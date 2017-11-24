@@ -79,8 +79,11 @@ class ManagerFactoryTest extends TestCase
     public function getProvider()
     {
         $config = [
+            'typeHint' => true,
             'databaseDriver' => \kristijorgji\DbToPhp\DatabaseDrivers::MYSQL,
-            'connection' => []
+            'connection' => [],
+            'entities' => [],
+            'factories' => []
         ];
 
         return [

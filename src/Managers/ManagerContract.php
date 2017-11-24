@@ -2,16 +2,27 @@
 
 namespace kristijorgji\DbToPhp\Managers;
 
-abstract class ManagerContract
+interface ManagerContract
 {
     /**
      * @return void
      */
-    abstract public function generateEntities();
+    public function generateEntities();
 
     /**
      * @param string $tableName
      * @return void
      */
-    abstract public function generateEntity(string $tableName);
+    public function generateEntity(string $tableName);
+
+    /**
+     * @return void
+     */
+    public function generateFactories();
+
+    /**
+     * @param string $tableName
+     * @return void
+     */
+    public function generateFactory(string $tableName);
 }
