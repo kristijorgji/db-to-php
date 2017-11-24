@@ -1,0 +1,26 @@
+##[with_annotation_and_type_hinting]##
+    /**
+     * @return int|null
+     */
+    public function getTestProperty() : ?int
+    {
+        return $this->testProperty;
+    }
+##[with_annotation_no_type_hinting]##
+    /**
+     * @return int|null
+     */
+    public function getTestProperty()
+    {
+        return $this->testProperty;
+    }
+##[no_annotation_with_type_hinting]##
+    public function getTestProperty() : ?int
+    {
+        return $this->testProperty;
+    }
+##[no_annotation_no_type_hinting]##
+    public function getTestProperty()
+    {
+        return $this->testProperty;
+    }

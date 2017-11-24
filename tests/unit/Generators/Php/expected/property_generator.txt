@@ -1,0 +1,12 @@
+##[no_annotations]##
+    public $testProperty;
+##[with_annotations_nullable]##
+    /**
+     * @var int|null
+     */
+    public $testProperty;
+##[with_annotations_not_nullable]##
+    /**
+     * @var int
+     */
+    protected $employeeAge;

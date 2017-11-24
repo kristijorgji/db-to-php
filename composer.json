@@ -1,0 +1,37 @@
+{
+  "name": "kristijorgji/db-to-php",
+  "type": "library",
+  "description": "A library to generate application code based on database definition.",
+  "keywords": ["php", "framework", "entity", "database", "generator", "automatic", "factories", "repository", "sql"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kristi Jorgji"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "symfony/console": "^3.3"
+  },
+  "require-dev": {
+    "fzaninotto/faker": "~1.7",
+    "phpunit/phpunit": "~5.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "kristijorgji\\DbToPhp\\": "src/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "kristijorgji\\UnitTests\\": "tests/unit/",
+      "kristijorgji\\IntegrationTests\\": "tests/integration/",
+      "kristijorgji\\Tests\\Factories\\": "tests/factories/",
+      "kristijorgji\\Tests\\Helpers\\": "tests/helpers/"
+    }
+  },
+  "bin": ["bin/dbToPhp"]
+}
