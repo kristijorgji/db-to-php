@@ -5,6 +5,7 @@ namespace kristijorgji\DbToPhp\Managers\Php;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
 use kristijorgji\DbToPhp\Db\FieldsCollection;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
+use kristijorgji\DbToPhp\Generators\Php\Configs\PhpClassGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpGetterGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpPropertyGeneratorConfig;
@@ -14,6 +15,7 @@ use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
 use kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers;
 use kristijorgji\DbToPhp\Rules\Php\PhpPropertiesCollection;
 use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
+use kristijorgji\DbToPhp\Support\StringCollection;
 
 class PhpEntityManager extends AbstractPhpManager
 {
@@ -23,28 +25,22 @@ class PhpEntityManager extends AbstractPhpManager
     private $config;
 
     /**
-     * @var bool
-     */
-    private $typeHint;
-
-    /**
      * @param DatabaseAdapterInterface $databaseAdapter
      * @param PhpTypeMapperInterface $typeMapper
      * @param FileSystemInterface $fileSystem
      * @param array $config
-     * @param bool $typeHints
+     * @param bool $typeHint
      */
     public function __construct(
         DatabaseAdapterInterface $databaseAdapter,
         PhpTypeMapperInterface $typeMapper,
         FileSystemInterface $fileSystem,
-        array $config,
-        bool $typeHints
+        bool $typeHint,
+        array $config
     )
     {
-        parent::__construct($databaseAdapter, $typeMapper, $fileSystem);
+        parent::__construct($databaseAdapter, $typeMapper, $fileSystem, $typeHint);
         $this->config = $config;
-        $this->typeHint = $typeHints;
     }
 
     /**
@@ -72,8 +68,12 @@ class PhpEntityManager extends AbstractPhpManager
         $properties = $this->formProperties($fields);
 
         $entityGeneratorConfig = new PhpEntityGeneratorConfig(
-            $this->config['namespace'],
-            $className,
+            new PhpClassGeneratorConfig(
+                $this->config['namespace'],
+                $className,
+                new StringCollection(... []),
+                null
+            ),
             $this->config['includeSetters'],
             $this->config['includeGetters'],
             new PhpSetterGeneratorConfig(

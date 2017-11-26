@@ -25,18 +25,26 @@ class AbstractPhpManager
     protected $fileSystem;
 
     /**
+     * @var bool
+     */
+    protected $typeHint;
+
+    /**
      * @param DatabaseAdapterInterface $databaseAdapter
      * @param PhpTypeMapperInterface $typeMapper
      * @param FileSystemInterface $fileSystem
+     * @param bool $typeHint
      */
     public function __construct(
         DatabaseAdapterInterface $databaseAdapter,
         PhpTypeMapperInterface $typeMapper,
-        FileSystemInterface $fileSystem
+        FileSystemInterface $fileSystem,
+        bool $typeHint
     ) {
         $this->databaseAdapter = $databaseAdapter;
         $this->typeMapper = $typeMapper;
         $this->fileSystem = $fileSystem;
+        $this->typeHint = $typeHint;
     }
 
     /**

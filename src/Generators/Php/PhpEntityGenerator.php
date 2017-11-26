@@ -7,7 +7,7 @@ use kristijorgji\DbToPhp\Rules\Php\PhpPropertiesCollection;
 use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
 use kristijorgji\DbToPhp\Support\TextBuffer;
 
-class PhpEntityGenerator
+class PhpEntityGenerator extends PhpClassGenerator
 {
     /**
      * @var PhpEntityGeneratorConfig
@@ -20,11 +20,6 @@ class PhpEntityGenerator
     private $properties;
 
     /**
-     * @var TextBuffer
-     */
-    private $output;
-
-    /**
      * @param PhpEntityGeneratorConfig $config
      * @param PhpPropertiesCollection $properties
      */
@@ -33,9 +28,9 @@ class PhpEntityGenerator
         PhpPropertiesCollection $properties
     )
     {
+        parent::__construct($config->getPhpClassGeneratorConfig());
         $this->config = $config;
         $this->properties = $properties;
-        $this->output = new TextBuffer();
     }
 
     /**
@@ -52,21 +47,6 @@ class PhpEntityGenerator
         $this->addClassEnding();
 
         return $this->output->get();
-    }
-
-    /**
-     * @return void
-     */
-    private function addClassDeclaration()
-    {
-        $this->output->addLine('<?php');
-        $this->output->addEmptyLines();
-
-        $this->output->addLine(sprintf('namespace %s;', $this->config->getNamespace()));
-        $this->output->addEmptyLines();
-
-        $this->output->addLine(sprintf('class %s', $this->config->getClassName()));
-        $this->output->addLine('{');
     }
 
     /**
@@ -141,13 +121,5 @@ class PhpEntityGenerator
         );
 
         $this->output->addLine($propertyGenerator->generate());
-    }
-
-    /**
-     * @return void
-     */
-    private function addClassEnding()
-    {
-        $this->output->addLine('}');
     }
 }

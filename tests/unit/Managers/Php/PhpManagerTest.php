@@ -81,8 +81,6 @@ class PhpManagerTest extends TestCase
         $this->markTestIncomplete();
     }
 
-
-
     private function createManager()
     {
         $this->manager = new PhpManager(

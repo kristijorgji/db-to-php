@@ -2,12 +2,14 @@
 
 namespace kristijorgji\UnitTests\Generators\Php;
 
+use kristijorgji\DbToPhp\Generators\Php\Configs\PhpClassGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpGetterGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpPropertyGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpSetterGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityGenerator;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityGeneratorConfig;
 use kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers;
+use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\TestCase;
 
 class PhpEntityGeneratorTest extends TestCase
@@ -32,11 +34,17 @@ class PhpEntityGeneratorTest extends TestCase
     {
         $expected = self::getExpected(__DIR__ . '/expected/entity_generator.txt');
 
+        $phpClassGeneratorConfig = new PhpClassGeneratorConfig(
+            'MyApp\Entities',
+            'TestEntity',
+            new StringCollection(...[]),
+            null
+        );
+
         return [
             'no_setters_no_getters' => [
                 new PhpEntityGeneratorConfig(
-                    'MyApp\Entities',
-                    'TestEntity',
+                    $phpClassGeneratorConfig,
                     false,
                     false,
                     new PhpSetterGeneratorConfig(true, true, true),
@@ -50,8 +58,7 @@ class PhpEntityGeneratorTest extends TestCase
             ],
             'with_getters_and_setters' => [
                 new PhpEntityGeneratorConfig(
-                    'MyApp\Entities',
-                    'TestEntity',
+                    $phpClassGeneratorConfig,
                     true,
                     true,
                     new PhpSetterGeneratorConfig(true, true, true),
@@ -65,8 +72,7 @@ class PhpEntityGeneratorTest extends TestCase
             ],
             'only_getters' => [
                 new PhpEntityGeneratorConfig(
-                    'MyApp\Entities',
-                    'TestEntity',
+                    $phpClassGeneratorConfig,
                     false,
                     true,
                     new PhpSetterGeneratorConfig(true, true, true),
@@ -80,8 +86,7 @@ class PhpEntityGeneratorTest extends TestCase
             ],
             'only_setters' => [
                 new PhpEntityGeneratorConfig(
-                    'MyApp\Entities',
-                    'TestEntity',
+                    $phpClassGeneratorConfig,
                     true,
                     false,
                     new PhpSetterGeneratorConfig(true, true, true),

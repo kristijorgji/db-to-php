@@ -73,7 +73,8 @@ class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
             ->setConstructorArgs([
                 $this->databaseAdapter,
                 $this->typeMapper,
-                $this->fileSystem
+                $this->fileSystem,
+                $this->typeHint
             ])
             ->getMockForAbstractClass();
     }

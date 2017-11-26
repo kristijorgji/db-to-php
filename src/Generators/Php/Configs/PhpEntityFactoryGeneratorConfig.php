@@ -5,53 +5,23 @@ namespace kristijorgji\DbToPhp\Generators\Php\Configs;
 class PhpEntityFactoryGeneratorConfig
 {
     /**
-     * @var string
+     * @var PhpClassGeneratorConfig
      */
-    private $namespace;
+    private $phpClassGeneratorConfig;
 
     /**
-     * @var string
+     * @param PhpClassGeneratorConfig $phpClassGeneratorConfig
      */
-    private $className;
-
-    /**
-     * @var bool
-     */
-    private $typeHint;
-
-    /**
-     * @param string $namespace
-     * @param string $className
-     * @param bool $typeHint
-     */
-    public function __construct(string $namespace, string $className, bool $typeHint)
+    public function __construct(PhpClassGeneratorConfig $phpClassGeneratorConfig)
     {
-        $this->namespace = $namespace;
-        $this->className = $className;
-        $this->typeHint = $typeHint;
+        $this->phpClassGeneratorConfig = $phpClassGeneratorConfig;
     }
 
     /**
-     * @return string
+     * @return PhpClassGeneratorConfig
      */
-    public function getNamespace(): string
+    public function getPhpClassGeneratorConfig(): PhpClassGeneratorConfig
     {
-        return $this->namespace;
-    }
-
-    /**
-     * @return string
-     */
-    public function getClassName(): string
-    {
-        return $this->className;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isTypeHint(): bool
-    {
-        return $this->typeHint;
+        return $this->phpClassGeneratorConfig;
     }
 }

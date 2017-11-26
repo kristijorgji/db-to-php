@@ -30,6 +30,11 @@ class PhpManager extends AbstractPhpManager implements ManagerContract
     private $entityManager;
 
     /**
+     * @var PhpEntityFactoryManager
+     */
+    private $entityFactoryManager;
+
+    /**
      * @param array $config
      * @param DatabaseAdapterInterface $databaseAdapter
      * @param PhpTypeMapperInterface $typeMapper
@@ -42,7 +47,7 @@ class PhpManager extends AbstractPhpManager implements ManagerContract
         FileSystemInterface $fileSystem
     )
     {
-        parent::__construct($databaseAdapter, $typeMapper, $fileSystem);
+        parent::__construct($databaseAdapter, $typeMapper, $fileSystem, $config['typeHint']);
         $this->config = $config;
         $this->databaseAdapter = $databaseAdapter;
         $this->typeMapper = $typeMapper;
@@ -52,8 +57,24 @@ class PhpManager extends AbstractPhpManager implements ManagerContract
             $this->databaseAdapter,
             $this->typeMapper,
             $this->fileSystem,
-            $this->config['entities'],
-            $this->config['typeHint']
+            $this->config['typeHint'],
+            $this->config['entities']
+        );
+
+        $entityFactoryManagerConfig = $this->config['factories'];
+        $entityFactoryManagerConfig['tableToEntityClassName'] = [];
+
+        foreach ($this->databaseAdapter->getTables()->all() as $table) {
+            $entityFactoryManagerConfig['tableToEntityClassName'][]
+                = $this->entityManager->formClassName($table->getName());
+        }
+
+        $this->entityFactoryManager = new PhpEntityFactoryManager(
+            $this->databaseAdapter,
+            $this->typeMapper,
+            $this->fileSystem,
+            $this->config['typeHint'],
+            $entityFactoryManagerConfig
         );
     }
 
@@ -79,7 +100,7 @@ class PhpManager extends AbstractPhpManager implements ManagerContract
      */
     public function generateFactories()
     {
-
+        $this->entityFactoryManager->generateFactories();
     }
 
     /**
@@ -88,6 +109,6 @@ class PhpManager extends AbstractPhpManager implements ManagerContract
      */
     public function generateFactory(string $tableName)
     {
-
+        $this->entityFactoryManager->generateFactory($tableName);
     }
 }

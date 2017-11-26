@@ -45,8 +45,8 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
             $this->databaseAdapter,
             $this->typeMapper,
             $this->fileSystem,
-            $this->config,
-            $this->typeHint
+            $this->typeHint,
+            $this->config
         );
     }
 
@@ -179,8 +179,8 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                     $this->databaseAdapter,
                     $this->typeMapper,
                     $this->fileSystem,
-                    $this->config,
-                    $this->typeHint
+                    $this->typeHint,
+                    $this->config
                 ]
             )
             ->setMethods($methodsToMock)

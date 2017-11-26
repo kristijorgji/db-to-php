@@ -5,14 +5,9 @@ namespace kristijorgji\DbToPhp\Generators\Php\Configs;
 class PhpEntityGeneratorConfig
 {
     /**
-     * @var string
+     * @var PhpClassGeneratorConfig
      */
-    private $namespace;
-
-    /**
-     * @var string
-     */
-    private $className;
+    private $phpClassGeneratorConfig;
 
     /**
      * @var bool
@@ -40,8 +35,7 @@ class PhpEntityGeneratorConfig
     private $phpPropertyGeneratorConfig;
 
     /**
-     * @param string $namespace
-     * @param string $className
+     * @param PhpClassGeneratorConfig $phpClassGeneratorConfig
      * @param bool $includeSetters
      * @param bool $includeGetters
      * @param PhpSetterGeneratorConfig $phpSetterGeneratorConfig
@@ -49,17 +43,14 @@ class PhpEntityGeneratorConfig
      * @param PhpPropertyGeneratorConfig $phpPropertyGeneratorConfig
      */
     public function __construct(
-        string $namespace,
-        string $className,
+        PhpClassGeneratorConfig $phpClassGeneratorConfig,
         bool $includeSetters,
         bool $includeGetters,
         PhpSetterGeneratorConfig $phpSetterGeneratorConfig,
         PhpGetterGeneratorConfig $phpGetterGeneratorConfig,
         PhpPropertyGeneratorConfig $phpPropertyGeneratorConfig
     ) {
-
-        $this->namespace = $namespace;
-        $this->className = $className;
+        $this->phpClassGeneratorConfig = $phpClassGeneratorConfig;
         $this->includeSetters = $includeSetters;
         $this->includeGetters = $includeGetters;
         $this->phpSetterGeneratorConfig = $phpSetterGeneratorConfig;
@@ -68,19 +59,11 @@ class PhpEntityGeneratorConfig
     }
 
     /**
-     * @return string
+     * @return PhpClassGeneratorConfig
      */
-    public function getNamespace(): string
+    public function getPhpClassGeneratorConfig(): PhpClassGeneratorConfig
     {
-        return $this->namespace;
-    }
-
-    /**
-     * @return string
-     */
-    public function getClassName(): string
-    {
-        return $this->className;
+        return $this->phpClassGeneratorConfig;
     }
 
     /**
