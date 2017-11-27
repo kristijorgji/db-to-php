@@ -82,7 +82,7 @@ class ManagerFactoryTest extends TestCase
             'typeHint' => true,
             'databaseDriver' => \kristijorgji\DbToPhp\DatabaseDrivers::MYSQL,
             'connection' => [],
-            'entities' => [],
+            'entities' => ['namespace' => 'Entities'],
             'factories' => []
         ];
 

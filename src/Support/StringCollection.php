@@ -24,4 +24,12 @@ class StringCollection
     {
         return $this->elements;
     }
+
+    /**
+     * @return int
+     */
+    public function count() : int
+    {
+        return count($this->elements);
+    }
 }

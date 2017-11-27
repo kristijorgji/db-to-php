@@ -58,16 +58,22 @@ class PhpEntityFactoryManager extends AbstractPhpManager
     public function generateFactory(string $tableName)
     {
         $className = $this->formClassName($tableName);
+        $fields = $this->databaseAdapter->getFields($tableName);
+        $entityClassName = $this->resolveReturnedEntity($tableName);
+        $fullyQualifiedEntityClassName = $this->config['entitiesNamespace'] . '\\' . $entityClassName;
 
         $entityFactoryGenerator = new PhpEntityFactoryGenerator(
             new PhpEntityFactoryGeneratorConfig(
                 new  PhpClassGeneratorConfig(
                     $this->config['namespace'],
                     $className,
-                    new StringCollection(... []),
+                    new StringCollection(... [$fullyQualifiedEntityClassName]),
                     null
-                )
-            )
+                ),
+                $this->typeHint
+            ),
+            $fields,
+            $entityClassName
         );
 
         $entityFactoryFileAsString = $entityFactoryGenerator->generate();
@@ -90,9 +96,18 @@ class PhpEntityFactoryManager extends AbstractPhpManager
     public function formClassName(string $tableName) : string
     {
         if (!isset($this->config['tableToEntityFactoryClassName'][$tableName])) {
-            return snakeToPascalCase($tableName) . 'Entity';
+            return snakeToPascalCase($tableName) . 'EntityFactory';
         }
 
         return $this->config['tableToEntityFactoryClassName'][$tableName];
+    }
+
+    public function resolveReturnedEntity(string $tableName) : string
+    {
+        if (!isset($this->config['tableToEntityClassName'][$tableName])) {
+            return snakeToPascalCase($tableName) . 'EntityFactory';
+        }
+
+        return $this->config['tableToEntityClassName'][$tableName];
     }
 }

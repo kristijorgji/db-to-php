@@ -10,11 +10,21 @@ class PhpEntityFactoryGeneratorConfig
     private $phpClassGeneratorConfig;
 
     /**
-     * @param PhpClassGeneratorConfig $phpClassGeneratorConfig
+     * @var bool
      */
-    public function __construct(PhpClassGeneratorConfig $phpClassGeneratorConfig)
+    private $typeHint;
+
+    /**
+     * @param PhpClassGeneratorConfig $phpClassGeneratorConfig
+     * @param bool $typeHint
+     */
+    public function __construct(
+        PhpClassGeneratorConfig $phpClassGeneratorConfig,
+        bool $typeHint
+    )
     {
         $this->phpClassGeneratorConfig = $phpClassGeneratorConfig;
+        $this->typeHint = $typeHint;
     }
 
     /**
@@ -23,5 +33,13 @@ class PhpEntityFactoryGeneratorConfig
     public function getPhpClassGeneratorConfig(): PhpClassGeneratorConfig
     {
         return $this->phpClassGeneratorConfig;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isTypeHint(): bool
+    {
+        return $this->typeHint;
     }
 }

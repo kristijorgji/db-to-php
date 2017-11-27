@@ -37,8 +37,11 @@ abstract class PhpClassGenerator
         $this->output->addLine(sprintf('namespace %s;', $this->config->getNamespace()));
         $this->output->addEmptyLines();
 
-        foreach ($this->config->getUses()->all() as $uses) {
-            $this->output->addLine(sprintf('uses %s', $uses));
+        if ($this->config->getUses()->count() > 0) {
+            foreach ($this->config->getUses()->all() as $uses) {
+                $this->output->addLine(sprintf('use %s;', $uses));
+            }
+            $this->output->addEmptyLines();
         }
 
         $this->output->add(sprintf('class %s', $this->config->getClassName()));

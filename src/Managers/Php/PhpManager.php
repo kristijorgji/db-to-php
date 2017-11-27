@@ -69,6 +69,8 @@ class PhpManager extends AbstractPhpManager implements ManagerContract
                 = $this->entityManager->formClassName($table->getName());
         }
 
+        $entityFactoryManagerConfig['entitiesNamespace'] = $this->config['entities']['namespace'];
+
         $this->entityFactoryManager = new PhpEntityFactoryManager(
             $this->databaseAdapter,
             $this->typeMapper,

@@ -12,20 +12,36 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
      * @var PhpEntityFactoryGeneratorConfig
      */
     private $config;
+    /**
+     * @var FieldsCollection
+     */
+    private $fields;
+
+    /**
+     * @var string
+     */
+    private $entityClassName;
 
     /**
      * @param PhpEntityFactoryGeneratorConfig $config
+     * @param FieldsCollection $fields
+     * @param string $entityClassName
      */
     public function __construct(
-        PhpEntityFactoryGeneratorConfig $config
+        PhpEntityFactoryGeneratorConfig $config,
+        FieldsCollection $fields,
+        string $entityClassName
     )
     {
         parent::__construct($config->getPhpClassGeneratorConfig());
         $this->config = $config;
+        $this->fields = $fields;
+        $this->entityClassName = $entityClassName;
     }
 
     public function generate() : string
     {
         $this->addClassDeclaration();
+        return $this->output->get();
     }
 }
