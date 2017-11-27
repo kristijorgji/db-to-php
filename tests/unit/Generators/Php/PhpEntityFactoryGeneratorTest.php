@@ -2,12 +2,17 @@
 
 namespace kristijorgji\UnitTests\Generators\Php;
 
-use kristijorgji\DbToPhp\Db\FieldsCollection;
+
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpClassGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityFactoryGeneratorConfig;
+use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryField;
+use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryFieldsCollection;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryGenerator;
+use kristijorgji\DbToPhp\Generators\Resolvers\PhpEntityFactoryFieldFunctionResolver;
+use kristijorgji\DbToPhp\Rules\Php\PhpType;
+use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
 use kristijorgji\DbToPhp\Support\StringCollection;
-use kristijorgji\Tests\Factories\Db\FieldsCollectionFactory;
+use kristijorgji\Tests\Factories\Generators\PhpEntityFactoryFieldsCollectionFactory;
 use kristijorgji\Tests\Helpers\TestCase;
 
 class PhpEntityFactoryGeneratorTest extends TestCase
@@ -15,13 +20,13 @@ class PhpEntityFactoryGeneratorTest extends TestCase
     /**
      * @dataProvider generateProvider
      * @param PhpEntityFactoryGeneratorConfig $config
-     * @param FieldsCollection $fields
+     * @param PhpEntityFactoryFieldsCollection $fields
      * @param string $entityClassName
      * @param string $expected
      */
     public function testGenerate(
         PhpEntityFactoryGeneratorConfig $config,
-        FieldsCollection $fields,
+        PhpEntityFactoryFieldsCollection $fields,
         string $entityClassName,
         string $expected
     )
@@ -29,6 +34,7 @@ class PhpEntityFactoryGeneratorTest extends TestCase
         $entityGenerator = new PhpEntityFactoryGenerator(
             $config,
             $fields,
+            new PhpEntityFactoryFieldFunctionResolver(),
             $entityClassName
         );
 
@@ -45,16 +51,41 @@ class PhpEntityFactoryGeneratorTest extends TestCase
             'App\Factories\Entities',
             'TestEntity',
             new StringCollection(...['Entities\TestEntity']),
-            null
+            'BaseEntityFactory'
         );
+
+        $generatorFields = new PhpEntityFactoryFieldsCollection(... [
+           new PhpEntityFactoryField(
+               'status',
+               'status',
+               new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
+               24,
+               false
+           ),
+            new PhpEntityFactoryField(
+                'credit_value',
+                'creditValue',
+                new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
+                8,
+                true
+            ),
+            new PhpEntityFactoryField(
+                'name',
+                'name',
+                new PhpType(new PhpTypes(PhpTypes::STRING), true),
+                20,
+                true
+            ),
+        ]);
 
         return [
             'type_hinted' => [
                 new PhpEntityFactoryGeneratorConfig(
                     $phpClassGeneratorConfig,
+                    true,
                     true
                 ),
-                FieldsCollectionFactory::make(),
+                $generatorFields,
                 'SuperEntity',
                 $expected['type_hinted']
             ]

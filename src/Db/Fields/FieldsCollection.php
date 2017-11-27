@@ -1,6 +1,6 @@
 <?php
 
-namespace kristijorgji\DbToPhp\Db;
+namespace kristijorgji\DbToPhp\Db\Fields;
 
 class FieldsCollection
 {

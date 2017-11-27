@@ -15,16 +15,24 @@ class PhpEntityFactoryGeneratorConfig
     private $typeHint;
 
     /**
+     * @var bool
+     */
+    private $includeAnnotations;
+
+    /**
      * @param PhpClassGeneratorConfig $phpClassGeneratorConfig
      * @param bool $typeHint
+     * @param bool $includeAnnotations
      */
     public function __construct(
         PhpClassGeneratorConfig $phpClassGeneratorConfig,
-        bool $typeHint
+        bool $typeHint,
+        bool $includeAnnotations
     )
     {
         $this->phpClassGeneratorConfig = $phpClassGeneratorConfig;
         $this->typeHint = $typeHint;
+        $this->includeAnnotations = $includeAnnotations;
     }
 
     /**
@@ -36,10 +44,18 @@ class PhpEntityFactoryGeneratorConfig
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isTypeHint(): bool
+    public function shouldTypeHint() : bool
     {
         return $this->typeHint;
+    }
+
+    /**
+     * @return bool
+     */
+    public function shouldIncludeAnnotations() : bool
+    {
+        return $this->includeAnnotations;
     }
 }

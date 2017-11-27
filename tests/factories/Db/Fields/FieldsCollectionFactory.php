@@ -1,8 +1,8 @@
 <?php
 
-namespace kristijorgji\Tests\Factories\Db;
+namespace kristijorgji\Tests\Factories\Db\Fields;
 
-use kristijorgji\DbToPhp\Db\FieldsCollection;
+use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
 
 class FieldsCollectionFactory
 {

@@ -3,18 +3,8 @@
 namespace kristijorgji\DbToPhp\Managers\Php;
 
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
-use kristijorgji\DbToPhp\Db\FieldsCollection;
-use kristijorgji\DbToPhp\Db\TablesCollection;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
-use kristijorgji\DbToPhp\Generators\Php\Configs\PhpGetterGeneratorConfig;
-use kristijorgji\DbToPhp\Generators\Php\Configs\PhpPropertyGeneratorConfig;
-use kristijorgji\DbToPhp\Generators\Php\Configs\PhpSetterGeneratorConfig;
-use kristijorgji\DbToPhp\Generators\Php\PhpEntityGenerator;
-use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityGeneratorConfig;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
-use kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers;
-use kristijorgji\DbToPhp\Rules\Php\PhpPropertiesCollection;
-use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
 use kristijorgji\DbToPhp\Managers\ManagerContract;
 
 class PhpManager extends AbstractPhpManager implements ManagerContract
@@ -61,22 +51,13 @@ class PhpManager extends AbstractPhpManager implements ManagerContract
             $this->config['entities']
         );
 
-        $entityFactoryManagerConfig = $this->config['factories'];
-        $entityFactoryManagerConfig['tableToEntityClassName'] = [];
-
-        foreach ($this->databaseAdapter->getTables()->all() as $table) {
-            $entityFactoryManagerConfig['tableToEntityClassName'][]
-                = $this->entityManager->formClassName($table->getName());
-        }
-
-        $entityFactoryManagerConfig['entitiesNamespace'] = $this->config['entities']['namespace'];
-
         $this->entityFactoryManager = new PhpEntityFactoryManager(
             $this->databaseAdapter,
             $this->typeMapper,
             $this->fileSystem,
             $this->config['typeHint'],
-            $entityFactoryManagerConfig
+            $this->config['factories'],
+            $this->entityManager
         );
     }
 

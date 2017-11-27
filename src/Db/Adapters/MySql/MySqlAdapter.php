@@ -1,9 +1,9 @@
 <?php
 
-namespace kristijorgji\DbToPhp\Db\Adapters;
+namespace kristijorgji\DbToPhp\Db\Adapters\MySql;
 
-use kristijorgji\DbToPhp\Db\Field;
-use kristijorgji\DbToPhp\Db\FieldsCollection;
+use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
+use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
 use kristijorgji\DbToPhp\Db\Table;
 use kristijorgji\DbToPhp\Db\TablesCollection;
 use PDO;
@@ -36,14 +36,14 @@ class MySqlAdapter implements DatabaseAdapterInterface
     private $password;
 
     /**
-     * @var bool
-     */
-    private $verbose = true;
-
-    /**
      * @var PDO
      */
     private $pdo;
+
+    /**
+     * @var MySqlFieldResolver
+     */
+    private $fieldResolver;
 
     /**
      * @param string $host
@@ -70,6 +70,8 @@ class MySqlAdapter implements DatabaseAdapterInterface
             $this->username,
             $this->password
         );
+
+        $this->fieldResolver = new MySqlFieldResolver();
     }
 
     public function __destruct()
@@ -102,10 +104,10 @@ class MySqlAdapter implements DatabaseAdapterInterface
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         return new FieldsCollection(... array_map(function ($field) {
-                return new Field(
+                return $this->fieldResolver->resolveField(
                     $field['Field'],
                     $field['Type'],
-                    $field['Null'] === 'NO' ? false : true
+                    $field['Null']
                 );
             }, $result)
         );

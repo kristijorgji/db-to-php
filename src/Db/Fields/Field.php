@@ -1,23 +1,23 @@
 <?php
 
-namespace kristijorgji\DbToPhp\Db;
+namespace kristijorgji\DbToPhp\Db\Fields;
 
-class Field
+abstract class Field
 {
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * @var bool
      */
-    private $nullable;
+    protected $nullable;
 
     /**
      * @param string $name

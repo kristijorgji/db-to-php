@@ -5,15 +5,9 @@ namespace kristijorgji\IntegrationTests\MySql\Php;
 use DirectoryIterator;
 use kristijorgji\DbToPhp\AppInfo;
 use kristijorgji\DbToPhp\Console\DbToPhpApplication;
-use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterFactory;
-use kristijorgji\DbToPhp\FileSystem\Exceptions\FileSystemException;
 use kristijorgji\DbToPhp\FileSystem\FileSystem;
-use kristijorgji\DbToPhp\Managers\ManagerFactory;
-use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperFactory;
 use kristijorgji\Tests\Helpers\CommandTestCaseHelper;
 use kristijorgji\Tests\Helpers\MySqlTestCase;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 
 class PhpTest extends MySqlTestCase
 {
@@ -69,6 +63,8 @@ class PhpTest extends MySqlTestCase
             $this->consoleApp,
             sprintf('%s --configuration=%s', $command, $configurationPath)
         );
+
+        echo $output;
 
         $this->assertFoldersMatch($expectedOutputDirectory);
     }

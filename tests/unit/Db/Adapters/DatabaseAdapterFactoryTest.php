@@ -1,6 +1,6 @@
 <?php
 
-namespace kristijorgji\UnitTests\Db;
+namespace kristijorgji\UnitTests\Db\Adapters;
 
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterFactory;
 use kristijorgji\DbToPhp\Db\Adapters\Exceptions\InvalidDatabaseDriverException;

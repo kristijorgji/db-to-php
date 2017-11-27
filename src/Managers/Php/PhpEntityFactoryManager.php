@@ -3,10 +3,17 @@
 namespace kristijorgji\DbToPhp\Managers\Php;
 
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
+use kristijorgji\DbToPhp\Db\Fields\BinaryField;
+use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
+use kristijorgji\DbToPhp\Db\Fields\IntegerField;
+use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpClassGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityFactoryGeneratorConfig;
+use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryField;
+use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryFieldsCollection;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryGenerator;
+use kristijorgji\DbToPhp\Generators\Resolvers\PhpEntityFactoryFieldFunctionResolver;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
 use kristijorgji\DbToPhp\Support\StringCollection;
 
@@ -18,21 +25,29 @@ class PhpEntityFactoryManager extends AbstractPhpManager
     private $config;
 
     /**
+     * @var PhpEntityManager
+     */
+    private $entityManager;
+
+    /**
      * @param DatabaseAdapterInterface $databaseAdapter
      * @param PhpTypeMapperInterface $typeMapper
      * @param FileSystemInterface $fileSystem
-     * @param array $config
      * @param bool $typeHint
+     * @param array $config
+     * @param PhpEntityManager $entityManager
      */
     public function __construct(
         DatabaseAdapterInterface $databaseAdapter,
         PhpTypeMapperInterface $typeMapper,
         FileSystemInterface $fileSystem,
         bool $typeHint,
-        array $config
+        array $config,
+        PhpEntityManager $entityManager
     )
     {
         parent::__construct($databaseAdapter, $typeMapper, $fileSystem, $typeHint);
+        $this->entityManager = $entityManager;
         $this->config = $config;
     }
 
@@ -59,8 +74,8 @@ class PhpEntityFactoryManager extends AbstractPhpManager
     {
         $className = $this->formClassName($tableName);
         $fields = $this->databaseAdapter->getFields($tableName);
-        $entityClassName = $this->resolveReturnedEntity($tableName);
-        $fullyQualifiedEntityClassName = $this->config['entitiesNamespace'] . '\\' . $entityClassName;
+        $entityClassName = $this->entityManager->formClassName($tableName);
+        $fullyQualifiedEntityClassName = $this->entityManager->getEntitiesNamespace() . '\\' . $entityClassName;
 
         $entityFactoryGenerator = new PhpEntityFactoryGenerator(
             new PhpEntityFactoryGeneratorConfig(
@@ -70,9 +85,11 @@ class PhpEntityFactoryManager extends AbstractPhpManager
                     new StringCollection(... [$fullyQualifiedEntityClassName]),
                     null
                 ),
-                $this->typeHint
+                $this->typeHint,
+                $this->config['includeAnnotations']
             ),
-            $fields,
+            $this->formGeneratorFieldsDetails($fields),
+            new PhpEntityFactoryFieldFunctionResolver(),
             $entityClassName
         );
 
@@ -102,12 +119,37 @@ class PhpEntityFactoryManager extends AbstractPhpManager
         return $this->config['tableToEntityFactoryClassName'][$tableName];
     }
 
-    public function resolveReturnedEntity(string $tableName) : string
+    /**
+     * @param FieldsCollection $fields
+     * @return PhpEntityFactoryFieldsCollection
+     */
+    private function formGeneratorFieldsDetails(FieldsCollection $fields) : PhpEntityFactoryFieldsCollection
     {
-        if (!isset($this->config['tableToEntityClassName'][$tableName])) {
-            return snakeToPascalCase($tableName) . 'EntityFactory';
-        }
+        $generatorFields = [];
 
-        return $this->config['tableToEntityClassName'][$tableName];
+
+        foreach ($fields->all() as $field) {
+            $property = $this->entityManager->formProperty($field);
+            $lengthLimit = null;
+            $signed = null;
+
+            if ($field instanceof IntegerField) {
+                $signed = $field->isSigned();
+                $lengthLimit = $field->getLengthInBits();
+            }
+
+            if ($field instanceof TextField
+                || $field instanceof BinaryField) {
+                $lengthLimit = $field->getLengthInBytes();
+            }
+
+            $generatorFields[] = new PhpEntityFactoryField(
+                $field->getName(),
+                $property->getName(),
+                $property->getType(),
+                $lengthLimit,
+                $signed
+            );
+        }
     }
 }

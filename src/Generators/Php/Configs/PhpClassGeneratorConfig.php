@@ -32,7 +32,12 @@ class PhpClassGeneratorConfig
      * @param StringCollection $uses
      * @param string|null $extends
      */
-    public function __construct($namespace, $className, StringCollection $uses, ?string $extends)
+    public function __construct(
+        string $namespace,
+        string $className,
+        StringCollection $uses,
+        ?string $extends
+    )
     {
         $this->namespace = $namespace;
         $this->className = $className;

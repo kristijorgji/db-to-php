@@ -3,7 +3,8 @@
 namespace kristijorgji\DbToPhp\Managers\Php;
 
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
-use kristijorgji\DbToPhp\Db\FieldsCollection;
+use kristijorgji\DbToPhp\Db\Fields\Field;
+use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpClassGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityGeneratorConfig;
@@ -72,7 +73,8 @@ class PhpEntityManager extends AbstractPhpManager
                 $this->config['namespace'],
                 $className,
                 new StringCollection(... []),
-                null
+                null,
+                $this->config['includeAnnotations']
             ),
             $this->config['includeSetters'],
             $this->config['includeGetters'],
@@ -117,14 +119,23 @@ class PhpEntityManager extends AbstractPhpManager
         $properties = [];
 
         foreach ($fields->all() as $field) {
-            $properties[] = new PhpProperty(
-                new PhpAccessModifiers($this->config['properties']['accessModifier']),
-                $this->typeMapper->map($field),
-                snakeToCamelCase($field->getName())
-            );
+            $properties[] = $this->formProperty($field);
         }
 
         return new PhpPropertiesCollection(...$properties);
+    }
+
+    /**
+     * @param Field $field
+     * @return PhpProperty
+     */
+    public function formProperty(Field $field) : PhpProperty
+    {
+        return new PhpProperty(
+            new PhpAccessModifiers($this->config['properties']['accessModifier']),
+            $this->typeMapper->map($field),
+            snakeToCamelCase($field->getName())
+        );
     }
 
     /**
@@ -138,5 +149,13 @@ class PhpEntityManager extends AbstractPhpManager
         }
 
         return $this->config['tableToEntityClassName'][$tableName];
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntitiesNamespace() : string
+    {
+        return $this->config['namespace'];
     }
 }
