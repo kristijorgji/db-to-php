@@ -70,28 +70,10 @@ class PhpManager extends AbstractPhpManager implements ManagerContract
     }
 
     /**
-     * @param string $tableName
-     * @return void
-     */
-    public function generateEntity(string $tableName)
-    {
-        $this->entityManager->generateEntity($tableName);
-    }
-
-    /**
      * @return void
      */
     public function generateFactories()
     {
         $this->entityFactoryManager->generateFactories();
-    }
-
-    /**
-     * @param string $tableName
-     * @return void
-     */
-    public function generateFactory(string $tableName)
-    {
-        $this->entityFactoryManager->generateFactory($tableName);
     }
 }

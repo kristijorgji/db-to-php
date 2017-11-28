@@ -32,6 +32,6 @@ return [
         ],
         'outputDirectory' => 'Factories/Entities',
         'namespace' => 'Factories\Entities',
-        'includeAnnotations' => true,
+        'includeAnnotations' => true
     ]
 ];

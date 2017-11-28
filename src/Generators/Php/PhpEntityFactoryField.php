@@ -22,35 +22,27 @@ class PhpEntityFactoryField
     private $type;
 
     /**
-     * @var int|null
+     * @var string
      */
-    private $lengthLimit;
-
-    /**
-     * @var bool|null
-     */
-    private $signed;
+    private $resolvingCall;
 
     /**
      * @param string $dbFieldName
      * @param string $entityPropertyName
      * @param PhpType $type
-     * @param int|null $lengthLimit
-     * @param bool|null $signed
+     * @param string $resolvingCall
      */
     public function __construct(
         string $dbFieldName,
         string $entityPropertyName,
         PhpType $type,
-        ?int $lengthLimit,
-        ?bool $signed = null
+        string $resolvingCall
     )
     {
         $this->dbFieldName = $dbFieldName;
         $this->entityPropertyName = $entityPropertyName;
         $this->type = $type;
-        $this->lengthLimit = $lengthLimit;
-        $this->signed = $signed;
+        $this->resolvingCall = $resolvingCall;
     }
 
     /**
@@ -78,18 +70,10 @@ class PhpEntityFactoryField
     }
 
     /**
-     * @return int|null
+     * @return string
      */
-    public function getLengthLimit() : ?int
+    public function getResolvingCall(): string
     {
-        return $this->lengthLimit;
-    }
-
-    /**
-     * @return bool|null
-     */
-    public function isSigned() : ?bool
-    {
-        return $this->signed;
+        return $this->resolvingCall;
     }
 }

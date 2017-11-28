@@ -2,6 +2,7 @@
 
 namespace kristijorgji\Tests\Helpers;
 
+use DirectoryIterator;
 use Faker\Factory;
 use Faker\Generator;
 use ReflectionClass;

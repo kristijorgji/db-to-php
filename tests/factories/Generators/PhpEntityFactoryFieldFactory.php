@@ -14,14 +14,18 @@ class PhpEntityFactoryFieldFactory extends BaseFactory
      */
     public static function make() : PhpEntityFactoryField
     {
-        $lengths = [8, 16, 32, 64];
+        $resolvers = [
+            'self::randomInt32()',
+            'self::randomInt8()',
+            'self::randomArray',
+            'self::randomString()'
+        ];
 
         return new PhpEntityFactoryField(
             self::faker()->text(20),
             self::faker()->text(20),
             PhpTypeFactory::make(),
-            rand(0, 1) === true ? null : $lengths[rand(0, count($lengths) - 1)],
-            rand(0, 1) === true ? null : (self::faker()->boolean)
+            $resolvers[rand(0, count($resolvers) - 1)]
         );
     }
 }

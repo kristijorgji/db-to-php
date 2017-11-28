@@ -3,6 +3,7 @@
 namespace kristijorgji\DbToPhp\Generators\Php;
 
 use kristijorgji\DbToPhp\Rules\Php\PhpFunctionParametersCollection;
+use kristijorgji\DbToPhp\Rules\Php\PhpObjectType;
 use kristijorgji\DbToPhp\Rules\Php\PhpType;
 use kristijorgji\DbToPhp\Support\TextBuffer;
 
@@ -33,7 +34,7 @@ class PhpMethodAnnotationGenerator
      * @param $returnType
      * @param bool $typeHint
      */
-    public function __construct(PhpFunctionParametersCollection $parameters, $returnType, $typeHint)
+    public function __construct(PhpFunctionParametersCollection $parameters, PhpType $returnType, bool $typeHint)
     {
         $this->parameters = $parameters;
         $this->returnType = $returnType;
@@ -79,6 +80,10 @@ class PhpMethodAnnotationGenerator
     private function resolveType(PhpType $type) : string
     {
         $nullableText = $type->isNullable() === true ? '|null' :  '';
+        if ($type instanceof PhpObjectType) {
+            return (string) $type->getClassName() . $nullableText;
+        }
+
         return (string) $type->getType() . $nullableText;
     }
 }

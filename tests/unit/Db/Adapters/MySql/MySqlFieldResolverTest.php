@@ -48,9 +48,9 @@ class MySqlFieldResolverTest extends TestCase
     {
         $name = self::randomString(4);
 
-        $h = function (Field $field) {
+        $h = function (Field $field) use ($name) {
             return [
-                $field->getName(), $field->getType(), ($field->isNullable() ? 'YES' : 'NO'), $field
+                $name, $field->getType(), ($field->isNullable() ? 'YES' : 'NO'), $field
             ];
         };
 
@@ -61,10 +61,9 @@ class MySqlFieldResolverTest extends TestCase
                 new EnumField($name, 'enum(\'j,aru\',\'naru\',\'daru\')', false, new StringCollection(
                     ... ['j,aru', 'naru', 'daru']))
             ),
-            'binary' => $h(new BinaryField($name, 'binary(1)', true)),
 
-            'unsigned_int32' => $h(new IntegerField('test', 'int(11) unsigned', false, 32, false)),
-            'signed_int32' => $h(new IntegerField('test', 'int(11)', false, 32, true)),
+            'unsigned_int32' => $h(new IntegerField($name, 'int(11) unsigned', false, 32, false)),
+            'signed_int32' => $h(new IntegerField($name, 'int(11)', false, 32, true)),
 
             'unsigned_int64' => $h(new IntegerField($name, 'bigint(20) unsigned', false, 64, false)),
             'signed_int64' => $h(new IntegerField($name, 'bigint(20)', false, 64, true)),

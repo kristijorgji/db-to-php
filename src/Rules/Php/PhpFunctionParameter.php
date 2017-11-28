@@ -33,26 +33,10 @@ class PhpFunctionParameter
     }
 
     /**
-     * @param string $name
-     */
-    public function setName(string $name)
-    {
-        $this->name = $name;
-    }
-
-    /**
      * @return PhpType
      */
     public function getType(): PhpType
     {
         return $this->type;
-    }
-
-    /**
-     * @param PhpType $type
-     */
-    public function setType(PhpType $type)
-    {
-        $this->type = $type;
     }
 }

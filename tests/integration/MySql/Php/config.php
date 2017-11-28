@@ -15,7 +15,7 @@ return [
         'tableToEntityClassName' => [
             'test' => 'SuperEntity'
         ],
-        'outputDirectory' => __DIR__ . '/output/actual',
+        'outputDirectory' => __DIR__ . '/output/entities/actual',
         'namespace' => 'Entities',
         'includeAnnotations' => true,
         'includeSetters' => true,
@@ -30,7 +30,8 @@ return [
         'tableToEntityFactoryClassName' => [
             'test' => 'SuperEntityFactory'
         ],
-        'outputDirectory' => __DIR__ . '/output/actual',
+        'outputDirectory' => __DIR__ . '/output/factories/actual',
         'namespace' => 'Factories\Entities',
+        'includeAnnotations' => true
     ]
 ];

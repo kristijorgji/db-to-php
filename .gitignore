@@ -1,6 +1,7 @@
 .idea/
 .vagrant/
 Entities/
+Factories/
 vendor/
 .env
 logs/

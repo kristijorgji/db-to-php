@@ -4,7 +4,7 @@ namespace kristijorgji\DbToPhp;
 
 use kristijorgji\DbToPhp\Support\Enum;
 
-class Languages extends Enum
+class ProgrammingLanguages extends Enum
 {
     const PHP = 'php';
 }

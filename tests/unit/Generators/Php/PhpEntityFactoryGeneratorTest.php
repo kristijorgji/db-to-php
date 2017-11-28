@@ -8,11 +8,9 @@ use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityFactoryGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryField;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryFieldsCollection;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryGenerator;
-use kristijorgji\DbToPhp\Generators\Resolvers\PhpEntityFactoryFieldFunctionResolver;
 use kristijorgji\DbToPhp\Rules\Php\PhpType;
 use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
 use kristijorgji\DbToPhp\Support\StringCollection;
-use kristijorgji\Tests\Factories\Generators\PhpEntityFactoryFieldsCollectionFactory;
 use kristijorgji\Tests\Helpers\TestCase;
 
 class PhpEntityFactoryGeneratorTest extends TestCase
@@ -34,7 +32,6 @@ class PhpEntityFactoryGeneratorTest extends TestCase
         $entityGenerator = new PhpEntityFactoryGenerator(
             $config,
             $fields,
-            new PhpEntityFactoryFieldFunctionResolver(),
             $entityClassName
         );
 
@@ -47,10 +44,13 @@ class PhpEntityFactoryGeneratorTest extends TestCase
     {
         $expected = self::getExpected(__DIR__ . '/expected/entity_factory_generator.txt');
 
+        $entityClassName = 'TestEntity';
+        $qualifiedEntityClassName = 'Entities\TestEntity';
+
         $phpClassGeneratorConfig = new PhpClassGeneratorConfig(
             'App\Factories\Entities',
-            'TestEntity',
-            new StringCollection(...['Entities\TestEntity']),
+            'TestEntityFactory',
+            new StringCollection(...[$qualifiedEntityClassName]),
             'BaseEntityFactory'
         );
 
@@ -59,35 +59,58 @@ class PhpEntityFactoryGeneratorTest extends TestCase
                'status',
                'status',
                new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
-               24,
-               false
+               'self::randomInt32()'
+
            ),
             new PhpEntityFactoryField(
                 'credit_value',
                 'creditValue',
                 new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
-                8,
-                true
-            ),
-            new PhpEntityFactoryField(
-                'name',
-                'name',
-                new PhpType(new PhpTypes(PhpTypes::STRING), true),
-                20,
-                true
-            ),
+                'self::randomInt16()'
+
+            )
         ]);
 
         return [
-            'type_hinted' => [
+            'type_hinted_annotations' => [
                 new PhpEntityFactoryGeneratorConfig(
                     $phpClassGeneratorConfig,
                     true,
                     true
                 ),
                 $generatorFields,
-                'SuperEntity',
-                $expected['type_hinted']
+                $entityClassName,
+                $expected['type_hinted_annotations']
+            ],
+            'type_hinted_no_annotations' => [
+                new PhpEntityFactoryGeneratorConfig(
+                    $phpClassGeneratorConfig,
+                    true,
+                    false
+                ),
+                $generatorFields,
+                $entityClassName,
+                $expected['type_hinted_no_annotations']
+            ],
+            'not_type_hinted_annotations' => [
+                new PhpEntityFactoryGeneratorConfig(
+                    $phpClassGeneratorConfig,
+                    false,
+                    true
+                ),
+                $generatorFields,
+                $entityClassName,
+                $expected['not_type_hinted_annotations']
+            ],
+            'not_type_hinted_no_annotations' => [
+                new PhpEntityFactoryGeneratorConfig(
+                    $phpClassGeneratorConfig,
+                    false,
+                    false
+                ),
+                $generatorFields,
+                $entityClassName,
+                $expected['not_type_hinted_no_annotations']
             ]
         ];
     }

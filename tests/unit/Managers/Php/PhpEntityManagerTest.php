@@ -2,21 +2,16 @@
 
 namespace kristijorgji\UnitTests\Managers\Php;
 
-use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
-use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
 use kristijorgji\DbToPhp\Db\Table;
 use kristijorgji\DbToPhp\Db\TablesCollection;
-use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
 use kristijorgji\DbToPhp\Managers\Php\PhpEntityManager;
-use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
 use kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers;
 use kristijorgji\DbToPhp\Rules\Php\PhpPropertiesCollection;
 use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
 use kristijorgji\Tests\Factories\Db\Fields\FieldFactory;
 use kristijorgji\Tests\Factories\Db\Fields\FieldsCollectionFactory;
 use kristijorgji\Tests\Factories\Rules\Php\PhpTypeFactory;
-use kristijorgji\Tests\Helpers\TestCase;
 use kristijorgji\UnitTests\Generators\Php\SamplePhpProperties;
 
 class PhpEntityManagerTest extends AbstractPhpManagerTestCase

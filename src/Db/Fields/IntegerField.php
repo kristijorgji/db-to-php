@@ -5,12 +5,12 @@ namespace kristijorgji\DbToPhp\Db\Fields;
 class IntegerField extends Field
 {
     /**
-     * @var
+     * @var int
      */
     private $lengthInBits;
 
     /**
-     * @var
+     * @var bool
      */
     private $signed;
 
@@ -35,17 +35,17 @@ class IntegerField extends Field
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getLengthInBits()
+    public function getLengthInBits() : int
     {
         return $this->lengthInBits;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function isSigned()
+    public function isSigned() : bool
     {
         return $this->signed;
     }

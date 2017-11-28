@@ -11,4 +11,5 @@ class PhpTypes extends Enum
     const BOOL = 'bool';
     const FLOAT = 'float';
     const ARRAY = 'array';
+    const OBJECT = 'object';
 }

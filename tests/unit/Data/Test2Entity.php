@@ -1,6 +1,6 @@
 <?php
 
-namespace Entities;
+namespace kristijorgji\UnitTests\Data;
 
 class Test2Entity
 {

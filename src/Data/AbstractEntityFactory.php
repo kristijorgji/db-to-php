@@ -1,7 +1,25 @@
 <?php
 
-class BaseEntityFactory
+namespace kristijorgji\DbToPhp\Data;
+
+abstract class AbstractEntityFactory
 {
+    /**
+     * @param array $data
+     * @param $toClass
+     * @return mixed
+     */
+    public static function mapArrayToEntity(array $data, $toClass)
+    {
+        $item  = new $toClass();
+
+        foreach ($data as $key => $value) {
+            $item->{'set' . snakeToPascalCase($key)}($value);
+        }
+
+        return $item;
+    }
+
     /**
      * @return array
      */
@@ -94,11 +112,15 @@ class BaseEntityFactory
     }
 
     /**
+     * PHP max supported int is signed 64 bit integer
+     * that's why in this case I return again an unsigned 32 bit int
+     * which still is also a unsigned 64 bit int
+     *
      * @return int
      */
     public static function randomUnsignedInt64() : int
     {
-        return rand(0, 18446744073709551615);
+        return self::randomUnsignedInt32();
     }
 
     /**
@@ -144,11 +166,8 @@ class BaseEntityFactory
      *
      * @return integer
      */
-    public static function randomNumber($nbDigits = null, $strict = false) : int
+    public static function randomNumber($nbDigits = null, bool $strict = false) : int
     {
-        if (!is_bool($strict)) {
-            throw new \InvalidArgumentException('randomNumber() generates numbers of fixed width. To generate numbers between two boundaries, use numberBetween() instead.');
-        }
         if (null === $nbDigits) {
             $nbDigits = static::randomDigitNotNull();
         }
@@ -183,7 +202,7 @@ class BaseEntityFactory
      * @param int $length
      * @return string
      */
-    public static function randomString($length = 16)
+    public static function randomString(int $length = 16)
     {
         $string = '';
 
@@ -196,5 +215,14 @@ class BaseEntityFactory
         }
 
         return $string;
+    }
+
+    /**
+     * @param string[] ...$values
+     * @return string
+     */
+    public static function chooseRandomString(string... $values) : string
+    {
+        return $values[rand(0, count($values) -1)];
     }
 }

@@ -1,1 +1,136 @@
-##[type_hinted]##
+##[type_hinted_annotations]##
+<?php
+
+namespace App\Factories\Entities;
+
+use Entities\TestEntity;
+
+class TestEntityFactory extends BaseEntityFactory
+{
+    /**
+     * @param array $data
+     * @return TestEntity
+     */
+    public static function make(array $data = []) : TestEntity
+    {
+        return self::makeFromData(self::makeData($data));
+    }
+
+    /**
+     * @param array $data
+     * @return TestEntity
+     */
+    public static function makeFromData(array $data) : TestEntity
+    {
+        return self::mapArrayToEntity($data, TestEntity::class);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public static function makeData(array $data = []) : array
+    {
+        return [
+            'status' => $data['status'] ?? self::randomInt32(),
+            'credit_value' => $data['credit_value'] ?? self::randomInt16(),
+        ];
+    }
+}
+
+##[type_hinted_no_annotations]##
+<?php
+
+namespace App\Factories\Entities;
+
+use Entities\TestEntity;
+
+class TestEntityFactory extends BaseEntityFactory
+{
+    public static function make(array $data = []) : TestEntity
+    {
+        return self::makeFromData(self::makeData($data));
+    }
+
+    public static function makeFromData(array $data) : TestEntity
+    {
+        return self::mapArrayToEntity($data, TestEntity::class);
+    }
+
+    public static function makeData(array $data = []) : array
+    {
+        return [
+            'status' => $data['status'] ?? self::randomInt32(),
+            'credit_value' => $data['credit_value'] ?? self::randomInt16(),
+        ];
+    }
+}
+
+##[not_type_hinted_annotations]##
+<?php
+
+namespace App\Factories\Entities;
+
+use Entities\TestEntity;
+
+class TestEntityFactory extends BaseEntityFactory
+{
+    /**
+     * @param array $data
+     * @return TestEntity
+     */
+    public static function make(array $data = [])
+    {
+        return self::makeFromData(self::makeData($data));
+    }
+
+    /**
+     * @param array $data
+     * @return TestEntity
+     */
+    public static function makeFromData(array $data)
+    {
+        return self::mapArrayToEntity($data, TestEntity::class);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public static function makeData(array $data = [])
+    {
+        return [
+            'status' => $data['status'] ?? self::randomInt32(),
+            'credit_value' => $data['credit_value'] ?? self::randomInt16(),
+        ];
+    }
+}
+
+##[not_type_hinted_no_annotations]##
+<?php
+
+namespace App\Factories\Entities;
+
+use Entities\TestEntity;
+
+class TestEntityFactory extends BaseEntityFactory
+{
+    public static function make(array $data = [])
+    {
+        return self::makeFromData(self::makeData($data));
+    }
+
+    public static function makeFromData(array $data)
+    {
+        return self::mapArrayToEntity($data, TestEntity::class);
+    }
+
+    public static function makeData(array $data = [])
+    {
+        return [
+            'status' => $data['status'] ?? self::randomInt32(),
+            'credit_value' => $data['credit_value'] ?? self::randomInt16(),
+        ];
+    }
+}
+

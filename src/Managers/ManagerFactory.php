@@ -4,11 +4,9 @@ namespace kristijorgji\DbToPhp\Managers;
 
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterFactory;
 use kristijorgji\DbToPhp\FileSystem\FileSystem;
-use kristijorgji\DbToPhp\Languages;
 use kristijorgji\DbToPhp\Managers\Exceptions\InvalidProgrammingLanguageException;
 use kristijorgji\DbToPhp\Managers\Php\PhpManager;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperFactory;
-use kristijorgji\DbToPhp\Mappers\Types\TypeMapperFactoryFactory;
 
 class ManagerFactory
 {

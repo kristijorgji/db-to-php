@@ -2,20 +2,18 @@
 
 namespace kristijorgji\DbToPhp\Managers\Php;
 
+use kristijorgji\DbToPhp\AppInfo;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
-use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
-use kristijorgji\DbToPhp\Db\Fields\IntegerField;
-use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpClassGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityFactoryGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryField;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryFieldsCollection;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryGenerator;
-use kristijorgji\DbToPhp\Generators\Resolvers\PhpEntityFactoryFieldFunctionResolver;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
 use kristijorgji\DbToPhp\Support\StringCollection;
+use kristijorgji\DbToPhp\Managers\Php\Resolvers\PhpEntityFactoryFieldFunctionResolver;
 
 class PhpEntityFactoryManager extends AbstractPhpManager
 {
@@ -61,9 +59,36 @@ class PhpEntityFactoryManager extends AbstractPhpManager
             $this->config['includeTables']
         );
 
+        if (!$this->fileSystem->exists($this->config['outputDirectory'])) {
+            $this->fileSystem->createDirectory($this->config['outputDirectory'], true);
+        }
+
+        $baseEntityFactory = $this->fileSystem->readFile(AppInfo::ABSTRACT_ENTITY_FACTORY_PATH);
+        $baseEntityFactory = $this->changeNameSpaceOfBaseEntityFactory(
+            $baseEntityFactory,
+            $this->config['namespace']
+        );
+        $this->fileSystem->write(
+            $this->config['outputDirectory'] . DIRECTORY_SEPARATOR . $this->getAbstractEntityFactoryFileName(),
+            $baseEntityFactory
+        );
+
         foreach ($tables->all() as $table) {
             $this->generateFactory($table->getName());
         }
+    }
+
+    /**
+     * @param string $baseEntityFactory
+     * @param string $namespace
+     * @return string
+     */
+    private function changeNameSpaceOfBaseEntityFactory(
+        string $baseEntityFactory,
+        string $namespace
+    ) : string
+    {
+        return preg_replace('#namespace.*#', sprintf('namespace %s;', $namespace), $baseEntityFactory);
     }
 
     /**
@@ -72,9 +97,9 @@ class PhpEntityFactoryManager extends AbstractPhpManager
      */
     public function generateFactory(string $tableName)
     {
-        $className = $this->formClassName($tableName);
-        $fields = $this->databaseAdapter->getFields($tableName);
         $entityClassName = $this->entityManager->formClassName($tableName);
+        $className = $this->formClassName($tableName, $entityClassName);
+        $fields = $this->databaseAdapter->getFields($tableName);
         $fullyQualifiedEntityClassName = $this->entityManager->getEntitiesNamespace() . '\\' . $entityClassName;
 
         $entityFactoryGenerator = new PhpEntityFactoryGenerator(
@@ -82,23 +107,20 @@ class PhpEntityFactoryManager extends AbstractPhpManager
                 new  PhpClassGeneratorConfig(
                     $this->config['namespace'],
                     $className,
-                    new StringCollection(... [$fullyQualifiedEntityClassName]),
-                    null
+                    new StringCollection(... [
+                        $fullyQualifiedEntityClassName
+                    ]),
+                    $this->getAbstractEntityFactoryClassName()
                 ),
                 $this->typeHint,
                 $this->config['includeAnnotations']
             ),
             $this->formGeneratorFieldsDetails($fields),
-            new PhpEntityFactoryFieldFunctionResolver(),
             $entityClassName
         );
 
         $entityFactoryFileAsString = $entityFactoryGenerator->generate();
         $entityFactoryFileName = $className . '.php';
-
-        if (!$this->fileSystem->exists($this->config['outputDirectory'])) {
-            $this->fileSystem->createDirectory($this->config['outputDirectory'], true);
-        }
 
         $this->fileSystem->write(
             $this->config['outputDirectory'] . '/' . $entityFactoryFileName,
@@ -108,48 +130,55 @@ class PhpEntityFactoryManager extends AbstractPhpManager
 
     /**
      * @param string $tableName
+     * @param string $entityClassName
      * @return string
      */
-    public function formClassName(string $tableName) : string
+    public function formClassName(string $tableName, string $entityClassName) : string
     {
         if (!isset($this->config['tableToEntityFactoryClassName'][$tableName])) {
-            return snakeToPascalCase($tableName) . 'EntityFactory';
+            return $entityClassName . 'Factory';
         }
 
         return $this->config['tableToEntityFactoryClassName'][$tableName];
     }
 
     /**
+     * @return string
+     */
+    public function getAbstractEntityFactoryFileName() : string
+    {
+        return basename(AppInfo::ABSTRACT_ENTITY_FACTORY_PATH);
+    }
+
+    /**
+     * @return string
+     */
+    public function getAbstractEntityFactoryClassName() : string
+    {
+        return str_replace('.php', '', $this->getAbstractEntityFactoryFileName());
+    }
+
+    /**
      * @param FieldsCollection $fields
      * @return PhpEntityFactoryFieldsCollection
      */
-    private function formGeneratorFieldsDetails(FieldsCollection $fields) : PhpEntityFactoryFieldsCollection
+    public function formGeneratorFieldsDetails(FieldsCollection $fields) : PhpEntityFactoryFieldsCollection
     {
         $generatorFields = [];
+        $fieldResolver = new PhpEntityFactoryFieldFunctionResolver();
 
 
         foreach ($fields->all() as $field) {
             $property = $this->entityManager->formProperty($field);
-            $lengthLimit = null;
-            $signed = null;
-
-            if ($field instanceof IntegerField) {
-                $signed = $field->isSigned();
-                $lengthLimit = $field->getLengthInBits();
-            }
-
-            if ($field instanceof TextField
-                || $field instanceof BinaryField) {
-                $lengthLimit = $field->getLengthInBytes();
-            }
 
             $generatorFields[] = new PhpEntityFactoryField(
                 $field->getName(),
                 $property->getName(),
                 $property->getType(),
-                $lengthLimit,
-                $signed
+                $fieldResolver->resolve($field, $property->getType())
             );
         }
+
+        return new PhpEntityFactoryFieldsCollection(... $generatorFields);
     }
 }

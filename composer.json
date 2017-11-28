@@ -2,7 +2,7 @@
   "name": "kristijorgji/db-to-php",
   "type": "library",
   "description": "A library to generate application code based on database definition.",
-  "keywords": ["php", "framework", "entity", "database", "generator", "automatic", "factories", "repository", "sql"],
+  "keywords": ["db-to-php", "entities", "factories", "generate", "code", "sql", "mysql", "database"],
   "license": "MIT",
   "authors": [
     {
