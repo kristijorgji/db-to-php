@@ -62,6 +62,15 @@ class MySqlFieldResolverTest extends TestCase
                     ... ['j,aru', 'naru', 'daru']))
             ),
 
+            'unsigned_int8' => $h(new IntegerField($name, 'tinyint(3) unsigned', false, 8, false)),
+            'signed_int8' => $h(new IntegerField($name, 'tinyint(3)', false, 8, true)),
+
+            'unsigned_int16' => $h(new IntegerField($name, 'smallint(5) unsigned', false, 16, false)),
+            'signed_int16' => $h(new IntegerField($name, 'smallint(5)', false, 16, true)),
+
+            'unsigned_int24' => $h(new IntegerField($name, 'mediumint(9) unsigned', false, 24, false)),
+            'signed_int24' => $h(new IntegerField($name, 'mediumint(9)', false, 24, true)),
+
             'unsigned_int32' => $h(new IntegerField($name, 'int(11) unsigned', false, 32, false)),
             'signed_int32' => $h(new IntegerField($name, 'int(11)', false, 32, true)),
 

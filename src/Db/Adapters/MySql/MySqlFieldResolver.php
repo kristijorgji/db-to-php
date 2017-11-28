@@ -104,6 +104,8 @@ class MySqlFieldResolver
     private function getIntLength(string $type) : int
     {
         switch ($type) {
+            case 'tiny':
+                return 8;
             case 'small':
                 return 16;
             case 'medium':
