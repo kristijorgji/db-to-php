@@ -57,17 +57,12 @@ class PhpEntityFactoryGeneratorTest extends TestCase
         $generatorFields = new PhpEntityFactoryFieldsCollection(... [
            new PhpEntityFactoryField(
                'status',
-               'status',
-               new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
                'self::randomInt32()'
 
            ),
             new PhpEntityFactoryField(
                 'credit_value',
-                'creditValue',
-                new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
                 'self::randomInt16()'
-
             )
         ]);
 

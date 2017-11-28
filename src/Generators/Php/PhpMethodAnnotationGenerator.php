@@ -15,7 +15,7 @@ class PhpMethodAnnotationGenerator
     private $parameters;
 
     /**
-     * @var ?PhpType
+     * @var PhpType|null
      */
     private $returnType;
 
@@ -31,10 +31,10 @@ class PhpMethodAnnotationGenerator
 
     /**
      * @param PhpFunctionParametersCollection $parameters
-     * @param $returnType
+     * @param PhpType|null $returnType
      * @param bool $typeHint
      */
-    public function __construct(PhpFunctionParametersCollection $parameters, PhpType $returnType, bool $typeHint)
+    public function __construct(PhpFunctionParametersCollection $parameters, ?PhpType $returnType, bool $typeHint)
     {
         $this->parameters = $parameters;
         $this->returnType = $returnType;

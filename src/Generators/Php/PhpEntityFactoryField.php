@@ -14,34 +14,18 @@ class PhpEntityFactoryField
     /**
      * @var string
      */
-    private $entityPropertyName;
-
-    /**
-     * @var PhpType
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
     private $resolvingCall;
 
     /**
      * @param string $dbFieldName
-     * @param string $entityPropertyName
-     * @param PhpType $type
      * @param string $resolvingCall
      */
     public function __construct(
         string $dbFieldName,
-        string $entityPropertyName,
-        PhpType $type,
         string $resolvingCall
     )
     {
         $this->dbFieldName = $dbFieldName;
-        $this->entityPropertyName = $entityPropertyName;
-        $this->type = $type;
         $this->resolvingCall = $resolvingCall;
     }
 
@@ -51,22 +35,6 @@ class PhpEntityFactoryField
     public function getDbFieldName(): string
     {
         return $this->dbFieldName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEntityPropertyName(): string
-    {
-        return $this->entityPropertyName;
-    }
-
-    /**
-     * @return PhpType
-     */
-    public function getType(): PhpType
-    {
-        return $this->type;
     }
 
     /**

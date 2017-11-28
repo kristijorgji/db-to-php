@@ -2,6 +2,7 @@
 
 namespace kristijorgji\UnitTests\Db\Adapters\MySql;
 
+use kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions\UnknownMySqlTypeException;
 use kristijorgji\DbToPhp\Db\Adapters\MySql\MySqlFieldResolver;
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
@@ -24,6 +25,16 @@ class MySqlFieldResolverTest extends TestCase
     public function setUp()
     {
         $this->fieldResolver = new MySqlFieldResolver();
+    }
+
+    public function testResolveField_unkown_field()
+    {
+        $this->expectException(UnknownMySqlTypeException::class);
+        $this->fieldResolver->resolveField(
+            self::randomString(),
+            self::randomString(),
+            self::randomString()
+        );
     }
 
     /**
@@ -80,7 +91,9 @@ class MySqlFieldResolverTest extends TestCase
             $h(new FloatField($name, 'float', false)),
 
             $h(new DoubleField($name, 'double', false)),
-            $h(new DoubleField($name, 'decimal(20)', false)),
+            $h(new DoubleField($name, 'decimal(20, 0)', false)),
+            //TODO maybe later use integer for decimals without fractional part
+            'unsigned_decimal' => $h(new DoubleField($name, 'decimal(39,0) unsigned', false)),
             $h(new DoubleField($name, 'decimal(18,4)', false)),
             $h(new DoubleField($name, 'dec(18,4)', false)),
             $h(new DoubleField($name, 'real(10)', false)),
@@ -110,8 +123,13 @@ class MySqlFieldResolverTest extends TestCase
             $h(new TextField($name, 'mediumtext', false)),
             $h(new TextField($name, 'longtext', false)),
 
+            // TODO can have proper fields and generators in factories
+
+            $h(new IntegerField($name, 'year(4)', false, 4, false)),
             $h(new TextField($name, 'time', false)),
+            $h(new TextField($name, 'datetime', false)),
             $h(new TextField($name, 'timestamp', true)),
+            $h(new TextField($name, 'date', false)),
         ];
     }
 }

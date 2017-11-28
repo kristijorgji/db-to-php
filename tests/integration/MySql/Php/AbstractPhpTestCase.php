@@ -42,6 +42,6 @@ abstract class AbstractPhpTestCase extends MySqlTestCase
 
     public function tearDown()
     {
-        $this->fileSystem->emptyDirectory($this->actualOutputDirectory);
+        //$this->fileSystem->emptyDirectory($this->actualOutputDirectory);
     }
 }

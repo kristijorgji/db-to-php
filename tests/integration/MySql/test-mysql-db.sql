@@ -102,6 +102,31 @@ LOCK TABLES `test_2` WRITE;
 /*!40000 ALTER TABLE `test_2` DISABLE KEYS */;
 /*!40000 ALTER TABLE `test_2` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `times`
+--
+
+DROP TABLE IF EXISTS `times`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `times` (
+  `birthday_year` year(4) DEFAULT NULL,
+  `birthday_time` time DEFAULT NULL,
+  `column_3` datetime DEFAULT NULL,
+  `logged_in` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `registered_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `times`
+--
+
+LOCK TABLES `times` WRITE;
+/*!40000 ALTER TABLE `times` DISABLE KEYS */;
+/*!40000 ALTER TABLE `times` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -112,4 +137,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-21 16:23:19
+-- Dump completed on 2017-11-28 15:12:28

@@ -173,8 +173,6 @@ class PhpEntityFactoryManager extends AbstractPhpManager
 
             $generatorFields[] = new PhpEntityFactoryField(
                 $field->getName(),
-                $property->getName(),
-                $property->getType(),
                 $fieldResolver->resolve($field, $property->getType())
             );
         }

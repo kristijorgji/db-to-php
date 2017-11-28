@@ -2,6 +2,7 @@
 
 namespace kristijorgji\DbToPhp\Db\Adapters\MySql;
 
+use kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions\UnknownMySqlTypeException;
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
@@ -19,6 +20,7 @@ class MySqlFieldResolver
      * @param string $type
      * @param string $null
      * @return Field
+     * @throws UnknownMySqlTypeException
      */
     public function resolveField(string $name, string $type, string $null) : Field
     {
@@ -39,8 +41,32 @@ class MySqlFieldResolver
         }
 
         if (preg_match('#^(tiny|small|medium|long)*text#i', $type)
-            || preg_match('#^(tiny|small|medium|long)*blob#i', $type)
-            || preg_match('#(?=^time)#i', $type)) {
+            || preg_match('#^(tiny|small|medium|long)*blob#i', $type)) {
+            return new TextField($name, $type, $nullable);
+        }
+
+        // TODO year type
+        if (preg_match('#^year\((\d+)\)#i', $type, $captured)) {
+            return new IntegerField($name, $type, $nullable, $captured[1], false);
+        }
+
+        // TODO time type
+        if (preg_match('#^time$#i', $type)) {
+            return new TextField($name, $type, $nullable);
+        }
+
+        // TODO datetime type
+        if (preg_match('#^datetime#i', $type)) {
+            return new TextField($name, $type, $nullable);
+        }
+
+        // TODO timestamp type
+        if (preg_match('#^timestamp#i', $type)) {
+            return new TextField($name, $type, $nullable);
+        }
+
+        // TODO date type
+        if (preg_match('#^date#i', $type)) {
             return new TextField($name, $type, $nullable);
         }
 
@@ -64,6 +90,10 @@ class MySqlFieldResolver
         if (preg_match('#(?=^decimal)|(?=^dec)|(?=^double)|(?=^real)|(?=^fixed)#', $type)) {
             return new DoubleField($name, $type, $nullable);
         }
+
+        throw new UnknownMySqlTypeException(
+            sprintf('MySql type %s for field %s is cannot be mapped to internal type!', $type, $name)
+        );
     }
 
     /**
