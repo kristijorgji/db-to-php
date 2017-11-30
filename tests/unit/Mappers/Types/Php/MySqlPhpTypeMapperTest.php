@@ -4,6 +4,7 @@ namespace kristijorgji\UnitTests\Mappers\Types\Php;
 
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FloatField;
@@ -85,7 +86,11 @@ class MySqlPhpTypeMapperTest extends TestCase
             [new TextField('test', 'mediumtext', false), new PhpType(new PhpTypes(PhpTypes::STRING), false)],
             [new TextField('test', 'longtext', false), new PhpType(new PhpTypes(PhpTypes::STRING), false)],
 
+            [new DecimalField('test', 'year(4)', false, 4), new PhpType(new PhpTypes(PhpTypes::INTEGER), false)],
+            [new DecimalField('test', 'decimal(20, 4)', false, 16, 4), new PhpType(new PhpTypes(PhpTypes::FLOAT), false)],
+
             [new TextField('test', 'time', false), new PhpType(new PhpTypes(PhpTypes::STRING), false)],
+            [new TextField('test', 'datetime', false), new PhpType(new PhpTypes(PhpTypes::STRING), false)],
             [new TextField('test', 'timestamp', false), new PhpType(new PhpTypes(PhpTypes::STRING), false)],
         ];
     }

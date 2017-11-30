@@ -5,6 +5,7 @@ namespace kristijorgji\DbToPhp\Db\Adapters\MySql;
 use kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions\UnknownMySqlTypeException;
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
@@ -47,7 +48,7 @@ class MySqlFieldResolver
 
         // TODO year type
         if (preg_match('#^year\((\d+)\)#i', $type, $captured)) {
-            return new IntegerField($name, $type, $nullable, $captured[1], false);
+            return new DecimalField($name, $type, $nullable, $captured[1]);
         }
 
         // TODO time type
@@ -148,5 +149,4 @@ class MySqlFieldResolver
                 throw new \InvalidArgumentException('Unrecongnized mysql integer type ' . $type);
         }
     }
-
 }

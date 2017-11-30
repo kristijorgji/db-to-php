@@ -123,11 +123,20 @@ class AbstractEntityFactoryTest extends TestCase
         $this->assertInternalType('float', $actual);
     }
 
+    public function testRandomNumber()
+    {
+        for ($i = 0; $i < 177; $i++) {
+            $actual = AbstractEntityFactory::randomNumber();
+            $this->assertTrue($actual >= 0, $actual . ' should not be negative');
+        }
+    }
+
     public function testRandomNumber_fixed_digits_number()
     {
         $nrDigits = rand(3, 7);
         $actual = AbstractEntityFactory::randomNumber($nrDigits, true);
         $this->assertEquals($nrDigits, strlen((string) $actual));
+        $this->assertTrue($actual > 0);
     }
 
     public function testRandomNumber_overflow()

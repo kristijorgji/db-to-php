@@ -4,6 +4,7 @@ namespace kristijorgji\UnitTests\Managers\Php\Resolvers;
 
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
@@ -132,6 +133,18 @@ class PhpEntityFactoryFieldFunctionResolverTest extends TestCase
                 new TextField($name, $type, false, 188),
                 new PhpType(new PhpTypes(PhpTypes::STRING), false),
                 'self::randomString(rand(0, 188))'
+            ],
+
+            'decimal_no_fractional_part' => [
+                new DecimalField($name, $type, false, 4),
+                new PhpType(new PhpTypes(PhpTypes::INTEGER), false),
+                'self::randomNumber(4, true)'
+            ],
+
+            'decimal_with_fractional_part' => [
+                new DecimalField($name, $type, false, 8, 4),
+                new PhpType(new PhpTypes(PhpTypes::INTEGER), false),
+                'self::randomFloat(4)'
             ]
         ];
     }

@@ -4,9 +4,11 @@ namespace kristijorgji\IntegrationTests;
 
 use kristijorgji\DbToPhp\AppInfo;
 use kristijorgji\DbToPhp\Console\DbToPhpApplication;
+use kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions\UnknownMySqlTypeException;
 use kristijorgji\DbToPhp\FileSystem\FileSystem;
 use kristijorgji\Tests\Helpers\CommandTestCaseHelper;
 use kristijorgji\Tests\Helpers\TestCase;
+use Symfony\Component\Debug\Exception\FatalErrorException;
 
 class InitCommandTest extends TestCase
 {
@@ -58,7 +60,10 @@ class InitCommandTest extends TestCase
         unlink($expectedConfigFilePath);
     }
 
-    public function testInit_with_path()
+    /**
+     * @param bool $deleteConfigAfter
+     */
+    public function testInit_with_path(bool $deleteConfigAfter = true)
     {
         chdir(__DIR__ . '/../');
 
@@ -75,6 +80,28 @@ class InitCommandTest extends TestCase
         $this->assertTrue(
             $this->fileSystem->exists($expectedConfigFilePath)
         );
+
+        if ($deleteConfigAfter) {
+            unlink($expectedConfigFilePath);
+        }
+    }
+
+    public function testInit_already_exists()
+    {
+        chdir(dirname(__FILE__));
+
+        $expectedConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . AppInfo::DEFAULT_CONFIG_FILENAME;
+        $this->fileSystem->write($expectedConfigFilePath, self::randomString());
+
+        $command = 'init';
+
+
+        $output = $this->runCommand(
+            $this->consoleApp,
+            sprintf('%s', $command)
+        );
+
+        $this->assertRegexp('#The file \".*\" already exists#', $output);
 
         unlink($expectedConfigFilePath);
     }

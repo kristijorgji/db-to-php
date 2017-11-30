@@ -3,6 +3,7 @@
 namespace kristijorgji\DbToPhp\Managers\Php\Resolvers;
 
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
+use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
@@ -25,6 +26,9 @@ class PhpEntityFactoryFieldFunctionResolver
             case PhpTypes::FLOAT:
                 return 'self::randomFloat()';
             case PhpTypes::INTEGER:
+                if ($field instanceof DecimalField) {
+                    return $this->resolveDecimal($field);
+                }
                 return $this->resolveInteger($field);
             case PhpTypes::STRING:
                 return $this->resolveString($field);
@@ -65,6 +69,15 @@ class PhpEntityFactoryFieldFunctionResolver
         }
 
         return 'self::randomInt32()';
+    }
+
+    private function resolveDecimal(DecimalField $field)
+    {
+        if ($field->getFractionalPrecision() === 0 && !$field->isSigned()) {
+            return sprintf('self::randomNumber(%s, true)', $field->getDecimalPrecision());
+        }
+
+        return sprintf('self::randomFloat(%s)', $field->getFractionalPrecision());
     }
 
     /**

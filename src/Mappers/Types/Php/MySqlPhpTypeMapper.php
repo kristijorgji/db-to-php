@@ -4,6 +4,7 @@ namespace kristijorgji\DbToPhp\Mappers\Types\Php;
 
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
@@ -43,6 +44,13 @@ class MySqlPhpTypeMapper implements PhpTypeMapperInterface
                 break;
             case $field instanceof IntegerField:
                 $resolvedPhpType = new PhpTypes(PhpTypes::INTEGER);
+                break;
+            case $field instanceof DecimalField:
+                if ($field->getFractionalPrecision() === 0) {
+                    $resolvedPhpType = new PhpTypes(PhpTypes::INTEGER);
+                } else {
+                    $resolvedPhpType = new PhpTypes(PhpTypes::FLOAT);
+                }
                 break;
             default:
                 throw new UnknownDatabaseFieldTypeException(

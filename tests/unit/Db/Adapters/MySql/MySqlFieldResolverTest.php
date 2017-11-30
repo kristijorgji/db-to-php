@@ -6,6 +6,7 @@ use kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions\UnknownMySqlTypeException;
 use kristijorgji\DbToPhp\Db\Adapters\MySql\MySqlFieldResolver;
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
@@ -125,7 +126,7 @@ class MySqlFieldResolverTest extends TestCase
 
             // TODO can have proper fields and generators in factories
 
-            $h(new IntegerField($name, 'year(4)', false, 4, false)),
+            $h(new DecimalField($name, 'year(4)', false, 4)),
             $h(new TextField($name, 'time', false)),
             $h(new TextField($name, 'datetime', false)),
             $h(new TextField($name, 'timestamp', true)),
