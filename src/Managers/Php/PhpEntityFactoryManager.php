@@ -169,11 +169,9 @@ class PhpEntityFactoryManager extends AbstractPhpManager
 
 
         foreach ($fields->all() as $field) {
-            $property = $this->entityManager->formProperty($field);
-
             $generatorFields[] = new PhpEntityFactoryField(
                 $field->getName(),
-                $fieldResolver->resolve($field, $property->getType())
+                $fieldResolver->resolve($field)
             );
         }
 

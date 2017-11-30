@@ -16,20 +16,18 @@ class IntegerField extends Field
 
     /**
      * @param string $name
-     * @param string $type
      * @param bool $nullable
      * @param int $lengthInBits
      * @param bool $signed
      */
     public function __construct(
         string $name,
-        string $type,
         bool $nullable,
         int $lengthInBits = 32,
         bool $signed = false
     )
     {
-        parent::__construct($name, $type, $nullable);
+        parent::__construct($name, $nullable);
         $this->lengthInBits = $lengthInBits;
         $this->signed = $signed;
     }

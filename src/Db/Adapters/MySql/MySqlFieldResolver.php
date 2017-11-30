@@ -12,6 +12,7 @@ use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FloatField;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
+use kristijorgji\DbToPhp\Db\Fields\YearField;
 use kristijorgji\DbToPhp\Support\StringCollection;
 
 class MySqlFieldResolver
@@ -30,7 +31,6 @@ class MySqlFieldResolver
         if (preg_match('#^enum\((.*)\)#i', $type, $out)) {
             return new EnumField(
                 $name,
-                $type,
                 $nullable,
                 $this->resolveEnumAllowedTypes($out[1])
             );
@@ -38,62 +38,67 @@ class MySqlFieldResolver
 
         if (preg_match('#^char\((\\d+)\)#i', $type, $captured)
             || preg_match('#^varchar\((\\d+)\)#i', $type, $captured)) {
-            return new TextField($name, $type, $nullable, $captured[1]);
+            return new TextField($name, $nullable, $captured[1]);
         }
 
         if (preg_match('#^(tiny|small|medium|long)*text#i', $type)
             || preg_match('#^(tiny|small|medium|long)*blob#i', $type)) {
-            return new TextField($name, $type, $nullable);
+            return new TextField($name, $nullable);
         }
 
-        // TODO year type
         if (preg_match('#^year\((\d+)\)#i', $type, $captured)) {
-            return new DecimalField($name, $type, $nullable, $captured[1]);
+            return new YearField($name, $nullable, $captured[1]);
         }
 
         // TODO time type
         if (preg_match('#^time$#i', $type)) {
-            return new TextField($name, $type, $nullable);
+            return new TextField($name, $nullable);
         }
 
         // TODO datetime type
         if (preg_match('#^datetime#i', $type)) {
-            return new TextField($name, $type, $nullable);
+            return new TextField($name, $nullable);
         }
 
         // TODO timestamp type
         if (preg_match('#^timestamp#i', $type)) {
-            return new TextField($name, $type, $nullable);
+            return new TextField($name, $nullable);
         }
 
         // TODO date type
         if (preg_match('#^date#i', $type)) {
-            return new TextField($name, $type, $nullable);
+            return new TextField($name, $nullable);
         }
 
         if (preg_match('#^binary\((\\d+)\)#i', $type, $captured)
             || preg_match('#^varbinary\((\\d+)\)#i', $type, $captured)) {
-            return new BinaryField($name, $type, $nullable, $captured[1]);
+            return new BinaryField($name, $nullable, $captured[1]);
         }
 
         if (($type == 'tinyint(1)' || preg_match('#(?=^bit)#i', $type))) {
-            return new BoolField($name, $type, $nullable);
+            return new BoolField($name, $nullable);
         } else if (preg_match('#^(tiny|small|medium|big)*int\(\d+\)( unsigned)?#i', $type, $captured)) {
             $signed = empty($captured[2]) ? true : false;
             $length = $this->getIntLength(empty($captured[1])  ? 'int' : $captured[1]);
-            return new IntegerField($name, $type, $nullable, $length, $signed);
+            return new IntegerField($name, $nullable, $length, $signed);
         }
 
         if (preg_match('#(?=^float)#i', $type)) {
-            return new FloatField($name, $type, $nullable);
+            return new FloatField($name, $nullable);
         }
 
-        if (preg_match('#(?=^decimal)|(?=^dec)|(?=^double)|(?=^real)|(?=^fixed)#', $type)) {
-            return new DoubleField($name, $type, $nullable);
+        if (preg_match('#(?=^double)|(?=^real)|(?=^fixed)#', $type)) {
+            return new DoubleField($name, $nullable);
+        }
+
+        if (preg_match('#^decimal\((\d+),(\d+)\)( unsigned)?#', $type, $captured)) {
+            $signed = empty($captured[3]) ? true : false;
+            $decimalPrecision = $captured[1] - $captured[2];
+            return new DecimalField($name, $nullable, $decimalPrecision, $captured[2], $signed);
         }
 
         throw new UnknownMySqlTypeException(
-            sprintf('MySql type %s for field %s is cannot be mapped to internal type!', $type, $name)
+            sprintf('MySql type %s for field %s cannot be mapped to internal type!', $type, $name)
         );
     }
 

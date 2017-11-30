@@ -36,7 +36,7 @@ class Test2EntityFactory extends AbstractEntityFactory
             'surname' => $data['surname'] ?? self::randomString(rand(0, 64)),
             'isWorking' => $data['isWorking'] ?? self::randomBoolean(),
             'salary' => $data['salary'] ?? self::randomFloat(),
-            'discount' => $data['discount'] ?? self::randomFloat(),
+            'discount' => $data['discount'] ?? self::randomFloat(4),
             'new_column' => $data['new_column'] ?? self::randomFloat(),
             'dddd' => $data['dddd'] ?? self::randomString(rand(0, 64)),
             'binaeraylk' => $data['binaeraylk'] ?? self::randomString(rand(0, 1)),

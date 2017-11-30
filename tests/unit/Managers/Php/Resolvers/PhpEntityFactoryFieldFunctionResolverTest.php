@@ -11,11 +11,10 @@ use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FloatField;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
-use kristijorgji\DbToPhp\Rules\Php\PhpType;
-use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
 use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\DbToPhp\Managers\Php\Resolvers\PhpEntityFactoryFieldFunctionResolver;
 use kristijorgji\Tests\Helpers\TestCase;
+use kristijorgji\UnitTests\Mappers\Types\Php\TestDbField;
 
 class PhpEntityFactoryFieldFunctionResolverTest extends TestCase
 {
@@ -32,12 +31,11 @@ class PhpEntityFactoryFieldFunctionResolverTest extends TestCase
     /**
      * @dataProvider resolveProvider
      * @param Field $field
-     * @param PhpType $type
      * @param string $expected
      */
-    public function testResolve(Field $field, PhpType $type, string $expected)
+    public function testResolve(Field $field, string $expected)
     {
-        $actual = $this->resolver->resolve($field, $type);
+        $actual = $this->resolver->resolve($field);
         $this->assertEquals($expected, $actual);
     }
 
@@ -45,106 +43,98 @@ class PhpEntityFactoryFieldFunctionResolverTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->resolver->resolve(
-            new BinaryField(self::randomString(), self::randomString(), false, 123),
-            new PhpType(new PhpTypes(PhpTypes::ARRAY), false)
+            new TestDbField(self::randomString(), false)
         );
     }
 
     public function resolveProvider()
     {
         $name = self::randomString();
-        $type = self::randomString();
 
         return [
             'binary' => [
-                new BinaryField($name, $type, false, 123),
-                new PhpType(new PhpTypes(PhpTypes::STRING), false),
+                new BinaryField($name, false, 123),
                 'self::randomString(rand(0, 123))'
             ],
 
             'boolean' => [
-                new BoolField($name, $type, false),
-                new PhpType(new PhpTypes(PhpTypes::BOOL), false),
+                new BoolField($name, false),
                 'self::randomBoolean()'
             ],
 
             'double' => [
-                new DoubleField($name, $type, false),
-                new PhpType(new PhpTypes(PhpTypes::FLOAT), false),
+                new DoubleField($name, false),
                 'self::randomFloat()'
             ],
 
             'enum' => [
-                new EnumField($name, $type, false, new StringCollection(... ['test', 'dada', 'p'])),
-                new PhpType(new PhpTypes(PhpTypes::STRING), false),
+                new EnumField($name, false, new StringCollection(... ['test', 'dada', 'p'])),
                 'self::chooseRandomString(\'test\', \'dada\', \'p\')'
             ],
 
             'enum_with_quote' => [
-                new EnumField($name, $type, false, new StringCollection(... ['t\'est', 'dada', 'p'])),
-                new PhpType(new PhpTypes(PhpTypes::STRING), false),
+                new EnumField($name, false, new StringCollection(... ['t\'est', 'dada', 'p'])),
                 'self::chooseRandomString(\'t\\\'est\', \'dada\', \'p\')'
             ],
 
             'float' => [
-                new FloatField($name, $type, false),
-                new PhpType(new PhpTypes(PhpTypes::FLOAT), false),
+                new FloatField($name, false),
                 'self::randomFloat()'
             ],
 
             'int_7_signed' => [
-                new IntegerField($name, $type, true, 7, true),
-                new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
+                new IntegerField($name, true, 7, true),
                 'self::randomInt32()'
             ],
 
             'int_8_signed' => [
-                new IntegerField($name, $type, true, 8, true),
-                new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
+                new IntegerField($name, true, 8, true),
                 'self::randomInt8()'
             ],
             'int_8_unsigned' => [
-                new IntegerField($name, $type, true, 8, false),
-                new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
+                new IntegerField($name, true, 8, false),
                 'self::randomUnsignedInt8()'
             ],
             'int_16_unsigned' => [
-                new IntegerField($name, $type, true, 16, false),
-                new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
+                new IntegerField($name, true, 16, false),
                 'self::randomUnsignedInt16()'
             ],
             'int_24_unsigned' => [
-                new IntegerField($name, $type, true, 24, false),
-                new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
+                new IntegerField($name, true, 24, false),
                 'self::randomUnsignedInt24()'
             ],
             'int_32_unsigned' => [
-                new IntegerField($name, $type, true, 32, false),
-                new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
+                new IntegerField($name, true, 32, false),
                 'self::randomUnsignedInt32()'
             ],
             'int_64_unsigned' => [
-                new IntegerField($name, $type, true, 64, false),
-                new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
+                new IntegerField($name, true, 64, false),
                 'self::randomUnsignedInt64()'
             ],
 
             'text' => [
-                new TextField($name, $type, false, 188),
-                new PhpType(new PhpTypes(PhpTypes::STRING), false),
+                new TextField($name, false, 188),
                 'self::randomString(rand(0, 188))'
             ],
 
-            'decimal_no_fractional_part' => [
-                new DecimalField($name, $type, false, 4),
-                new PhpType(new PhpTypes(PhpTypes::INTEGER), false),
-                'self::randomNumber(4, true)'
+            'unsigned_decimal_no_fractional_part' => [
+                new DecimalField($name, false, 4),
+                'self::randomUnsignedNumber(4)'
             ],
 
-            'decimal_with_fractional_part' => [
-                new DecimalField($name, $type, false, 8, 4),
-                new PhpType(new PhpTypes(PhpTypes::INTEGER), false),
-                'self::randomFloat(4)'
+            'unsigned_decimal_with_fractional_part' => [
+                new DecimalField($name, false, 8, 7),
+                'self::randomFloat(7)'
+            ],
+
+            'signed_decimal_no_fractional_part' => [
+                new DecimalField($name, false, 4, 0, true),
+                'self::randomNumber(4)'
+            ],
+
+            'signed_decimal_with_fractional_part' => [
+                new DecimalField($name, false, 8, 7, true),
+                'self::randomFloat(7)'
             ]
         ];
     }

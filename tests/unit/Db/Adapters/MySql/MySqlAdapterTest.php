@@ -3,13 +3,9 @@
 namespace kristijorgji\UnitTests\Db\Adapters\MySql;
 
 use kristijorgji\DbToPhp\Db\Adapters\MySql\MySqlAdapter;
-use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
-use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
-use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
-use kristijorgji\DbToPhp\Db\Fields\FloatField;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Support\StringCollection;
@@ -56,28 +52,26 @@ class MySqlAdapterTest extends MySqlTestCase
     {
         $fields = $this->databaseAdapter->getFields('test');
         $expectedFields = new FieldsCollection(... [
-            new IntegerField('id', 'bigint(20) unsigned', false, 64, false),
-            new TextField('event', 'varchar(50)', false, 50),
-            new TextField('payload', 'longtext', false),
+            new IntegerField('id',  false, 64, false),
+            new TextField('event',  false, 50),
+            new TextField('payload',  false),
             new EnumField(
                 'status',
-                'enum(\'jaru\',\'naru\',\'daru\')',
                 false,
                 new StringCollection(... ['jaru', 'naru', 'daru'])
             ),
             new EnumField(
                 'super_status',
-                'enum(\'1\',\'4\',\'111\')',
                 false,
                 new StringCollection(... ['1', '4', '111'])
             ),
-            new BoolField('active', 'bit(4)', false),
-            new TextField('file', 'blob', false),
-            new TextField('time', 'time', false),
-            new IntegerField('can_be_nulled', 'int(11)', true, 32, true),
-            new TextField('created_at', 'timestamp', false),
-            new TextField('updated_at', 'timestamp', false),
-            new BoolField('new_column', 'bit(1)', true),
+            new BoolField('active',  false),
+            new TextField('file',  false),
+            new TextField('time',  false),
+            new IntegerField('can_be_nulled',  true, 32, true),
+            new TextField('created_at',  false),
+            new TextField('updated_at',  false),
+            new BoolField('new_column',  true),
         ]);
 
         $this->assertEquals($expectedFields, $fields);

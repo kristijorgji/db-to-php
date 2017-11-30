@@ -15,7 +15,6 @@ class EnumFieldFactory extends BaseFactory
     {
         return new EnumField(
             self::faker()->text(20),
-            self::faker()->text(20),
             self::faker()->boolean(),
             self::randomAllowedValues()
         );

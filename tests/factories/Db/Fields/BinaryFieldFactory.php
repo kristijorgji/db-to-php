@@ -14,7 +14,6 @@ class BinaryFieldFactory extends BaseFactory
     {
         return new BinaryField(
             self::faker()->text(20),
-            self::faker()->text(20),
             self::faker()->boolean(),
             random_int(16, 128)
         );

@@ -13,15 +13,14 @@ class EnumField extends Field
 
     /**
      * @param string $name
-     * @param string $type
      * @param bool $nullable
      * @param StringCollection $allowedValues
      * @internal param $lengthInBits
      * @internal param $signed
      */
-    public function __construct(string $name, string $type, bool $nullable, StringCollection $allowedValues)
+    public function __construct(string $name, bool $nullable, StringCollection $allowedValues)
     {
-        parent::__construct($name, $type, $nullable);
+        parent::__construct($name, $nullable);
         $this->allowedValues = $allowedValues;
     }
 

@@ -124,6 +124,15 @@ abstract class AbstractEntityFactory
     }
 
     /**
+     * @param int $digits
+     * @return int
+     */
+    public static function randomYear(int $digits) : int
+    {
+        return self::randomUnsignedNumber($digits, true);
+    }
+
+    /**
      * Return a random float number
      *
      * @param int       $nbMaxDecimals
@@ -140,7 +149,7 @@ abstract class AbstractEntityFactory
         }
 
         if (null === $max) {
-            $max = static::randomNumber();
+            $max = static::randomUnsignedNumber();
             if ($min > $max) {
                 $max = $min;
             }
@@ -166,20 +175,31 @@ abstract class AbstractEntityFactory
      *
      * @return integer
      */
-    public static function randomNumber($nbDigits = null, bool $strict = false) : int
+    public static function randomUnsignedNumber(?int $nbDigits = null, bool $strict = false) : int
     {
         if (null === $nbDigits) {
             $nbDigits = static::randomDigitNotNull();
         }
         $max = pow(10, $nbDigits) - 1;
         if ($max > mt_getrandmax()) {
-            throw new \InvalidArgumentException('randomNumber() can only generate numbers up to mt_getrandmax()');
+            throw new \InvalidArgumentException('randomUnsignedNumber() can only generate numbers up to mt_getrandmax()');
         }
         if ($strict) {
             return mt_rand(pow(10, $nbDigits - 1), $max);
         }
 
         return mt_rand(0, $max);
+    }
+
+    /**
+     * @param int|null|null $nrDigits
+     * @param bool $strict
+     * @return int
+     */
+    public static function randomNumber(?int $nrDigits = null, bool $strict = false) : int
+    {
+        $randomNumber = self::randomUnsignedNumber($nrDigits, $strict);
+        return self::randomBoolean() ? $randomNumber : (0 - $randomNumber);
     }
 
     /**

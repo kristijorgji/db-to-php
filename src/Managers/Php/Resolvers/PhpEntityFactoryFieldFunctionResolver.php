@@ -3,39 +3,47 @@
 namespace kristijorgji\DbToPhp\Managers\Php\Resolvers;
 
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
+use kristijorgji\DbToPhp\Db\Fields\BoolField;
 use kristijorgji\DbToPhp\Db\Fields\DecimalField;
+use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
+use kristijorgji\DbToPhp\Db\Fields\FloatField;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
-use kristijorgji\DbToPhp\Rules\Php\PhpType;
-use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
+use kristijorgji\DbToPhp\Db\Fields\YearField;
 
 class PhpEntityFactoryFieldFunctionResolver
 {
     /**
      * @param Field $field
-     * @param PhpType $type
      * @return string
      */
-    public function resolve(Field $field, PhpType $type) : string
+    public function resolve(Field $field) : string
     {
-        switch ((string) $type->getType()) {
-            case PhpTypes::BOOL:
+        switch (true)
+        {
+            case $field instanceof BoolField:
                 return 'self::randomBoolean()';
-            case PhpTypes::FLOAT:
+            case $field instanceof DoubleField:
+            case $field instanceof FloatField:
                 return 'self::randomFloat()';
-            case PhpTypes::INTEGER:
-                if ($field instanceof DecimalField) {
-                    return $this->resolveDecimal($field);
-                }
-                return $this->resolveInteger($field);
-            case PhpTypes::STRING:
+            case $field instanceof EnumField:
+                return $this->resolveEnum($field);
+            case $field instanceof TextField:
+            case $field instanceof BinaryField:
                 return $this->resolveString($field);
+            case $field instanceof IntegerField:
+                return $this->resolveInteger($field);
+            case $field instanceof YearField:
+                return sprintf('self::randomYear(%s)', $field->getDigits());
+            case $field instanceof DecimalField:
+                return $this->resolveDecimal($field);
             default:
                 throw new \InvalidArgumentException(
-                    sprintf('Type %s do not have generator functions yet!', $type->getType()->getSelfKey())
+                    sprintf('Field %s do not have generator functions yet!', get_class($field))
                 );
+
         }
     }
 
@@ -73,8 +81,12 @@ class PhpEntityFactoryFieldFunctionResolver
 
     private function resolveDecimal(DecimalField $field)
     {
-        if ($field->getFractionalPrecision() === 0 && !$field->isSigned()) {
-            return sprintf('self::randomNumber(%s, true)', $field->getDecimalPrecision());
+        if ($field->getFractionalPrecision() === 0) {
+            if ($field->isSigned()) {
+                return sprintf('self::randomNumber(%s)', $field->getDecimalPrecision());
+            } else {
+                return sprintf('self::randomUnsignedNumber(%s)', $field->getDecimalPrecision());
+            }
         }
 
         return sprintf('self::randomFloat(%s)', $field->getFractionalPrecision());
@@ -86,16 +98,7 @@ class PhpEntityFactoryFieldFunctionResolver
      */
     private function resolveString(Field $field) : string
     {
-        $lengthLimit = null;
-
-        switch (true) {
-            case $field instanceof EnumField:
-                return $this->resolveEnum($field);
-            case $field instanceof BinaryField:
-            case $field instanceof TextField:
-                $lengthLimit = $field->getLengthInBytes();
-        }
-
+        $lengthLimit = $field->getLengthInBytes();
         return sprintf('self::randomString(rand(0, %s))', $lengthLimit);
     }
 

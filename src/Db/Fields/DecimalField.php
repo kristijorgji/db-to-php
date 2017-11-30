@@ -21,7 +21,6 @@ class DecimalField extends Field
 
     /**
      * @param string $name
-     * @param string $type
      * @param bool $nullable
      * @param int $decimalPrecision
      * @param int $fractionalPrecision
@@ -29,14 +28,13 @@ class DecimalField extends Field
      */
     public function __construct(
         string $name,
-        string $type,
         bool $nullable,
         int $decimalPrecision,
         int $fractionalPrecision = 0,
         bool $signed = false
     )
     {
-        parent::__construct($name, $type, $nullable);
+        parent::__construct($name, $nullable);
         $this->decimalPrecision = $decimalPrecision;
         $this->fractionalPrecision = $fractionalPrecision;
         $this->signed = $signed;

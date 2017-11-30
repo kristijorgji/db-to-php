@@ -11,14 +11,13 @@ class TextField extends Field
 
     /**
      * @param string $name
-     * @param string $type
      * @param bool $nullable
      * @param int $lengthInBytes
      * @internal param $signed
      */
-    public function __construct(string $name, string $type, bool $nullable, int $lengthInBytes = 64)
+    public function __construct(string $name, bool $nullable, int $lengthInBytes = 64)
     {
-        parent::__construct($name, $type, $nullable);
+        parent::__construct($name, $nullable);
         $this->lengthInBytes = $lengthInBytes;
     }
 

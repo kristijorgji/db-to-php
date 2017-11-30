@@ -13,6 +13,7 @@ use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FloatField;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
+use kristijorgji\DbToPhp\Db\Fields\YearField;
 use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\TestCase;
 
@@ -60,77 +61,78 @@ class MySqlFieldResolverTest extends TestCase
     {
         $name = self::randomString(4);
 
-        $h = function (Field $field) use ($name) {
+        $h = function (Field $field, string $mysqlType) use ($name) {
             return [
-                $name, $field->getType(), ($field->isNullable() ? 'YES' : 'NO'), $field
+                $name, $mysqlType, ($field->isNullable() ? 'YES' : 'NO'), $field
             ];
         };
 
         return [
-            'nullable' => $h(new TextField($name, 'char(1)', true, 1)),
-            'not_nullable' => $h(new TextField($name, 'char(1)', false, 1)),
+            'nullable' => $h(new TextField($name, true, 1), 'char(1)'),
+            'not_nullable' => $h(new TextField($name, false, 1), 'char(1)'),
             'enum' => $h(
-                new EnumField($name, 'enum(\'j,aru\',\'naru\',\'daru\')', false, new StringCollection(
-                    ... ['j,aru', 'naru', 'daru']))
+                new EnumField($name, false, new StringCollection(
+                    ... ['j,aru', 'naru', 'daru'])),
+                'enum(\'j,aru\',\'naru\',\'daru\')'
+            ),
+            'enum_1' => $h(new EnumField($name, false, new StringCollection(
+                ... ['1', '4', '111'])),
+                'enum(\'1\',\'4\',\'111\')'
             ),
 
-            'unsigned_int8' => $h(new IntegerField($name, 'tinyint(3) unsigned', false, 8, false)),
-            'signed_int8' => $h(new IntegerField($name, 'tinyint(3)', false, 8, true)),
+            'unsigned_int8' => $h(new IntegerField($name, false, 8, false), 'tinyint(3) unsigned'),
+            'signed_int8' => $h(new IntegerField($name, false, 8, true), 'tinyint(3)'),
 
-            'unsigned_int16' => $h(new IntegerField($name, 'smallint(5) unsigned', false, 16, false)),
-            'signed_int16' => $h(new IntegerField($name, 'smallint(5)', false, 16, true)),
+            'unsigned_int16' => $h(new IntegerField($name, false, 16, false), 'smallint(5) unsigned'),
+            'signed_int16' => $h(new IntegerField($name, false, 16, true), 'smallint(5)'),
 
-            'unsigned_int24' => $h(new IntegerField($name, 'mediumint(9) unsigned', false, 24, false)),
-            'signed_int24' => $h(new IntegerField($name, 'mediumint(9)', false, 24, true)),
+            'unsigned_int24' => $h(new IntegerField($name, false, 24, false), 'mediumint(9) unsigned'),
+            'signed_int24' => $h(new IntegerField($name, false, 24, true), 'mediumint(9)'),
 
-            'unsigned_int32' => $h(new IntegerField($name, 'int(11) unsigned', false, 32, false)),
-            'signed_int32' => $h(new IntegerField($name, 'int(11)', false, 32, true)),
+            'unsigned_int32' => $h(new IntegerField($name, false, 32, false), 'int(11) unsigned'),
+            'signed_int32' => $h(new IntegerField($name, false, 32, true), 'int(11)'),
 
-            'unsigned_int64' => $h(new IntegerField($name, 'bigint(20) unsigned', false, 64, false)),
-            'signed_int64' => $h(new IntegerField($name, 'bigint(20)', false, 64, true)),
+            'unsigned_int64' => $h(new IntegerField($name, false, 64, false), 'bigint(20) unsigned'),
+            'signed_int64' => $h(new IntegerField($name, false, 64, true), 'bigint(20)'),
 
-            $h(new FloatField($name, 'float', false)),
+            $h(new FloatField($name, false), 'float'),
 
-            $h(new DoubleField($name, 'double', false)),
-            $h(new DoubleField($name, 'decimal(20, 0)', false)),
-            //TODO maybe later use integer for decimals without fractional part
-            'unsigned_decimal' => $h(new DoubleField($name, 'decimal(39,0) unsigned', false)),
-            $h(new DoubleField($name, 'decimal(18,4)', false)),
-            $h(new DoubleField($name, 'dec(18,4)', false)),
-            $h(new DoubleField($name, 'real(10)', false)),
+            'double' => $h(new DoubleField($name, false), 'double'),
+            'real' => $h(new DoubleField($name, false), 'real(10)'),
 
-            $h(new BoolField($name, 'tinyint(1)', false)),
-            $h(new BoolField($name, 'bit', false)),
+            'signed_decimal_no_fractionals' => $h(new DecimalField($name, false, 20, 0, true), 'decimal(20,0)'),
+            'unsigned_decimal' => $h(new DecimalField($name, false, 39, 0, false), 'decimal(39,0) unsigned'),
+            'signed_decimal' => $h(new DecimalField($name, false, 14, 4, true), 'decimal(18,4)'),
 
-            'binary' => $h(new BinaryField($name, 'binary(1)', false, 1)),
-            'varbinary' => $h(new BinaryField($name, 'varbinary(4)', false, 4)),
+            $h(new BoolField($name, false), 'tinyint(1)'),
+            $h(new BoolField($name, false), 'bit'),
 
-            $h(new TextField($name, 'blob', false)),
-            $h(new TextField($name, 'tinyblob', false)),
-            $h(new TextField($name, 'smallblob', false)),
-            $h(new TextField($name, 'mediumblob', false)),
-            $h(new TextField($name, 'longblob', false)),
+            'binary' => $h(new BinaryField($name, false, 1), 'binary(1)'),
+            'varbinary' => $h(new BinaryField($name, false, 4), 'varbinary(4)'),
 
-            $h(new EnumField($name, 'enum(\'1\',\'4\',\'111\')', false, new StringCollection(
-                ... ['1', '4', '111']
-            ))),
+            $h(new TextField($name, false), 'blob'),
+            $h(new TextField($name, false), 'tinyblob'),
+            $h(new TextField($name, false), 'smallblob'),
+            $h(new TextField($name, false), 'mediumblob'),
+            $h(new TextField($name, false), 'longblob'),
 
-            'varchar' => $h(new TextField($name, 'varchar(50)', false, 50)),
-            'char' => $h(new TextField($name, 'char(2)', false, 2)),
+            'varchar' => $h(new TextField($name, false, 50), 'varchar(50)'),
+            'char' => $h(new TextField($name, false, 2), 'char(2)'),
 
-            $h(new TextField($name, 'text', false)),
-            $h(new TextField($name, 'tinytext', false)),
-            $h(new TextField($name, 'smalltext', false)),
-            $h(new TextField($name, 'mediumtext', false)),
-            $h(new TextField($name, 'longtext', false)),
+            $h(new TextField($name, false), 'text'),
+            $h(new TextField($name, false), 'tinytext'),
+            $h(new TextField($name, false), 'smalltext'),
+            $h(new TextField($name, false), 'mediumtext'),
+            $h(new TextField($name, false), 'longtext'),
 
             // TODO can have proper fields and generators in factories
 
-            $h(new DecimalField($name, 'year(4)', false, 4)),
-            $h(new TextField($name, 'time', false)),
-            $h(new TextField($name, 'datetime', false)),
-            $h(new TextField($name, 'timestamp', true)),
-            $h(new TextField($name, 'date', false)),
+            $h(new YearField($name, false, 4), 'year(4)'),
+
+            $h(new TextField($name, false), 'time'),
+            $h(new TextField($name, false), 'datetime'),
+            $h(new TextField($name, true), 'timestamp'),
+            $h(new TextField($name, false), 'date'),
         ];
     }
 }

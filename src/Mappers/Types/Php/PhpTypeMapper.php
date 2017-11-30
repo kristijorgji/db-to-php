@@ -11,11 +11,12 @@ use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FloatField;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
+use kristijorgji\DbToPhp\Db\Fields\YearField;
 use kristijorgji\DbToPhp\Mappers\Types\Exceptions\UnknownDatabaseFieldTypeException;
 use kristijorgji\DbToPhp\Rules\Php\PhpType;
 use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
 
-class MySqlPhpTypeMapper implements PhpTypeMapperInterface
+class PhpTypeMapper implements PhpTypeMapperInterface
 {
     /**
      * @param Field $field
@@ -26,7 +27,6 @@ class MySqlPhpTypeMapper implements PhpTypeMapperInterface
     {
         $resolvedPhpType = null;
 
-        $fieldType = $field->getType();
         $nullable = $field->isNullable();
 
         switch(true) {
@@ -43,6 +43,7 @@ class MySqlPhpTypeMapper implements PhpTypeMapperInterface
                 $resolvedPhpType = new PhpTypes(PhpTypes::STRING);
                 break;
             case $field instanceof IntegerField:
+            case $field instanceof YearField:
                 $resolvedPhpType = new PhpTypes(PhpTypes::INTEGER);
                 break;
             case $field instanceof DecimalField:
@@ -54,7 +55,7 @@ class MySqlPhpTypeMapper implements PhpTypeMapperInterface
                 break;
             default:
                 throw new UnknownDatabaseFieldTypeException(
-                    sprintf('The mysql type %s cannot be resolved to any internal type', $fieldType)
+                    sprintf('The field %s cannot be resolved to any internal type', get_class($field))
                 );
         }
 

@@ -3,7 +3,7 @@
 namespace kristijorgji\UnitTests\Mappers\Types\Php;
 
 use kristijorgji\DbToPhp\DatabaseDrivers;
-use kristijorgji\DbToPhp\Mappers\Types\Php\MySqlPhpTypeMapper;
+use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapper;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperFactory;
 
 class PhpTypeMapperFactoryTest extends \PHPUnit_Framework_TestCase
@@ -38,7 +38,7 @@ class PhpTypeMapperFactoryTest extends \PHPUnit_Framework_TestCase
     public function getProvider()
     {
         return [
-            [DatabaseDrivers::MYSQL, MySqlPhpTypeMapper::class]
+            [DatabaseDrivers::MYSQL, PhpTypeMapper::class]
         ];
     }
 }

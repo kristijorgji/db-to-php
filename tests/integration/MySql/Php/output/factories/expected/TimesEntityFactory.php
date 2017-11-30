@@ -31,7 +31,7 @@ class TimesEntityFactory extends AbstractEntityFactory
     public static function makeData(array $data = []) : array
     {
         return [
-            'birthday_year' => $data['birthday_year'] ?? self::randomNumber(4, true),
+            'birthday_year' => $data['birthday_year'] ?? self::randomYear(4),
             'birthday_time' => $data['birthday_time'] ?? self::randomString(rand(0, 64)),
             'column_3' => $data['column_3'] ?? self::randomString(rand(0, 64)),
             'logged_in' => $data['logged_in'] ?? self::randomString(rand(0, 64)),

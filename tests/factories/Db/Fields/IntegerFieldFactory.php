@@ -14,7 +14,6 @@ class IntegerFieldFactory extends BaseFactory
     {
         return new IntegerField(
             self::faker()->text(20),
-            self::faker()->text(20),
             self::faker()->boolean(),
             random_int(16, 128),
             self::faker()->boolean()
