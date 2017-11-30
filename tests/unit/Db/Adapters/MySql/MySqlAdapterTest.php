@@ -4,6 +4,7 @@ namespace kristijorgji\UnitTests\Db\Adapters\MySql;
 
 use kristijorgji\DbToPhp\Db\Adapters\MySql\MySqlAdapter;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DateField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
@@ -69,8 +70,8 @@ class MySqlAdapterTest extends MySqlTestCase
             new TextField('file',  false),
             new TextField('time',  false),
             new IntegerField('can_be_nulled',  true, 32, true),
-            new TextField('created_at',  false),
-            new TextField('updated_at',  false),
+            new DateField('created_at',  false, DateField::MYSQL_TIMESTAMP),
+            new DateField('updated_at',  false, DateField::MYSQL_TIMESTAMP),
             new BoolField('new_column',  true),
         ]);
 

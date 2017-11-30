@@ -2,6 +2,7 @@
 
 namespace kristijorgji\UnitTests\Data;
 
+use DateTime;
 use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
 use kristijorgji\Tests\Helpers\TestCase;
 
@@ -20,10 +21,27 @@ class AbstractEntityFactoryTest extends TestCase
         $this->assertInternalType('array', $actual);
     }
 
+    public function testRandomJson()
+    {
+        $actual = AbstractEntityFactory::randomJson();
+        $this->assertJson($actual);
+    }
+
     public function testRandomBoolean()
     {
         $actual = AbstractEntityFactory::randomBoolean();
         $this->assertInternalType('bool', $actual);
+    }
+
+    public function testRandomDate()
+    {
+        $format = 'Y-m-d H:i:s';
+
+        for ($i = 0; $i < 177; $i++) {
+            $actual = AbstractEntityFactory::randomDate($format);
+            $d = DateTime::createFromFormat($format, $actual);
+            $this->assertTrue($d && $d->format($format) == $actual);
+        }
     }
 
     public function testRandomInt8()

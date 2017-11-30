@@ -4,6 +4,7 @@ namespace kristijorgji\UnitTests\Mappers\Types\Php;
 
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DateField;
 use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
@@ -56,6 +57,7 @@ class PhpTypeMapperTest extends TestCase
         return [
             [new BinaryField($name, false), new PhpType(new PhpTypes(PhpTypes::STRING), false)],
             [new BoolField($name, false), new PhpType(new PhpTypes(PhpTypes::BOOL), false)],
+            [new DateField($name, false, DateField::MYSQL_TIMESTAMP), new PhpType(new PhpTypes(PhpTypes::STRING), false)],
 
             [new DecimalField($name, false, 4), new PhpType(new PhpTypes(PhpTypes::INTEGER), false)],
             'decimal_with_fractional' => [new DecimalField($name, false, 16, 4), new PhpType(new PhpTypes(PhpTypes::FLOAT), false)],

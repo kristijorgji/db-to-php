@@ -4,12 +4,14 @@ namespace kristijorgji\UnitTests\Managers\Php\Resolvers;
 
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DateField;
 use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FloatField;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
+use kristijorgji\DbToPhp\Db\Fields\JsonField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\DbToPhp\Managers\Php\Resolvers\PhpEntityFactoryFieldFunctionResolver;
@@ -115,6 +117,16 @@ class PhpEntityFactoryFieldFunctionResolverTest extends TestCase
             'text' => [
                 new TextField($name, false, 188),
                 'self::randomString(rand(0, 188))'
+            ],
+
+            'json' => [
+                new JsonField($name, false),
+                'self::randomJson()'
+            ],
+
+            'date' => [
+                new DateField($name, false, DateField::MYSQL_TIMESTAMP),
+                'self::randomDate(\'Y-m-d H:i:s\')'
             ],
 
             'unsigned_decimal_no_fractional_part' => [

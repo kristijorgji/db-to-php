@@ -6,12 +6,14 @@ use kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions\UnknownMySqlTypeException;
 use kristijorgji\DbToPhp\Db\Adapters\MySql\MySqlFieldResolver;
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DateField;
 use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FloatField;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
+use kristijorgji\DbToPhp\Db\Fields\JsonField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Db\Fields\YearField;
 use kristijorgji\DbToPhp\Support\StringCollection;
@@ -29,14 +31,15 @@ class MySqlFieldResolverTest extends TestCase
         $this->fieldResolver = new MySqlFieldResolver();
     }
 
-    public function testResolveField_unkown_field()
+    public function testResolveField_unknown_field()
     {
-        $this->expectException(UnknownMySqlTypeException::class);
-        $this->fieldResolver->resolveField(
+        $actual = $this->fieldResolver->resolveField(
             self::randomString(),
             self::randomString(),
             self::randomString()
         );
+
+        $this->assertInstanceOf(TextField::class, $actual);
     }
 
     /**
@@ -116,6 +119,8 @@ class MySqlFieldResolverTest extends TestCase
             $h(new TextField($name, false), 'mediumblob'),
             $h(new TextField($name, false), 'longblob'),
 
+            'json' => $h(new JsonField($name, false), 'json'),
+
             'varchar' => $h(new TextField($name, false, 50), 'varchar(50)'),
             'char' => $h(new TextField($name, false, 2), 'char(2)'),
 
@@ -131,7 +136,7 @@ class MySqlFieldResolverTest extends TestCase
 
             $h(new TextField($name, false), 'time'),
             $h(new TextField($name, false), 'datetime'),
-            $h(new TextField($name, true), 'timestamp'),
+            $h(new DateField($name, true, DateField::MYSQL_TIMESTAMP), 'timestamp'),
             $h(new TextField($name, false), 'date'),
         ];
     }

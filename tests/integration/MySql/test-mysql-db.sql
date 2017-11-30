@@ -39,6 +39,35 @@ INSERT INTO `binarius` VALUES ('a','fgdgfdgdfg'),(NULL,NULL);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `special`
+--
+
+DROP TABLE IF EXISTS `special`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `special` (
+  `geometry` geometry DEFAULT NULL,
+  `geometry_collection` geometrycollection DEFAULT NULL,
+  `json` json DEFAULT NULL,
+  `line_string` linestring DEFAULT NULL,
+  `multilinestring` multilinestring DEFAULT NULL,
+  `point` point DEFAULT NULL,
+  `multipoint` multipoint DEFAULT NULL,
+  `polygon` polygon DEFAULT NULL,
+  `multy_polygon` multipolygon DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `special`
+--
+
+LOCK TABLES `special` WRITE;
+/*!40000 ALTER TABLE `special` DISABLE KEYS */;
+/*!40000 ALTER TABLE `special` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `test`
 --
 
@@ -137,4 +166,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-28 15:12:28
+-- Dump completed on 2017-11-30 14:42:25

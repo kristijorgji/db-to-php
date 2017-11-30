@@ -40,8 +40,8 @@ class SuperEntityFactory extends AbstractEntityFactory
             'file' => $data['file'] ?? self::randomString(rand(0, 64)),
             'time' => $data['time'] ?? self::randomString(rand(0, 64)),
             'can_be_nulled' => $data['can_be_nulled'] ?? self::randomInt32(),
-            'created_at' => $data['created_at'] ?? self::randomString(rand(0, 64)),
-            'updated_at' => $data['updated_at'] ?? self::randomString(rand(0, 64)),
+            'created_at' => $data['created_at'] ?? self::randomDate('Y-m-d H:i:s'),
+            'updated_at' => $data['updated_at'] ?? self::randomDate('Y-m-d H:i:s'),
             'new_column' => $data['new_column'] ?? self::randomBoolean(),
         ];
     }

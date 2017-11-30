@@ -34,7 +34,7 @@ class TimesEntityFactory extends AbstractEntityFactory
             'birthday_year' => $data['birthday_year'] ?? self::randomYear(4),
             'birthday_time' => $data['birthday_time'] ?? self::randomString(rand(0, 64)),
             'column_3' => $data['column_3'] ?? self::randomString(rand(0, 64)),
-            'logged_in' => $data['logged_in'] ?? self::randomString(rand(0, 64)),
+            'logged_in' => $data['logged_in'] ?? self::randomDate('Y-m-d H:i:s'),
             'registered_date' => $data['registered_date'] ?? self::randomString(rand(0, 64)),
         ];
     }

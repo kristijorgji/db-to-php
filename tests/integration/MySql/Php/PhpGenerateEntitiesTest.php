@@ -25,6 +25,7 @@ class PhpGenerateEntitiesTest extends AbstractPhpTestCase
             sprintf('%s --configuration=%s', $command, $configurationPath)
         );
 
+        echo $output;
         $this->assertFoldersContentMatch($expectedOutputDirectory,  $this->actualOutputDirectory);
     }
 

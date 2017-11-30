@@ -5,12 +5,14 @@ namespace kristijorgji\DbToPhp\Db\Adapters\MySql;
 use kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions\UnknownMySqlTypeException;
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DateField;
 use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FloatField;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
+use kristijorgji\DbToPhp\Db\Fields\JsonField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Db\Fields\YearField;
 use kristijorgji\DbToPhp\Support\StringCollection;
@@ -46,6 +48,10 @@ class MySqlFieldResolver
             return new TextField($name, $nullable);
         }
 
+        if (preg_match('#^json$#i', $type)) {
+            return new JsonField($name, $nullable);
+        }
+
         if (preg_match('#^year\((\d+)\)#i', $type, $captured)) {
             return new YearField($name, $nullable, $captured[1]);
         }
@@ -60,9 +66,8 @@ class MySqlFieldResolver
             return new TextField($name, $nullable);
         }
 
-        // TODO timestamp type
         if (preg_match('#^timestamp#i', $type)) {
-            return new TextField($name, $nullable);
+            return new DateField($name, $nullable, DateField::MYSQL_TIMESTAMP);
         }
 
         // TODO date type
@@ -97,9 +102,11 @@ class MySqlFieldResolver
             return new DecimalField($name, $nullable, $decimalPrecision, $captured[2], $signed);
         }
 
-        throw new UnknownMySqlTypeException(
-            sprintf('MySql type %s for field %s cannot be mapped to internal type!', $type, $name)
-        );
+        /**
+         * For all unsupported types so far like point, geometry etc
+         * we return strings in order not to crash the application
+         */
+        return new TextField($name, $nullable);
     }
 
     /**

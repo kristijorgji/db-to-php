@@ -4,12 +4,14 @@ namespace kristijorgji\DbToPhp\Managers\Php\Resolvers;
 
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DateField;
 use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FloatField;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
+use kristijorgji\DbToPhp\Db\Fields\JsonField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Db\Fields\YearField;
 
@@ -25,11 +27,15 @@ class PhpEntityFactoryFieldFunctionResolver
         {
             case $field instanceof BoolField:
                 return 'self::randomBoolean()';
+            case $field instanceof DateField:
+                return sprintf('self::randomDate(\'%s\')', $field->getFormat());
             case $field instanceof DoubleField:
             case $field instanceof FloatField:
                 return 'self::randomFloat()';
             case $field instanceof EnumField:
                 return $this->resolveEnum($field);
+            case $field instanceof JsonField:
+                return 'self::randomJson()';
             case $field instanceof TextField:
             case $field instanceof BinaryField:
                 return $this->resolveString($field);

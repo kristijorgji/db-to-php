@@ -41,17 +41,10 @@ class InitCommand extends Command
             $path = getcwd();
         }
 
-        $path = realpath($path);
-
-        if (!is_writable($path)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The directory "%s" is not writable',
-                $path
-            ));
-        }
+        $realPath = realpath($path);
 
         $fileName = AppInfo::DEFAULT_CONFIG_FILENAME;
-        $filePath = $path . DIRECTORY_SEPARATOR . $fileName;
+        $filePath = $realPath . DIRECTORY_SEPARATOR . $fileName;
 
         if (file_exists($filePath)) {
             throw new \InvalidArgumentException(sprintf(
@@ -62,9 +55,15 @@ class InitCommand extends Command
 
         $contents = file_get_contents(basePath(AppInfo::DEFAULT_CONFIG_FILENAME));
 
-        if (false === file_put_contents($filePath, $contents)) {
+        $wasWritten = false;
+        try {
+            $wasWritten = file_put_contents($filePath, $contents);
+        } catch (\Exception $e) {}
+
+        if (!$wasWritten) {
             throw new \RuntimeException(sprintf(
-                'The file "%s" could not be written to',
+                'Cannot write "%s". Please check that the path exists'
+                .' and if the folder is writable.',
                 $path
             ));
         }

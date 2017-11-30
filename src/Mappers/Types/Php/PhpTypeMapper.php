@@ -4,12 +4,14 @@ namespace kristijorgji\DbToPhp\Mappers\Types\Php;
 
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
+use kristijorgji\DbToPhp\Db\Fields\DateField;
 use kristijorgji\DbToPhp\Db\Fields\DecimalField;
 use kristijorgji\DbToPhp\Db\Fields\DoubleField;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FloatField;
 use kristijorgji\DbToPhp\Db\Fields\IntegerField;
+use kristijorgji\DbToPhp\Db\Fields\JsonField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Db\Fields\YearField;
 use kristijorgji\DbToPhp\Mappers\Types\Exceptions\UnknownDatabaseFieldTypeException;
@@ -40,6 +42,8 @@ class PhpTypeMapper implements PhpTypeMapperInterface
             case $field instanceof EnumField:
             case $field instanceof TextField:
             case $field instanceof BinaryField:
+            case $field instanceof JsonField:
+            case $field instanceof DateField:
                 $resolvedPhpType = new PhpTypes(PhpTypes::STRING);
                 break;
             case $field instanceof IntegerField:

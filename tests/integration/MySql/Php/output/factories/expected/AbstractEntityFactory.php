@@ -31,12 +31,30 @@ abstract class AbstractEntityFactory
     }
 
     /**
+     * @return string
+     */
+    public static function randomJson() : string
+    {
+        return json_encode(self::randomArray());
+    }
+
+    /**
      * @param int $chanceOfGettingTrue
      * @return bool
      */
     public static function randomBoolean(int $chanceOfGettingTrue = 50) : bool
     {
         return mt_rand(1, 100) <= $chanceOfGettingTrue;
+    }
+
+    /**
+     * @param string $format
+     * @return string
+     */
+    public static function randomDate(string $format = 'Y-m-d H:i:s') : string
+    {
+        $now = time();
+        return date($format, $now - self::randomUnsignedNumber(strlen($now) - 1));
     }
 
     /**
