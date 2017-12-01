@@ -1,0 +1,6 @@
+##[void_return_type_type_hinting]##
+    /**
+     * @param bool|null $test
+     * @return void
+     */
+

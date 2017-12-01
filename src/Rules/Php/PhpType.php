@@ -18,7 +18,7 @@ class PhpType
      * @param PhpTypes $type
      * @param bool $nullable
      */
-    public function __construct(PhpTypes $type, $nullable)
+    public function __construct(PhpTypes $type, bool $nullable)
     {
         $this->type = $type;
         $this->nullable = $nullable;

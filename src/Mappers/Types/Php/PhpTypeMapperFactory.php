@@ -15,7 +15,7 @@ class PhpTypeMapperFactory
     {
         switch ($databaseDriver) {
             case DatabaseDrivers::MYSQL:
-                return new MySqlPhpTypeMapper();
+                return new PhpTypeMapper();
             default:
                 throw new \InvalidArgumentException('Invalid database driver!');
         }

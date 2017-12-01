@@ -5,6 +5,7 @@ namespace kristijorgji\DbToPhp\Console\Commands;
 use kristijorgji\DbToPhp\AppInfo;
 use kristijorgji\DbToPhp\Config\ConfigFactory;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterFactory;
+use kristijorgji\DbToPhp\Managers\GenerateResponse;
 use kristijorgji\DbToPhp\Managers\ManagerContract;
 use kristijorgji\DbToPhp\Managers\ManagerFactory;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperFactory;
@@ -136,5 +137,19 @@ abstract class AbstractCommand extends Command
     {
         $cwd = getcwd();
         return $cwd . DIRECTORY_SEPARATOR . AppInfo::DEFAULT_CONFIG_FILENAME;
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param GenerateResponse $generateResponse
+     */
+    protected function outputGenerationResult(OutputInterface $output, GenerateResponse $generateResponse)
+    {
+        $output->writeln('');
+        foreach ($generateResponse->getPaths() as $path) {
+            $output->writeln(
+                sprintf('Created: %s', $path)
+            );
+        }
     }
 }

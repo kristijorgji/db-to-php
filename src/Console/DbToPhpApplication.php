@@ -5,6 +5,7 @@ namespace kristijorgji\DbToPhp\Console;
 use kristijorgji\DbToPhp\AppInfo;
 use kristijorgji\DbToPhp\Config\ConfigFactory;
 use kristijorgji\DbToPhp\Console\Commands\GenerateEntitiesCommand;
+use kristijorgji\DbToPhp\Console\Commands\GenerateFactoriesCommand;
 use kristijorgji\DbToPhp\Console\Commands\InitCommand;
 use kristijorgji\DbToPhp\FileSystem\FileSystem;
 use Symfony\Component\Console\Application;
@@ -23,7 +24,8 @@ class DbToPhpApplication extends Application
         parent::__construct(sprintf('%s by Kristi Jorgji - %s', AppInfo::NAME, $version));
         $this->addCommands([
            new InitCommand('Initialize the application'),
-           new GenerateEntitiesCommand($configFactory, 'Generate entities')
+           new GenerateEntitiesCommand($configFactory, 'Generate entities'),
+           new GenerateFactoriesCommand($configFactory, 'Generate entity factories'),
         ]);
     }
 
@@ -35,7 +37,9 @@ class DbToPhpApplication extends Application
     public function doRun(InputInterface $input, OutputInterface $output)
     {
         if ($input->hasParameterOption(['--help', '-h']) === false && $input->getFirstArgument() !== null) {
+            $output->writeln(str_repeat('-', strlen($this->getLongVersion())));
             $output->writeln($this->getLongVersion());
+            $output->writeln(str_repeat('-', strlen($this->getLongVersion())));
             $output->writeln('');
         }
 

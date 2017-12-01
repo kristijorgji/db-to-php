@@ -4,6 +4,7 @@ namespace kristijorgji\DbToPhp\Db\Adapters;
 
 use kristijorgji\DbToPhp\DatabaseDrivers;
 use kristijorgji\DbToPhp\Db\Adapters\Exceptions\InvalidDatabaseDriverException;
+use kristijorgji\DbToPhp\Db\Adapters\MySql\MySqlAdapter;
 
 class DatabaseAdapterFactory
 {

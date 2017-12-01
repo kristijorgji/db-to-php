@@ -10,4 +10,6 @@ class PhpTypes extends Enum
     const STRING = 'string';
     const BOOL = 'bool';
     const FLOAT = 'float';
+    const ARRAY = 'array';
+    const OBJECT = 'object';
 }

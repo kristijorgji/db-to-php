@@ -2,7 +2,7 @@
 
 namespace kristijorgji\DbToPhp\Db\Adapters;
 
-use kristijorgji\DbToPhp\Db\FieldsCollection;
+use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
 use kristijorgji\DbToPhp\Db\TablesCollection;
 
 interface DatabaseAdapterInterface

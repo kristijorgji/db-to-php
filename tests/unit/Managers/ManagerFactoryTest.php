@@ -4,8 +4,6 @@ namespace kristijorgji\UnitTests\Managers;
 
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterFactory;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
-use kristijorgji\DbToPhp\Languages;
-use kristijorgji\DbToPhp\Managers\Exceptions\InvalidProgrammingLanguageException;
 use kristijorgji\DbToPhp\Managers\ManagerFactory;
 use kristijorgji\DbToPhp\Managers\Php\PhpManager;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperFactory;
@@ -79,8 +77,11 @@ class ManagerFactoryTest extends TestCase
     public function getProvider()
     {
         $config = [
+            'typeHint' => true,
             'databaseDriver' => \kristijorgji\DbToPhp\DatabaseDrivers::MYSQL,
-            'connection' => []
+            'connection' => [],
+            'entities' => ['namespace' => 'Entities'],
+            'factories' => []
         ];
 
         return [

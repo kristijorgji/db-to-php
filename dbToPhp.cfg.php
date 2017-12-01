@@ -24,5 +24,14 @@ return [
         'properties' => [
             'accessModifier' => \kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers::PRIVATE
         ]
+    ],
+    'factories' => [
+        'includeTables' => ['*'],
+        'tableToEntityFactoryClassName' => [
+            'test' => 'SuperEntityFactory'
+        ],
+        'outputDirectory' => 'Factories/Entities',
+        'namespace' => 'Factories\Entities',
+        'includeAnnotations' => true
     ]
 ];
