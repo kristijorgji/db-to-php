@@ -3,6 +3,7 @@
 namespace kristijorgji\DbToPhp\Managers\Php;
 
 use kristijorgji\DbToPhp\AppInfo;
+use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
 use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
@@ -64,20 +65,6 @@ class PhpEntityFactoryManager extends AbstractPhpManager
             $this->config['includeTables']
         )->all();
 
-        if (!$this->fileSystem->exists($this->config['outputDirectory'])) {
-            $this->fileSystem->createDirectory($this->config['outputDirectory'], true);
-        }
-
-        $baseEntityFactory = $this->fileSystem->readFile(AppInfo::ABSTRACT_ENTITY_FACTORY_PATH);
-        $baseEntityFactory = $this->changeNameSpaceOfBaseEntityFactory(
-            $baseEntityFactory,
-            $this->config['namespace']
-        );
-        $this->fileSystem->write(
-            $this->config['outputDirectory'] . DIRECTORY_SEPARATOR . $this->getAbstractEntityFactoryFileName(),
-            $baseEntityFactory
-        );
-
         try {
             foreach ($tables as $table) {
                 $response->addPath($this->generateFactory($table->getName()));
@@ -87,19 +74,6 @@ class PhpEntityFactoryManager extends AbstractPhpManager
         }
 
         return $response;
-    }
-
-    /**
-     * @param string $baseEntityFactory
-     * @param string $namespace
-     * @return string
-     */
-    private function changeNameSpaceOfBaseEntityFactory(
-        string $baseEntityFactory,
-        string $namespace
-    ) : string
-    {
-        return preg_replace('#namespace.*#', sprintf('namespace %s;', $namespace), $baseEntityFactory);
     }
 
     /**
@@ -119,9 +93,10 @@ class PhpEntityFactoryManager extends AbstractPhpManager
                     $this->config['namespace'],
                     $className,
                     new StringCollection(... [
+                        AbstractEntityFactory::class,
                         $fullyQualifiedEntityClassName
                     ]),
-                    $this->getAbstractEntityFactoryClassName()
+                    $this->stripClassName(AbstractEntityFactory::class)
                 ),
                 $this->typeHint,
                 $this->config['includeAnnotations']
@@ -132,6 +107,10 @@ class PhpEntityFactoryManager extends AbstractPhpManager
 
         $entityFactoryFileAsString = $entityFactoryGenerator->generate();
         $entityFactoryFileName = $className . '.php';
+
+        if (!$this->fileSystem->exists($this->config['outputDirectory'])) {
+            $this->fileSystem->createDirectory($this->config['outputDirectory'], true);
+        }
 
         $outputPath = $this->config['outputDirectory'] . '/' . $entityFactoryFileName;
 
@@ -155,22 +134,6 @@ class PhpEntityFactoryManager extends AbstractPhpManager
         }
 
         return $this->config['tableToEntityFactoryClassName'][$tableName];
-    }
-
-    /**
-     * @return string
-     */
-    public function getAbstractEntityFactoryFileName() : string
-    {
-        return basename(AppInfo::ABSTRACT_ENTITY_FACTORY_PATH);
-    }
-
-    /**
-     * @return string
-     */
-    public function getAbstractEntityFactoryClassName() : string
-    {
-        return str_replace('.php', '', $this->getAbstractEntityFactoryFileName());
     }
 
     /**

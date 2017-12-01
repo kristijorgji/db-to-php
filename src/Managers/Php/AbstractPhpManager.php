@@ -48,6 +48,16 @@ class AbstractPhpManager
     }
 
     /**
+     * @param string $qualifiedClassName
+     * @return string
+     */
+    public function stripClassName(string $qualifiedClassName) : string
+    {
+        $parts = explode('\\', $qualifiedClassName);
+        return array_pop($parts);
+    }
+
+    /**
      * @param TablesCollection $tables
      * @param array $filter
      * @return TablesCollection

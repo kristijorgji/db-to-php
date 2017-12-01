@@ -2,6 +2,7 @@
 
 namespace Factories\Entities;
 
+use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
 use Entities\TimesEntity;
 
 class TimesEntityFactory extends AbstractEntityFactory

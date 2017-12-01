@@ -2,6 +2,7 @@
 
 namespace Factories\Entities;
 
+use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
 use Entities\BinariusEntity;
 
 class BinariusEntityFactory extends AbstractEntityFactory

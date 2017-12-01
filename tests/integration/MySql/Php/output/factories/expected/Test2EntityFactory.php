@@ -2,6 +2,7 @@
 
 namespace Factories\Entities;
 
+use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
 use Entities\Test2Entity;
 
 class Test2EntityFactory extends AbstractEntityFactory
