@@ -189,7 +189,8 @@ CREATE TABLE users_demo
 );
 ```
 
-Entity code in PHP (please note that class name, inclusion of annotation etc anything can be customized in the configuration file):
+The generated entity class is given below 
+(please note that class name, namespace, usage of annotations, typehinting, setters/getters etc anything can be customized in the configuration file):
 
 ```php
 <?php
