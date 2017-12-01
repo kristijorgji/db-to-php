@@ -24,10 +24,11 @@ For now the library supports only MySql as a database driver.
 - [Usage](#usage)
     - [Generate Entities](#generate-entities)
         - [Instructions](#generate-entities-instructions)
-        - [Example execution](#generate-entities-example)
+        - [Example execution](#example-entity-generation)
     - [Generate Factories](#generate-factories)
         - [Instructions](#generate-factories-instructions)
-        - [Example execution](#generate-factories-example)
+        - [Example execution](#example-factory-generation)
+- [License](#license)
 
 ## Installation
 
@@ -92,7 +93,7 @@ The
 
 ```typehint``` - if set to true the generated PHP code will use typehints in the function parameters and also as return tyeps (PHP 7 /7.1)
  
-Example with ```typehint``` set to true:
+Example with ```typehint=true```:
 ```
 /**
  * @param array $data
@@ -104,7 +105,7 @@ public static function make(array $data = []) : TestEntity
 }
 ```
  
-Example with ```typehint``` set to false:
+Example with ```typehint=false```:
 
 ```
 /**
@@ -121,7 +122,18 @@ public static function make()
 
 ### Generate Entities
 
-#### Instructions
+Features
+* Detect database field type and use corresponding php type for the property
+* Detect if a database field is nullable and generate corresponding properties and methods
+* (Optional) You can choose custom entity class names for specific tables
+* You can generate entities for all the tables or only for those that you specify
+* You can use annotations (PHPDoc) or not depending on the configuration that you setup
+* You can configure the access modifier of the entity properties
+* You can configure if you want to generate setter methods or not and if you want them to be fluent
+* You can configure if you want to generate getter methods
+* You can configure if you want to generate type hinted getters/setters 
+
+####  Generate Entities Instructions
 
 First make sure to have setup correctly your database connection and credentials
 in the config file that is generated after the installation `dbToPhp.cfg.php`.
@@ -131,17 +143,10 @@ If you want the result code to be generated for php that supports typehinting an
 
 The other options are self explanatory. Change anything you like under the entities key in the config.
 
+Below is shown only the part of the config for the entities generation, you can see a full configuration example in the [config](#config) section.
+
 ```php
 [
-    'typeHint' => true,
-    'databaseDriver' => 'mysql,
-    'connection' => [
-        'host' => '127.0.0.1',
-        'port' => 3306,
-        'database' => 'db_to_php',
-        'username' => 'root',
-        'password' => 'Test123@',
-    ],
     'entities' => [
         'includeTables' => ['*'],
         'tableToEntityClassName' => [
@@ -166,7 +171,7 @@ Then just run from your terminal
 vendor/bin/dbToPhp generate:entities
 ```
 
-#### Example execution
+#### Example entity generation
 
 In my demo setup I only had selected the table below with the following MySql schema:
 ```sql
@@ -408,18 +413,18 @@ https://github.com/kristijorgji/db-to-php/blob/master/docs/samples/entities/User
 The name for the entity is UsersDemoEntity, but that can be customized and set in the config section 'entities'['tableToEntityClassName']
 ### Generate Factories
 
-Highlights:
-1. Detect database field type and generate specific data
-* Detect enums and generate only those values
+Features:
+
+* Detect enums and generate only the allowed values
 * Detect if the integers are signed or not and their ranges
 * Detect the precision of the float/double/decimals and generate values up to that max precision
 * Detect json fields and generates valid json
 * Detects date, year and generates proper values
-* Detects if the field can be left null
+* Detects if the field is nullable
 
 (See example execution for demonstration)
 
-#### Instructions
+#### Generate Factories Instructions
 
 The config section for the factories is similar and self explanatory like the one for the entities:
 
@@ -441,7 +446,7 @@ After configuring the section to your preferences, execute the following to gene
 vendor/bin/dbToPhp generate:factories
 ```
 
-#### Example execution
+#### Example factory generation
 
 I am using as an example the same table that I used for generating entities.
 
@@ -480,8 +485,7 @@ class UsersDemoEntityFactory extends AbstractEntityFactory
     {
         return self::makeFromData(self::makeData($data));
     }
-
-    
+   
     /**
      * @param array $data
      * @return UsersDemoEntity
@@ -490,8 +494,7 @@ class UsersDemoEntityFactory extends AbstractEntityFactory
     {
         return self::mapArrayToEntity($data, UsersDemoEntity::class);
     }
-
-    
+ 
     /**
      * @param array $data
      * @return array
@@ -513,6 +516,10 @@ class UsersDemoEntityFactory extends AbstractEntityFactory
 }
 
 ```
+
+## License
+
+db-to-php is released under the MIT Licence. See the bundled LICENSE file for details.
 
 
 
