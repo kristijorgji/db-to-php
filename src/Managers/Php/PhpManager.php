@@ -4,6 +4,8 @@ namespace kristijorgji\DbToPhp\Managers\Php;
 
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
+use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
+use kristijorgji\DbToPhp\Managers\GenerateResponse;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
 use kristijorgji\DbToPhp\Managers\ManagerContract;
 
@@ -62,18 +64,20 @@ class PhpManager extends AbstractPhpManager implements ManagerContract
     }
 
     /**
-     * @return void
+     * @return GenerateResponse
+     * @throws GenerateException
      */
-    public function generateEntities()
+    public function generateEntities() : GenerateResponse
     {
-        $this->entityManager->generateEntities();
+        return $this->entityManager->generateEntities();
     }
 
     /**
-     * @return void
+     * @return GenerateResponse
+     * @throws GenerateException
      */
-    public function generateFactories()
+    public function generateFactories() : GenerateResponse
     {
-        $this->entityFactoryManager->generateFactories();
+        return $this->entityFactoryManager->generateFactories();
     }
 }

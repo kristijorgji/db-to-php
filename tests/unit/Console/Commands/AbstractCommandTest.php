@@ -35,7 +35,7 @@ class AbstractCommandTest extends TestCase
         $this->command = $this->getMockBuilder(AbstractCommand::class)
             ->setConstructorArgs([
                 $this->configFactory,
-                $this->appName
+                self::randomString()
             ])
             ->getMockForAbstractClass();
     }

@@ -12,6 +12,8 @@ use kristijorgji\DbToPhp\Generators\Php\Configs\PhpGetterGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpPropertyGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpSetterGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityGenerator;
+use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
+use kristijorgji\DbToPhp\Managers\GenerateResponse;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
 use kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers;
 use kristijorgji\DbToPhp\Rules\Php\PhpPropertiesCollection;
@@ -45,24 +47,34 @@ class PhpEntityManager extends AbstractPhpManager
     }
 
     /**
-     * @return void
+     * @return GenerateResponse
+     * @throws GenerateException
      */
-    public function generateEntities()
+    public function generateEntities() : GenerateResponse
     {
+        $response = new GenerateResponse();
+
         $tables = $this->filterTables(
             $this->databaseAdapter->getTables(),
             $this->config['includeTables']
-        );
-        foreach ($tables->all() as $table) {
-            $this->generateEntity($table->getName());
+        )->all();
+
+        try {
+            foreach ($tables as $table) {
+                $response->addPath($this->generateEntity($table->getName()));
+            }
+        } catch (\Exception $e) {
+            throw new GenerateException($e->getMessage(), $e, $response);
         }
+
+        return $response;
     }
 
     /**
      * @param string $tableName
-     * @return void
+     * @return string
      */
-    public function generateEntity(string $tableName)
+    public function generateEntity(string $tableName) : string
     {
         $className = $this->formClassName($tableName);
         $fields = $this->databaseAdapter->getFields($tableName);
@@ -104,10 +116,14 @@ class PhpEntityManager extends AbstractPhpManager
             $this->fileSystem->createDirectory($this->config['outputDirectory'], true);
         }
 
+        $outputPath = $this->config['outputDirectory'] . '/' . $entityFileName;
+
         $this->fileSystem->write(
-            $this->config['outputDirectory'] . '/' . $entityFileName,
+            $outputPath,
             $entityFileAsString
         );
+
+        return $outputPath;
     }
 
     /**

@@ -11,6 +11,8 @@ use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityFactoryGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryField;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryFieldsCollection;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryGenerator;
+use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
+use kristijorgji\DbToPhp\Managers\GenerateResponse;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
 use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\DbToPhp\Managers\Php\Resolvers\PhpEntityFactoryFieldFunctionResolver;
@@ -50,14 +52,17 @@ class PhpEntityFactoryManager extends AbstractPhpManager
     }
 
     /**
-     * @return void
+     * @return GenerateResponse
+     * @throws GenerateException
      */
-    public function generateFactories()
+    public function generateFactories() : GenerateResponse
     {
+        $response = new GenerateResponse();
+
         $tables = $this->filterTables(
             $this->databaseAdapter->getTables(),
             $this->config['includeTables']
-        );
+        )->all();
 
         if (!$this->fileSystem->exists($this->config['outputDirectory'])) {
             $this->fileSystem->createDirectory($this->config['outputDirectory'], true);
@@ -73,9 +78,15 @@ class PhpEntityFactoryManager extends AbstractPhpManager
             $baseEntityFactory
         );
 
-        foreach ($tables->all() as $table) {
-            $this->generateFactory($table->getName());
+        try {
+            foreach ($tables as $table) {
+                $response->addPath($this->generateFactory($table->getName()));
+            }
+        } catch (\Exception $e) {
+            throw new GenerateException($e->getMessage(), $e, $response);
         }
+
+        return $response;
     }
 
     /**
@@ -93,9 +104,9 @@ class PhpEntityFactoryManager extends AbstractPhpManager
 
     /**
      * @param string $tableName
-     * @return void
+     * @return string
      */
-    public function generateFactory(string $tableName)
+    public function generateFactory(string $tableName) : string
     {
         $entityClassName = $this->entityManager->formClassName($tableName);
         $className = $this->formClassName($tableName, $entityClassName);
@@ -122,10 +133,14 @@ class PhpEntityFactoryManager extends AbstractPhpManager
         $entityFactoryFileAsString = $entityFactoryGenerator->generate();
         $entityFactoryFileName = $className . '.php';
 
+        $outputPath = $this->config['outputDirectory'] . '/' . $entityFactoryFileName;
+
         $this->fileSystem->write(
-            $this->config['outputDirectory'] . '/' . $entityFactoryFileName,
+            $outputPath,
             $entityFactoryFileAsString
         );
+
+        return $outputPath;
     }
 
     /**

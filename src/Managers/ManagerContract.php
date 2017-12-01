@@ -2,15 +2,19 @@
 
 namespace kristijorgji\DbToPhp\Managers;
 
+use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
+
 interface ManagerContract
 {
     /**
-     * @return void
+     * @return GenerateResponse
+     * @throws GenerateException
      */
-    public function generateEntities();
+    public function generateEntities() : GenerateResponse;
 
     /**
-     * @return void
+     * @return GenerateResponse
+     * @throws GenerateException
      */
-    public function generateFactories();
+    public function generateFactories() : GenerateResponse;
 }

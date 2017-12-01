@@ -2,7 +2,6 @@
 
 namespace kristijorgji\IntegrationTests\MySql\Php;
 
-use DirectoryIterator;
 use kristijorgji\DbToPhp\AppInfo;
 use kristijorgji\DbToPhp\FileSystem\FileSystem;
 
@@ -25,7 +24,6 @@ class PhpGenerateEntitiesTest extends AbstractPhpTestCase
             sprintf('%s --configuration=%s', $command, $configurationPath)
         );
 
-        echo $output;
         $this->assertFoldersContentMatch($expectedOutputDirectory,  $this->actualOutputDirectory);
     }
 
@@ -40,7 +38,6 @@ class PhpGenerateEntitiesTest extends AbstractPhpTestCase
             $this->consoleApp,
             sprintf('%s', $command)
         );
-
 
         $this->assertFoldersContentMatch(__DIR__ . '/output/entities/expected/', $this->actualOutputDirectory);
     }

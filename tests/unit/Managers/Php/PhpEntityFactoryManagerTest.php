@@ -2,11 +2,10 @@
 
 namespace kristijorgji\UnitTests\Managers\Php;
 
-use kristijorgji\DbToPhp\Db\Table;
-use kristijorgji\DbToPhp\Db\TablesCollection;
+use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
+use kristijorgji\DbToPhp\Managers\GenerateResponse;
 use kristijorgji\DbToPhp\Managers\Php\PhpEntityFactoryManager;
 use kristijorgji\DbToPhp\Managers\Php\PhpEntityManager;
-use kristijorgji\Tests\Factories\Db\Fields\FieldsCollectionFactory;
 use kristijorgji\Tests\Factories\Db\TablesCollectionFactory;
 
 class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
@@ -71,6 +70,36 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
             }, $returnedTables->all()));
 
         $this->manager->generateFactories();
+    }
+
+    public function testGenerateFactories_on_error()
+    {
+        $this->selfPartialMock(['filterTables', 'generateFactory']);
+
+        $returnedTables = TablesCollectionFactory::make();
+
+        $this->databaseAdapter->expects($this->once())
+            ->method('getTables')
+            ->willReturn($returnedTables);
+
+        $this->manager->expects($this->once())
+            ->method('filterTables')
+            ->with($returnedTables)
+            ->willReturn($returnedTables);
+
+
+        $partialResponse = new GenerateResponse();
+        $partialResponse->addPath('test');
+
+        $this->manager->expects($this->once())
+            ->method('generateFactory')
+            ->willThrowException(new \Exception());
+
+        try {
+            $this->manager->generateFactories();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(GenerateException::class, $e);
+        }
     }
 
     /**

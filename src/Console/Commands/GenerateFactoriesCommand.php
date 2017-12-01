@@ -2,6 +2,7 @@
 
 namespace kristijorgji\DbToPhp\Console\Commands;
 
+use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -27,10 +28,17 @@ class GenerateFactoriesCommand extends AbstractCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return void
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->bootstrap($input, $output);
-        $this->getManager()->generateFactories();
+
+        try {
+            $this->outputGenerationResult($output, $this->getManager()->generateFactories());
+        } catch (GenerateException $e) {
+            $this->outputGenerationResult($output, $e->getPartialResponse());
+            throw $e->getPrevious();
+        }
     }
 }

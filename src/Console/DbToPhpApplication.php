@@ -37,7 +37,9 @@ class DbToPhpApplication extends Application
     public function doRun(InputInterface $input, OutputInterface $output)
     {
         if ($input->hasParameterOption(['--help', '-h']) === false && $input->getFirstArgument() !== null) {
+            $output->writeln(str_repeat('-', strlen($this->getLongVersion())));
             $output->writeln($this->getLongVersion());
+            $output->writeln(str_repeat('-', strlen($this->getLongVersion())));
             $output->writeln('');
         }
 

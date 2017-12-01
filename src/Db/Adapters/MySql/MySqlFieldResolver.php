@@ -158,7 +158,7 @@ class MySqlFieldResolver
             case 'big':
                 return '64';
             default:
-                throw new \InvalidArgumentException('Unrecongnized mysql integer type ' . $type);
+                throw new \InvalidArgumentException('Unrecognized mysql integer type ' . $type);
         }
     }
 }

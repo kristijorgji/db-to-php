@@ -140,4 +140,11 @@ class MySqlFieldResolverTest extends TestCase
             $h(new TextField($name, false), 'date'),
         ];
     }
+
+    public function testGetIntLength_on_unknown_type()
+    {
+        $method = $this->getPrivateMethod($this->fieldResolver, 'getIntLength');
+        $this->expectException(\InvalidArgumentException::class);
+        $method->invokeArgs($this->fieldResolver, [self::randomString()]);
+    }
 }
