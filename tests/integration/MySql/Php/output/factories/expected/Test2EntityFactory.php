@@ -10,7 +10,7 @@ class Test2EntityFactory extends AbstractEntityFactory
     /**
      * @var array
      */
-    protected $fields = [
+    protected static $fields = [
         'id',
         'name',
         'surname',

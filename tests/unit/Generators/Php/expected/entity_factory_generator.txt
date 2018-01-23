@@ -10,7 +10,7 @@ class TestEntityFactory extends BaseEntityFactory
     /**
      * @var array
      */
-    protected $fields = [
+    protected static $fields = [
         'status',
         'credit_value',
     ];
@@ -59,7 +59,7 @@ use Entities\TestEntity;
 
 class TestEntityFactory extends BaseEntityFactory
 {
-    protected $fields = [
+    protected static $fields = [
         'status',
         'credit_value',
     ];
@@ -99,7 +99,7 @@ class TestEntityFactory extends BaseEntityFactory
     /**
      * @var array
      */
-    protected $fields = [
+    protected static $fields = [
         'status',
         'credit_value',
     ];
@@ -148,7 +148,7 @@ use Entities\TestEntity;
 
 class TestEntityFactory extends BaseEntityFactory
 {
-    protected $fields = [
+    protected static $fields = [
         'status',
         'credit_value',
     ];
