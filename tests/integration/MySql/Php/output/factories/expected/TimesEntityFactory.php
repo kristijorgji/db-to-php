@@ -10,7 +10,7 @@ class TimesEntityFactory extends AbstractEntityFactory
     /**
      * @var array
      */
-    private $fields = [
+    protected $fields = [
         'birthday_year',
         'birthday_time',
         'column_3',

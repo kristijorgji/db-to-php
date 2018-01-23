@@ -10,7 +10,7 @@ class BinariusEntityFactory extends AbstractEntityFactory
     /**
      * @var array
      */
-    private $fields = [
+    protected $fields = [
         'file',
         'image',
     ];

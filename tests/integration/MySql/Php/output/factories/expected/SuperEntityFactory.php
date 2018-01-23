@@ -10,7 +10,7 @@ class SuperEntityFactory extends AbstractEntityFactory
     /**
      * @var array
      */
-    private $fields = [
+    protected $fields = [
         'id',
         'event',
         'payload',

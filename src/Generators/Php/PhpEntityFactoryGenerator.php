@@ -71,7 +71,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
             $this->output->add($propertyAnnotationGenerator->generate());
         }
 
-        $this->output->addLine('private $fields = [', 4);
+        $this->output->addLine('protected $fields = [', 4);
         foreach ($this->fieldsInfo->all() as $fieldInfo) {
             $quotedDbFieldName = sprintf('\'%s\'', $fieldInfo->getDbFieldName());
             $this->output->addLine($quotedDbFieldName . ',', 8);

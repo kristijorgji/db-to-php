@@ -10,7 +10,7 @@ class TestEntityFactory extends BaseEntityFactory
     /**
      * @var array
      */
-    private $fields = [
+    protected $fields = [
         'status',
         'credit_value',
     ];
@@ -59,7 +59,7 @@ use Entities\TestEntity;
 
 class TestEntityFactory extends BaseEntityFactory
 {
-    private $fields = [
+    protected $fields = [
         'status',
         'credit_value',
     ];
@@ -99,7 +99,7 @@ class TestEntityFactory extends BaseEntityFactory
     /**
      * @var array
      */
-    private $fields = [
+    protected $fields = [
         'status',
         'credit_value',
     ];
@@ -148,7 +148,7 @@ use Entities\TestEntity;
 
 class TestEntityFactory extends BaseEntityFactory
 {
-    private $fields = [
+    protected $fields = [
         'status',
         'credit_value',
     ];
