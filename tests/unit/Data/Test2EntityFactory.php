@@ -8,6 +8,22 @@ use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
 class Test2EntityFactory extends AbstractEntityFactory
 {
     /**
+     * @var array
+     */
+    protected static $fields = [
+        'id',
+        'name',
+        'surname',
+        'isWorking',
+        'salary',
+        'discount',
+        'new_column',
+        'dddd',
+        'binaeraylk',
+        'f',
+    ];
+
+    /**
      * @param array $data
      * @return Test2Entity
      */
@@ -22,6 +38,7 @@ class Test2EntityFactory extends AbstractEntityFactory
      */
     public static function makeFromData(array $data) : Test2Entity
     {
+        self::validateData($data);
         return self::mapArrayToEntity($data, Test2Entity::class);
     }
 
@@ -31,6 +48,7 @@ class Test2EntityFactory extends AbstractEntityFactory
      */
     public static function makeData(array $data = []) : array
     {
+        self::validateData($data);
         return [
             'id' => $data['id'] ?? self::randomInt32(),
             'name' => $data['name'] ?? self::randomString(rand(0, 50)),

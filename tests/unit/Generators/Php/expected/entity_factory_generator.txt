@@ -8,6 +8,14 @@ use Entities\TestEntity;
 class TestEntityFactory extends BaseEntityFactory
 {
     /**
+     * @var array
+     */
+    private $fields = [
+        'status',
+        'credit_value',
+    ];
+
+    /**
      * @param array $data
      * @return TestEntity
      */
@@ -22,6 +30,7 @@ class TestEntityFactory extends BaseEntityFactory
      */
     public static function makeFromData(array $data) : TestEntity
     {
+        self::validateData($data);
         return self::mapArrayToEntity($data, TestEntity::class);
     }
 
@@ -31,9 +40,12 @@ class TestEntityFactory extends BaseEntityFactory
      */
     public static function makeData(array $data = []) : array
     {
+        self::validateData($data);
         return [
-            'status' => $data['status'] ?? self::randomInt32(),
-            'credit_value' => $data['credit_value'] ?? self::randomInt16(),
+            'status' => array_key_exists('status', $data) ?
+                $data['status'] : self::randomInt32(),
+            'credit_value' => array_key_exists('credit_value', $data) ?
+                $data['credit_value'] : self::randomInt16(),
         ];
     }
 }
@@ -47,6 +59,11 @@ use Entities\TestEntity;
 
 class TestEntityFactory extends BaseEntityFactory
 {
+    private $fields = [
+        'status',
+        'credit_value',
+    ];
+
     public static function make(array $data = []) : TestEntity
     {
         return self::makeFromData(self::makeData($data));
@@ -54,14 +71,18 @@ class TestEntityFactory extends BaseEntityFactory
 
     public static function makeFromData(array $data) : TestEntity
     {
+        self::validateData($data);
         return self::mapArrayToEntity($data, TestEntity::class);
     }
 
     public static function makeData(array $data = []) : array
     {
+        self::validateData($data);
         return [
-            'status' => $data['status'] ?? self::randomInt32(),
-            'credit_value' => $data['credit_value'] ?? self::randomInt16(),
+            'status' => array_key_exists('status', $data) ?
+                $data['status'] : self::randomInt32(),
+            'credit_value' => array_key_exists('credit_value', $data) ?
+                $data['credit_value'] : self::randomInt16(),
         ];
     }
 }
@@ -76,6 +97,14 @@ use Entities\TestEntity;
 class TestEntityFactory extends BaseEntityFactory
 {
     /**
+     * @var array
+     */
+    private $fields = [
+        'status',
+        'credit_value',
+    ];
+
+    /**
      * @param array $data
      * @return TestEntity
      */
@@ -90,6 +119,7 @@ class TestEntityFactory extends BaseEntityFactory
      */
     public static function makeFromData(array $data)
     {
+        self::validateData($data);
         return self::mapArrayToEntity($data, TestEntity::class);
     }
 
@@ -99,9 +129,12 @@ class TestEntityFactory extends BaseEntityFactory
      */
     public static function makeData(array $data = [])
     {
+        self::validateData($data);
         return [
-            'status' => $data['status'] ?? self::randomInt32(),
-            'credit_value' => $data['credit_value'] ?? self::randomInt16(),
+            'status' => array_key_exists('status', $data) ?
+                $data['status'] : self::randomInt32(),
+            'credit_value' => array_key_exists('credit_value', $data) ?
+                $data['credit_value'] : self::randomInt16(),
         ];
     }
 }
@@ -115,6 +148,11 @@ use Entities\TestEntity;
 
 class TestEntityFactory extends BaseEntityFactory
 {
+    private $fields = [
+        'status',
+        'credit_value',
+    ];
+
     public static function make(array $data = [])
     {
         return self::makeFromData(self::makeData($data));
@@ -122,14 +160,18 @@ class TestEntityFactory extends BaseEntityFactory
 
     public static function makeFromData(array $data)
     {
+        self::validateData($data);
         return self::mapArrayToEntity($data, TestEntity::class);
     }
 
     public static function makeData(array $data = [])
     {
+        self::validateData($data);
         return [
-            'status' => $data['status'] ?? self::randomInt32(),
-            'credit_value' => $data['credit_value'] ?? self::randomInt16(),
+            'status' => array_key_exists('status', $data) ?
+                $data['status'] : self::randomInt32(),
+            'credit_value' => array_key_exists('credit_value', $data) ?
+                $data['credit_value'] : self::randomInt16(),
         ];
     }
 }

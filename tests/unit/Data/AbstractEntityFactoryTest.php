@@ -4,10 +4,33 @@ namespace kristijorgji\UnitTests\Data;
 
 use DateTime;
 use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
+use kristijorgji\DbToPhp\Data\Exceptions\InvalidEntityFactoryFieldException;
 use kristijorgji\Tests\Helpers\TestCase;
 
 class AbstractEntityFactoryTest extends TestCase
 {
+    public function testValidateFields()
+    {
+        Test2EntityFactory::validateData([
+            'id' => 'dummy',
+            'name' => 'dummy',
+            'surname' => 'dummy',
+            'isWorking' => 'dummy',
+            'salary' => 'dummy',
+            'discount' => 'dummy',
+            'new_column' => 'dummy',
+            'dddd' => 'dummy',
+            'binaeraylk' => 'dummy',
+            'f' => 'dummy',
+        ]);
+    }
+
+    public function testValidateFields_invalid_field()
+    {
+        $this->expectException(InvalidEntityFactoryFieldException::class);
+        Test2EntityFactory::validateData(['kari' => 2]);
+    }
+
     public function testMapArrayToEntity()
     {
         $data = Test2EntityFactory::makeData();
@@ -204,10 +227,5 @@ class AbstractEntityFactoryTest extends TestCase
     {
         $randomString = AbstractEntityFactory::randomString(0);
         $this->assertEquals('', $randomString);
-    }
-
-    public function testRandomDigitNotNull()
-    {
-
     }
 }

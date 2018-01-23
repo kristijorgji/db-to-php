@@ -49,6 +49,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
     public function generate() : string
     {
         $this->addClassDeclaration();
+        $this->addFieldsProperty();
         $this->addMakeFunction();
         $this->output->addEmptyLines();
         $this->addMakeFromDataFunction();
@@ -56,6 +57,27 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
         $this->addMakeDataFunction();
         $this-> addClassEnding();
         return $this->output->get();
+    }
+
+    /**
+     * @return void
+     */
+    private function addFieldsProperty()
+    {
+        if ($this->config->shouldIncludeAnnotations()) {
+            $propertyAnnotationGenerator = new PhpPropertyAnnotationGenerator(
+                new PhpType(new PhpTypes(PhpTypes::ARRAY), false)
+            );
+            $this->output->add($propertyAnnotationGenerator->generate());
+        }
+
+        $this->output->addLine('private $fields = [', 4);
+        foreach ($this->fieldsInfo->all() as $fieldInfo) {
+            $quotedDbFieldName = sprintf('\'%s\'', $fieldInfo->getDbFieldName());
+            $this->output->addLine($quotedDbFieldName . ',', 8);
+        }
+        $this->output->addLine('];', 4);
+        $this->output->addEmptyLines();
     }
 
     /**
@@ -87,10 +109,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
     private function addMakeFunctionAnnotations()
     {
         $arrayType = new PhpType(new PhpTypes(new PhpTypes(PhpTypes::ARRAY)), false);
-        $returnType = new PhpObjectType(
-            new PhpTypes(new PhpTypes(PhpTypes::OBJECT)),
-            false, $this->entityClassName
-        );
+        $returnType = new PhpObjectType(false, $this->entityClassName);
 
         $methodAnnotationGenerator = new PhpMethodAnnotationGenerator(
             new PhpFunctionParametersCollection(... [
@@ -121,6 +140,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
         $this->output->addLine('public static function makeFromData(array $data)' . $returnType, 4);
         $this->output->addLine('{', 4);
 
+        $this->output->addLine('self::validateData($data);', 8);
         $this->output->addLine(
             sprintf('return self::mapArrayToEntity($data, %s::class);', $this->entityClassName),
             8
@@ -155,18 +175,27 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
         $this->output->addLine('public static function makeData(array $data = [])' . $returnType, 4);
         $this->output->addLine('{', 4);
 
+        $this->output->addLine('self::validateData($data);', 8);
         $this->output->addLine('return [', 8);
 
         foreach ($this->fieldsInfo->all() as $fieldInfo) {
             $quotedDbFieldName = sprintf('\'%s\'', $fieldInfo->getDbFieldName());
             $this->output->addLine(
                 sprintf(
-                    '%s => $data[%s] ?? %s,',
+                    '%s => array_key_exists(%s, $data) ?',
                     $quotedDbFieldName,
+                    $quotedDbFieldName
+                ),
+                12
+            );
+
+            $this->output->addLine(
+                sprintf(
+                    '$data[%s] : %s,',
                     $quotedDbFieldName,
                     $fieldInfo->getResolvingCall()
                 ),
-                12
+                16
             );
         }
 

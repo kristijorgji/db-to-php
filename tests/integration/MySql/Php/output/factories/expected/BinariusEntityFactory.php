@@ -8,6 +8,14 @@ use Entities\BinariusEntity;
 class BinariusEntityFactory extends AbstractEntityFactory
 {
     /**
+     * @var array
+     */
+    private $fields = [
+        'file',
+        'image',
+    ];
+
+    /**
      * @param array $data
      * @return BinariusEntity
      */
@@ -22,6 +30,7 @@ class BinariusEntityFactory extends AbstractEntityFactory
      */
     public static function makeFromData(array $data) : BinariusEntity
     {
+        self::validateData($data);
         return self::mapArrayToEntity($data, BinariusEntity::class);
     }
 
@@ -31,9 +40,12 @@ class BinariusEntityFactory extends AbstractEntityFactory
      */
     public static function makeData(array $data = []) : array
     {
+        self::validateData($data);
         return [
-            'file' => $data['file'] ?? self::randomString(rand(0, 1)),
-            'image' => $data['image'] ?? self::randomString(rand(0, 64)),
+            'file' => array_key_exists('file', $data) ?
+                $data['file'] : self::randomString(rand(0, 1)),
+            'image' => array_key_exists('image', $data) ?
+                $data['image'] : self::randomString(rand(0, 64)),
         ];
     }
 }

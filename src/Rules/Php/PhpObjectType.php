@@ -4,16 +4,21 @@ namespace kristijorgji\DbToPhp\Rules\Php;
 
 class PhpObjectType extends PhpType
 {
+    /**
+     * @var string
+     */
     private $className;
 
     /**
-     * @param PhpTypes $type
      * @param bool $nullable
      * @param string $className
      */
-    public function __construct(PhpTypes $type, bool $nullable, string $className)
+    public function __construct(bool $nullable, string $className)
     {
-        parent::__construct($type, $nullable);
+        parent::__construct(
+            new PhpTypes(new PhpTypes(PhpTypes::OBJECT)),
+            $nullable
+        );
         $this->className = $className;
     }
 

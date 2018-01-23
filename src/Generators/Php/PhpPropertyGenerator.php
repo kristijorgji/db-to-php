@@ -47,15 +47,13 @@ class PhpPropertyGenerator
 
     private function addAnnotation()
     {
-        $type  = $this->property->getType();
-        $nullableText = $type->isNullable() === true ? '|null' :  '';
-
-        $this->output->addLine('/**', 4);
-        $this->output->addLine(
-            sprintf('* @var %s', (string) $this->property->getType()->getType() . $nullableText),
-            5
+        $propertyAnnotationGenerator = new PhpPropertyAnnotationGenerator(
+            $this->property->getType()
         );
-        $this->output->addLine('*/', 5);
+
+        $this->output->add(
+            $propertyAnnotationGenerator->generate()
+        );
     }
 
     private function addDeclaration()

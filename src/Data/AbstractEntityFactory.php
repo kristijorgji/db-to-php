@@ -2,8 +2,35 @@
 
 namespace kristijorgji\DbToPhp\Data;
 
+use kristijorgji\DbToPhp\Data\Exceptions\InvalidEntityFactoryFieldException;
+
 abstract class AbstractEntityFactory
 {
+    /**
+     * @var array
+     */
+    protected static $fields = [];
+
+    /**
+     * @param array $data
+     * @throws InvalidEntityFactoryFieldException
+     */
+    public static function validateData(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if (!in_array($key, static::$fields)) {
+                throw new InvalidEntityFactoryFieldException(
+                    sprintf(
+                        'The given key: %s in the data array is not a valid key.%sAvailable keys are: (%s)',
+                        $key,
+                        PHP_EOL,
+                        implode(', ', static::$fields)
+                    )
+                );
+            }
+        }
+    }
+
     /**
      * @param array $data
      * @param $toClass

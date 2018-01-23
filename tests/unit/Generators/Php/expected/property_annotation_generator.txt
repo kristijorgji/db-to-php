@@ -1,0 +1,15 @@
+##[array_type_not_nullable]##
+    /**
+     * @var array
+     */
+
+##[array_type_nullable]##
+    /**
+     * @var array|null
+     */
+
+##[class_type_not_nullable]##
+    /**
+     * @var Gari
+     */
+
