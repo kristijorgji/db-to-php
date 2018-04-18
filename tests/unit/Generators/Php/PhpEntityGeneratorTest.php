@@ -52,7 +52,8 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpPropertyGeneratorConfig(
                         true,
                         new PhpAccessModifiers(PhpAccessModifiers::PRIVATE)
-                    )
+                    ),
+                    false
                 ),
                 $expected['no_setters_no_getters']
             ],
@@ -66,7 +67,8 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpPropertyGeneratorConfig(
                         true,
                         new PhpAccessModifiers(PhpAccessModifiers::PRIVATE)
-                    )
+                    ),
+                    false
                 ),
                 $expected['with_getters_and_setters']
             ],
@@ -80,7 +82,8 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpPropertyGeneratorConfig(
                         true,
                         new PhpAccessModifiers(PhpAccessModifiers::PRIVATE)
-                    )
+                    ),
+                    false
                 ),
                 $expected['only_getters']
             ],
@@ -94,9 +97,30 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpPropertyGeneratorConfig(
                         true,
                         new PhpAccessModifiers(PhpAccessModifiers::PRIVATE)
-                    )
+                    ),
+                    false
                 ),
                 $expected['only_setters']
+            ],
+            'track_changes' => [
+                new PhpEntityGeneratorConfig(
+                    new PhpClassGeneratorConfig(
+                        'MyApp\Entities',
+                        'TestEntity',
+                        new StringCollection(...[]),
+                        null
+                    ),
+                    true,
+                    true,
+                    new PhpSetterGeneratorConfig(true, true, true),
+                    new PhpGetterGeneratorConfig(true, true),
+                    new PhpPropertyGeneratorConfig(
+                        true,
+                        new PhpAccessModifiers(PhpAccessModifiers::PRIVATE)
+                    ),
+                    true
+                ),
+                $expected['track_changes_no_properties']
             ]
         ];
     }

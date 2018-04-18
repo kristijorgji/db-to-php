@@ -23,7 +23,8 @@ return [
         'fluentSetters' => true,
         'properties' => [
             'accessModifier' => \kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers::PRIVATE
-        ]
+        ],
+        'trackChangesFor' => []
     ],
     'factories' => [
         'includeTables' => ['*'],

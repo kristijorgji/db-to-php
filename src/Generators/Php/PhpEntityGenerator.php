@@ -5,7 +5,6 @@ namespace kristijorgji\DbToPhp\Generators\Php;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityGeneratorConfig;
 use kristijorgji\DbToPhp\Rules\Php\PhpPropertiesCollection;
 use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
-use kristijorgji\DbToPhp\Support\TextBuffer;
 
 class PhpEntityGenerator extends PhpClassGenerator
 {
@@ -95,8 +94,16 @@ class PhpEntityGenerator extends PhpClassGenerator
      */
     private function addSetter(PhpProperty $property)
     {
+        $extraLines = [];
+        if ($this->config->shouldTrackChanges()) {
+            $extraLines[] = '$this->set(\'[%propertyName%]\', $[%propertyName%]);';
+        }
         $this->output->addLine(
-            (new PhpSetterGenerator($property, $this->config->getPhpSetterGeneratorConfig()))->generate()
+            (new PhpSetterGenerator(
+                $property,
+                $this->config->getPhpSetterGeneratorConfig(),
+                $extraLines
+            ))->generate()
         );
     }
 

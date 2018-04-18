@@ -2,6 +2,7 @@
 
 namespace kristijorgji\DbToPhp\Managers\Php;
 
+use kristijorgji\DbToPhp\Data\AbstractEntity;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
 use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
@@ -80,12 +81,21 @@ class PhpEntityManager extends AbstractPhpManager
         $fields = $this->databaseAdapter->getFields($tableName);
         $properties = $this->formProperties($fields);
 
+        $shouldTrackChanges = $this->shouldTrackChanges($tableName);
+        $extends = null;
+        $uses = [];
+
+        if ($shouldTrackChanges) {
+            $extends = $this->stripClassName(AbstractEntity::class);
+            $uses[] = AbstractEntity::class;
+        }
+
         $entityGeneratorConfig = new PhpEntityGeneratorConfig(
             new PhpClassGeneratorConfig(
                 $this->config['namespace'],
                 $className,
-                new StringCollection(... []),
-                null,
+                new StringCollection(... $uses),
+                $extends,
                 $this->config['includeAnnotations']
             ),
             $this->config['includeSetters'],
@@ -101,7 +111,8 @@ class PhpEntityManager extends AbstractPhpManager
             ),
             new PhpPropertyGeneratorConfig(
                 $this->config['includeAnnotations']
-            )
+            ),
+            $shouldTrackChanges
         );
 
         $entityGenerator = new PhpEntityGenerator(
@@ -124,6 +135,20 @@ class PhpEntityManager extends AbstractPhpManager
         );
 
         return $outputPath;
+    }
+
+    /**
+     * @param string $tableName
+     * @return bool
+     */
+    protected function shouldTrackChanges(string $tableName) : bool
+    {
+        return $this->config['trackChangesFor'] === '*'
+            || (
+                array_key_exists(0, $this->config['trackChangesFor'])
+                && $this->config['trackChangesFor'][0] === '*'
+                )
+            || array_key_exists($tableName, $this->config['trackChangesFor']);
     }
 
     /**

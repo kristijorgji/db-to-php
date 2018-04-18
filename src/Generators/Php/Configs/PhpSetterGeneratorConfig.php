@@ -20,7 +20,6 @@ class PhpSetterGeneratorConfig
     private $isFluent;
 
     /**
-     * PhpSetterGeneratorConfig constructor.
      * @param bool $includeAnnotations
      * @param bool $typeHint
      * @param bool $isFluent

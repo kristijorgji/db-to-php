@@ -130,7 +130,10 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
 
         $this->fileSystem->expects($this->once())
             ->method('write')
-            ->with($this->config['outputDirectory'] . '/TestTableEntity.php', $this->anything());
+            ->with(
+                $this->config['outputDirectory'] . '/TestTableEntity.php',
+                $this->anything()
+            );
 
         $this->manager->generateEntity($tableName);
     }

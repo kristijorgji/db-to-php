@@ -35,12 +35,18 @@ class PhpEntityGeneratorConfig
     private $phpPropertyGeneratorConfig;
 
     /**
+     * @var bool
+     */
+    private $shouldTrackChanges;
+
+    /**
      * @param PhpClassGeneratorConfig $phpClassGeneratorConfig
      * @param bool $includeSetters
      * @param bool $includeGetters
      * @param PhpSetterGeneratorConfig $phpSetterGeneratorConfig
      * @param PhpGetterGeneratorConfig $phpGetterGeneratorConfig
      * @param PhpPropertyGeneratorConfig $phpPropertyGeneratorConfig
+     * @param bool $shouldTrackChanges
      */
     public function __construct(
         PhpClassGeneratorConfig $phpClassGeneratorConfig,
@@ -48,7 +54,8 @@ class PhpEntityGeneratorConfig
         bool $includeGetters,
         PhpSetterGeneratorConfig $phpSetterGeneratorConfig,
         PhpGetterGeneratorConfig $phpGetterGeneratorConfig,
-        PhpPropertyGeneratorConfig $phpPropertyGeneratorConfig
+        PhpPropertyGeneratorConfig $phpPropertyGeneratorConfig,
+        bool $shouldTrackChanges
     ) {
         $this->phpClassGeneratorConfig = $phpClassGeneratorConfig;
         $this->includeSetters = $includeSetters;
@@ -56,6 +63,7 @@ class PhpEntityGeneratorConfig
         $this->phpSetterGeneratorConfig = $phpSetterGeneratorConfig;
         $this->phpGetterGeneratorConfig = $phpGetterGeneratorConfig;
         $this->phpPropertyGeneratorConfig = $phpPropertyGeneratorConfig;
+        $this->shouldTrackChanges = $shouldTrackChanges;
     }
 
     /**
@@ -104,5 +112,13 @@ class PhpEntityGeneratorConfig
     public function getPhpPropertyGeneratorConfig(): PhpPropertyGeneratorConfig
     {
         return $this->phpPropertyGeneratorConfig;
+    }
+
+    /**
+     * @return bool
+     */
+    public function shouldTrackChanges() : bool
+    {
+        return $this->shouldTrackChanges;
     }
 }

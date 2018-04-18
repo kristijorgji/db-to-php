@@ -24,14 +24,21 @@ class PhpSetterGenerator
     private $output;
 
     /**
+     * @var array
+     */
+    private $extraLines;
+
+    /**
      * @param PhpProperty $property
      * @param PhpSetterGeneratorConfig $config
+     * @param array $extraLines
      */
-    public function __construct(PhpProperty $property, PhpSetterGeneratorConfig $config)
+    public function __construct(PhpProperty $property, PhpSetterGeneratorConfig $config, array $extraLines = [])
     {
         $this->property = $property;
         $this->config = $config;
         $this->output = new TextBuffer();
+        $this->extraLines = $extraLines;
     }
 
     public function generate() : string
@@ -95,9 +102,18 @@ class PhpSetterGenerator
             sprintf('$this->%s = $%s;', $this->property->getName(), $this->property->getName()),
             8
         );
+
+        foreach ($this->extraLines as $extraLine) {
+            $this->output->addLine(
+                str_replace('[%propertyName%]', $this->property->getName(), $extraLine),
+                8
+            );
+        }
+
         if ($this->config->isFluent()) {
             $this->output->addLine('return $this;', 8);
         }
+
         $this->output->add('}', 4);
     }
 }
