@@ -96,7 +96,7 @@ class PhpEntityGenerator extends PhpClassGenerator
     {
         $extraLines = [];
         if ($this->config->shouldTrackChanges()) {
-            $extraLines[] = '$this->set(\'[%propertyName%]\', $[%propertyName%]);';
+            $extraLines[] = '$this->track(\'[%propertyName%]\', $[%propertyName%]);';
         }
         $this->output->addLine(
             (new PhpSetterGenerator(

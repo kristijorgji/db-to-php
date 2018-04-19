@@ -33,7 +33,7 @@ class TestPseudoModelEntity extends AbstractEntity
     public function setId(int $id)
     {
         $this->id = $id;
-        $this->set('id', $id);
+        $this->track('id', $id);
         return $this;
     }
 
@@ -52,7 +52,7 @@ class TestPseudoModelEntity extends AbstractEntity
     public function setName(?string $name)
     {
         $this->name = $name;
-        $this->set('name', $name);
+        $this->track('name', $name);
         return $this;
     }
 
@@ -71,7 +71,7 @@ class TestPseudoModelEntity extends AbstractEntity
     public function setSurname(?string $surname)
     {
         $this->surname = $surname;
-        $this->set('surname', $surname);
+        $this->track('surname', $surname);
         return $this;
     }
 
@@ -90,7 +90,7 @@ class TestPseudoModelEntity extends AbstractEntity
     public function setIsWorking(bool $isWorking)
     {
         $this->isWorking = $isWorking;
-        $this->set('isWorking', $isWorking);
+        $this->track('isWorking', $isWorking);
         return $this;
     }
 

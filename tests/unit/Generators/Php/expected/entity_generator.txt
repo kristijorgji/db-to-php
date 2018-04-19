@@ -288,7 +288,7 @@ class TestEntity
     public function setSalary(?float $salary)
     {
         $this->salary = $salary;
-        $this->set('salary', $salary);
+        $this->track('salary', $salary);
         return $this;
     }
 
@@ -307,7 +307,7 @@ class TestEntity
     public function setActive(bool $active)
     {
         $this->active = $active;
-        $this->set('active', $active);
+        $this->track('active', $active);
         return $this;
     }
 
@@ -326,7 +326,7 @@ class TestEntity
     public function setName(?string $name)
     {
         $this->name = $name;
-        $this->set('name', $name);
+        $this->track('name', $name);
         return $this;
     }
 
@@ -345,7 +345,7 @@ class TestEntity
     public function setYear(?int $year)
     {
         $this->year = $year;
-        $this->set('year', $year);
+        $this->track('year', $year);
         return $this;
     }
 

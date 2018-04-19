@@ -2,45 +2,27 @@
 
 namespace kristijorgji\DbToPhp\Data;
 
-// TODO
-
 abstract class AbstractEntity
 {
     /**
      * @var array
      */
-    protected $attributes = [];
+    private $__original = [];
 
-    /**
-     * @var array
-     */
-    protected $original = [];
-
-    /**
-     * @var bool
-     */
-    protected $booted = false;
+    public function __construct()
+    {
+        $this->sync();
+    }
 
     /**
      * @param string $key
      * @param $value
      */
-    protected function set(string $key, $value)
+    protected function track(string $key, $value)
     {
-        if (! array_key_exists($key, $this->original)) {
-            $this->original[$key] = $value;
+        if (! array_key_exists($key, $this->__original)) {
+            $this->__original[$key] = $value;
         }
-
-        $this->attributes[$key] = $value;
-    }
-
-    /**
-     * @param string $key
-     * @return mixed
-     */
-    protected function get(string $key)
-    {
-        return $this->attributes[$key];
     }
 
     /**
@@ -48,12 +30,8 @@ abstract class AbstractEntity
      */
     public function isDirty() : bool
     {
-        if (count($this->original) < count($this->attributes)) {
-            return true;
-        }
-
-        foreach ($this->original as $key => $value) {
-            if ($this->attributes[$key] !== $value) {
+        foreach ($this->__original as $key => $value) {
+            if ($this->{$key} !== $value) {
                 return true;
             }
         }
@@ -64,12 +42,12 @@ abstract class AbstractEntity
     /**
      * @return array
      */
-    public function getDirty() : array
+    public function dirtyFields() : array
     {
         $dirty = [];
 
-        foreach ($this->original as $property => $originalValue) {
-            $currentValue = $this->attributes[$property];
+        foreach ($this->__original as $property => $originalValue) {
+            $currentValue = $this->{$property};
 
             if ($currentValue !== $originalValue) {
                 $dirty[camelToSnakeCase($property)] = $currentValue;
@@ -79,16 +57,15 @@ abstract class AbstractEntity
         return $dirty;
     }
 
-    public function completeBuild()
-    {
-
-    }
-
     /**
      * @return void
      */
-    public function reset()
+    public function sync()
     {
-        $this->original = [];
+        foreach ($this as $key => $value) {
+            if ($key !== '__original') {
+                $this->__original[$key] = $value;
+            }
+        }
     }
 }

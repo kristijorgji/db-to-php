@@ -77,10 +77,40 @@ class PhpEntityManager extends AbstractPhpManager
      */
     public function generateEntity(string $tableName) : string
     {
-        $className = $this->formClassName($tableName);
         $fields = $this->databaseAdapter->getFields($tableName);
         $properties = $this->formProperties($fields);
 
+        $entityGeneratorConfig = $this->parseConfigForEntity($tableName);
+
+        $entityGenerator = new PhpEntityGenerator(
+            $entityGeneratorConfig,
+            $properties
+        );
+
+        $entityFileAsString = $entityGenerator->generate();
+        $entityFileName = $entityGeneratorConfig->getPhpClassGeneratorConfig()->getClassName() . '.php';
+
+        if (!$this->fileSystem->exists($this->config['outputDirectory'])) {
+            $this->fileSystem->createDirectory($this->config['outputDirectory'], true);
+        }
+
+        $outputPath = $this->config['outputDirectory'] . '/' . $entityFileName;
+
+        $this->fileSystem->write(
+            $outputPath,
+            $entityFileAsString
+        );
+
+        return $outputPath;
+    }
+
+    /**
+     * @param string $tableName
+     * @return PhpEntityGeneratorConfig
+     */
+    protected function parseConfigForEntity(string $tableName) : PhpEntityGeneratorConfig
+    {
+        $className = $this->formClassName($tableName);
         $shouldTrackChanges = $this->shouldTrackChanges($tableName);
         $extends = null;
         $uses = [];
@@ -90,7 +120,7 @@ class PhpEntityManager extends AbstractPhpManager
             $uses[] = AbstractEntity::class;
         }
 
-        $entityGeneratorConfig = new PhpEntityGeneratorConfig(
+        return new PhpEntityGeneratorConfig(
             new PhpClassGeneratorConfig(
                 $this->config['namespace'],
                 $className,
@@ -114,27 +144,6 @@ class PhpEntityManager extends AbstractPhpManager
             ),
             $shouldTrackChanges
         );
-
-        $entityGenerator = new PhpEntityGenerator(
-            $entityGeneratorConfig,
-            $properties
-        );
-
-        $entityFileAsString = $entityGenerator->generate();
-        $entityFileName = $className . '.php';
-
-        if (!$this->fileSystem->exists($this->config['outputDirectory'])) {
-            $this->fileSystem->createDirectory($this->config['outputDirectory'], true);
-        }
-
-        $outputPath = $this->config['outputDirectory'] . '/' . $entityFileName;
-
-        $this->fileSystem->write(
-            $outputPath,
-            $entityFileAsString
-        );
-
-        return $outputPath;
     }
 
     /**
@@ -148,7 +157,7 @@ class PhpEntityManager extends AbstractPhpManager
                 array_key_exists(0, $this->config['trackChangesFor'])
                 && $this->config['trackChangesFor'][0] === '*'
                 )
-            || array_key_exists($tableName, $this->config['trackChangesFor']);
+            || in_array($tableName, $this->config['trackChangesFor']);
     }
 
     /**
