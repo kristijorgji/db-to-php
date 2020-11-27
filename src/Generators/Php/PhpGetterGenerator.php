@@ -62,7 +62,7 @@ class PhpGetterGenerator
         $type  = $this->property->getType();
         $returnType = '';
         if ($this->config->shouldTypeHint()) {
-            $returnType = ' : ' . ($type->isNullable() === true ? '?' : '') . (string) $type->getType();
+            $returnType = ': ' . ($type->isNullable() === true ? '?' : '') . (string) $type->getType();
         }
 
         $functionName = 'get' . ucfirst($this->property->getName());
