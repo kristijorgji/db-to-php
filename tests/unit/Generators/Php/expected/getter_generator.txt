@@ -2,7 +2,7 @@
     /**
      * @return int|null
      */
-    public function getTestProperty() : ?int
+    public function getTestProperty(): ?int
     {
         return $this->testProperty;
     }
@@ -15,7 +15,7 @@
         return $this->testProperty;
     }
 ##[no_annotation_with_type_hinting]##
-    public function getTestProperty() : ?int
+    public function getTestProperty(): ?int
     {
         return $this->testProperty;
     }

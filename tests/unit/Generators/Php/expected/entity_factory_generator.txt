@@ -19,7 +19,7 @@ class TestEntityFactory extends BaseEntityFactory
      * @param array $data
      * @return TestEntity
      */
-    public static function make(array $data = []) : TestEntity
+    public static function make(array $data = []): TestEntity
     {
         return self::makeFromData(self::makeData($data));
     }
@@ -28,7 +28,7 @@ class TestEntityFactory extends BaseEntityFactory
      * @param array $data
      * @return TestEntity
      */
-    public static function makeFromData(array $data) : TestEntity
+    public static function makeFromData(array $data): TestEntity
     {
         self::validateData($data);
         return self::mapArrayToEntity($data, TestEntity::class);
@@ -38,7 +38,7 @@ class TestEntityFactory extends BaseEntityFactory
      * @param array $data
      * @return array
      */
-    public static function makeData(array $data = []) : array
+    public static function makeData(array $data = []): array
     {
         self::validateData($data);
         return [
@@ -64,18 +64,18 @@ class TestEntityFactory extends BaseEntityFactory
         'credit_value',
     ];
 
-    public static function make(array $data = []) : TestEntity
+    public static function make(array $data = []): TestEntity
     {
         return self::makeFromData(self::makeData($data));
     }
 
-    public static function makeFromData(array $data) : TestEntity
+    public static function makeFromData(array $data): TestEntity
     {
         self::validateData($data);
         return self::mapArrayToEntity($data, TestEntity::class);
     }
 
-    public static function makeData(array $data = []) : array
+    public static function makeData(array $data = []): array
     {
         self::validateData($data);
         return [

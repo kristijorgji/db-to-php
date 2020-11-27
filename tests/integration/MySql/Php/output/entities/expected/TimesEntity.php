@@ -42,7 +42,7 @@ class TimesEntity
     /**
      * @return int|null
      */
-    public function getBirthdayYear() : ?int
+    public function getBirthdayYear(): ?int
     {
         return $this->birthdayYear;
     }
@@ -60,7 +60,7 @@ class TimesEntity
     /**
      * @return string|null
      */
-    public function getBirthdayTime() : ?string
+    public function getBirthdayTime(): ?string
     {
         return $this->birthdayTime;
     }
@@ -78,7 +78,7 @@ class TimesEntity
     /**
      * @return string|null
      */
-    public function getColumn3() : ?string
+    public function getColumn3(): ?string
     {
         return $this->column3;
     }
@@ -96,7 +96,7 @@ class TimesEntity
     /**
      * @return string
      */
-    public function getLoggedIn() : string
+    public function getLoggedIn(): string
     {
         return $this->loggedIn;
     }
@@ -114,7 +114,7 @@ class TimesEntity
     /**
      * @return string|null
      */
-    public function getRegisteredDate() : ?string
+    public function getRegisteredDate(): ?string
     {
         return $this->registeredDate;
     }

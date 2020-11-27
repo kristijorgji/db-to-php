@@ -66,7 +66,7 @@ class TestEntity
     /**
      * @return float|null
      */
-    public function getSalary() : ?float
+    public function getSalary(): ?float
     {
         return $this->salary;
     }
@@ -84,7 +84,7 @@ class TestEntity
     /**
      * @return bool
      */
-    public function getActive() : bool
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -102,7 +102,7 @@ class TestEntity
     /**
      * @return string|null
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -120,7 +120,7 @@ class TestEntity
     /**
      * @return int|null
      */
-    public function getYear() : ?int
+    public function getYear(): ?int
     {
         return $this->year;
     }
@@ -156,7 +156,7 @@ class TestEntity
     /**
      * @return float|null
      */
-    public function getSalary() : ?float
+    public function getSalary(): ?float
     {
         return $this->salary;
     }
@@ -164,7 +164,7 @@ class TestEntity
     /**
      * @return bool
      */
-    public function getActive() : bool
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -172,7 +172,7 @@ class TestEntity
     /**
      * @return string|null
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -180,7 +180,7 @@ class TestEntity
     /**
      * @return int|null
      */
-    public function getYear() : ?int
+    public function getYear(): ?int
     {
         return $this->year;
     }
@@ -295,7 +295,7 @@ class TestEntity
     /**
      * @return float|null
      */
-    public function getSalary() : ?float
+    public function getSalary(): ?float
     {
         return $this->salary;
     }
@@ -314,7 +314,7 @@ class TestEntity
     /**
      * @return bool
      */
-    public function getActive() : bool
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -333,7 +333,7 @@ class TestEntity
     /**
      * @return string|null
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -352,7 +352,7 @@ class TestEntity
     /**
      * @return int|null
      */
-    public function getYear() : ?int
+    public function getYear(): ?int
     {
         return $this->year;
     }

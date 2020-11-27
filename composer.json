@@ -11,7 +11,8 @@
   ],
   "require": {
     "php": ">=7.1",
-    "symfony/console": ">=3.3"
+    "symfony/console": ">=3.3",
+    "vlucas/phpdotenv": "^5.2"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.7",

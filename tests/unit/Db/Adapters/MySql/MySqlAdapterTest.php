@@ -39,11 +39,14 @@ class MySqlAdapterTest extends MySqlTestCase
     {
         $expectedTableNames = [
             'binarius',
+            'special',
             'test',
-            'test_2'
+            'test_2',
+            'times'
         ];
 
         $tables = $this->databaseAdapter->getTables();
+        print_r($tables);
         foreach ($tables as $table) {
             $this->assertTrue(in_array($table->getName(), $expectedTableNames));
         }

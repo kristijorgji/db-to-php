@@ -3,13 +3,7 @@
 return [
     'typeHint' => true,
     'databaseDriver' => kristijorgji\DbToPhp\DatabaseDrivers::MYSQL,
-    'connection' => [
-        'host' => '127.0.0.1',
-        'port' => 3306,
-        'database' => 'test_db_to_php',
-        'username' => 'root',
-        'password' => 'Test123@',
-    ],
+    'connection' => \kristijorgji\Tests\Helpers\MySqlTestCase::$mysqlConnection,
     'entities' => [
         'includeTables' => ['*'],
         'tableToEntityClassName' => [

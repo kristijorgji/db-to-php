@@ -92,7 +92,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
         $returnType = '';
 
         if ($this->config->shouldTypeHint()) {
-            $returnType .= sprintf(' : %s', $this->entityClassName);
+            $returnType .= sprintf(': %s', $this->entityClassName);
         }
 
         $this->output->addLine('public static function make(array $data = [])' . $returnType, 4);
@@ -134,7 +134,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
         $returnType = '';
 
         if ($this->config->shouldTypeHint()) {
-            $returnType .= sprintf(' : %s', $this->entityClassName);
+            $returnType .= sprintf(': %s', $this->entityClassName);
         }
 
         $this->output->addLine('public static function makeFromData(array $data)' . $returnType, 4);
@@ -169,7 +169,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
         $returnType = '';
 
         if ($this->config->shouldTypeHint()) {
-            $returnType .= ' : array';
+            $returnType .= ': array';
         }
 
         $this->output->addLine('public static function makeData(array $data = [])' . $returnType, 4);

@@ -34,7 +34,7 @@ class PhpGetterGenerator
         $this->config = $config;
     }
 
-    public function generate() : string
+    public function generate(): string
     {
         if ($this->config->shouldIncludeAnnotations()) {
             $this->addAnnotation();

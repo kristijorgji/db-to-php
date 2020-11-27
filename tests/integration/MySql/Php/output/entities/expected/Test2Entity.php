@@ -67,7 +67,7 @@ class Test2Entity
     /**
      * @return int
      */
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -85,7 +85,7 @@ class Test2Entity
     /**
      * @return string|null
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -103,7 +103,7 @@ class Test2Entity
     /**
      * @return string|null
      */
-    public function getSurname() : ?string
+    public function getSurname(): ?string
     {
         return $this->surname;
     }
@@ -121,7 +121,7 @@ class Test2Entity
     /**
      * @return bool
      */
-    public function getIsWorking() : bool
+    public function getIsWorking(): bool
     {
         return $this->isWorking;
     }
@@ -139,7 +139,7 @@ class Test2Entity
     /**
      * @return float|null
      */
-    public function getSalary() : ?float
+    public function getSalary(): ?float
     {
         return $this->salary;
     }
@@ -157,7 +157,7 @@ class Test2Entity
     /**
      * @return float|null
      */
-    public function getDiscount() : ?float
+    public function getDiscount(): ?float
     {
         return $this->discount;
     }
@@ -175,7 +175,7 @@ class Test2Entity
     /**
      * @return float|null
      */
-    public function getNewColumn() : ?float
+    public function getNewColumn(): ?float
     {
         return $this->newColumn;
     }
@@ -193,7 +193,7 @@ class Test2Entity
     /**
      * @return string|null
      */
-    public function getDddd() : ?string
+    public function getDddd(): ?string
     {
         return $this->dddd;
     }
@@ -211,7 +211,7 @@ class Test2Entity
     /**
      * @return string|null
      */
-    public function getBinaeraylk() : ?string
+    public function getBinaeraylk(): ?string
     {
         return $this->binaeraylk;
     }
@@ -229,7 +229,7 @@ class Test2Entity
     /**
      * @return string|null
      */
-    public function getF() : ?string
+    public function getF(): ?string
     {
         return $this->f;
     }

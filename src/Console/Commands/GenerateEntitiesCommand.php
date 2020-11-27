@@ -27,10 +27,10 @@ class GenerateEntitiesCommand extends AbstractCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return int
      * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->bootstrap($input, $output);
 
@@ -40,5 +40,7 @@ class GenerateEntitiesCommand extends AbstractCommand
             $this->outputGenerationResult($output, $e->getPartialResponse());
             throw $e->getPrevious();
         }
+
+        return 0;
     }
 }
