@@ -83,20 +83,30 @@ class MySqlFieldResolverTest extends TestCase
                 'enum(\'1\',\'4\',\'111\')'
             ),
 
+            'unsigned_int8_no_length' => $h(new IntegerField($name, false, 8, false), 'tinyint unsigned'),
             'unsigned_int8' => $h(new IntegerField($name, false, 8, false), 'tinyint(3) unsigned'),
             'signed_int8' => $h(new IntegerField($name, false, 8, true), 'tinyint(3)'),
+            'signed_int8_no_length' => $h(new IntegerField($name, false, 8, true), 'tinyint'),
 
+            'unsigned_int16_no_length' => $h(new IntegerField($name, false, 16, false), 'smallint unsigned'),
             'unsigned_int16' => $h(new IntegerField($name, false, 16, false), 'smallint(5) unsigned'),
             'signed_int16' => $h(new IntegerField($name, false, 16, true), 'smallint(5)'),
+            'signed_int16_no_length' => $h(new IntegerField($name, false, 16, true), 'smallint'),
 
+            'unsigned_int24_no_length' => $h(new IntegerField($name, false, 24, false), 'mediumint unsigned'),
             'unsigned_int24' => $h(new IntegerField($name, false, 24, false), 'mediumint(9) unsigned'),
             'signed_int24' => $h(new IntegerField($name, false, 24, true), 'mediumint(9)'),
+            'signed_int24_no_length' => $h(new IntegerField($name, false, 24, true), 'mediumint'),
 
+            'unsigned_int32_no_length' => $h(new IntegerField($name, false, 32, false), 'int unsigned'),
             'unsigned_int32' => $h(new IntegerField($name, false, 32, false), 'int(11) unsigned'),
             'signed_int32' => $h(new IntegerField($name, false, 32, true), 'int(11)'),
+            'signed_int32_no_length' => $h(new IntegerField($name, false, 32, true), 'int'),
 
+            'unsigned_int64_no_length' => $h(new IntegerField($name, false, 64, false), 'bigint unsigned'),
             'unsigned_int64' => $h(new IntegerField($name, false, 64, false), 'bigint(20) unsigned'),
             'signed_int64' => $h(new IntegerField($name, false, 64, true), 'bigint(20)'),
+            'signed_int64_no_length' => $h(new IntegerField($name, false, 64, true), 'bigint'),
 
             $h(new FloatField($name, false), 'float'),
 
