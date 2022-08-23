@@ -11,11 +11,12 @@
   ],
   "require": {
     "php": ">=7.1",
-    "symfony/console": ">=3.3"
+    "symfony/console": ">=3.3",
+    "vlucas/phpdotenv": "^5.2"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.7",
-    "phpunit/phpunit": "~5.7"
+    "phpunit/phpunit": "^9.5"
   },
   "autoload": {
     "psr-4": {

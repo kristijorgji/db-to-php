@@ -9,23 +9,25 @@ abstract class MySqlTestCase extends TestCase
     /**
      * @var array
      */
-    protected static $mysqlConnection = [
-        'host' => '127.0.0.1',
-        'port' => 3306,
-        'database' => 'test_db_to_php',
-        'username' => 'root',
-        'password' => 'Test123@',
-    ];
+    public static $mysqlConnection = [];
 
     /**
      * @var PDO
      */
     protected static $pdo;
 
-    /**
-     * @return void
-     */
-    public static function setUpBeforeClass()
+    static function init(): void
+    {
+        self::$mysqlConnection = [
+            'host' => $_ENV['DB_HOST'],
+            'port' => $_ENV['DB_PORT'],
+            'database' => $_ENV['DB_DATABASE'],
+            'username' => $_ENV['DB_USERNAME'],
+            'password' => $_ENV['DB_PASSWORD'],
+        ];
+    }
+
+    public static function setUpBeforeClass(): void
     {
         $dsn = sprintf(
             'mysql:host=%s:%s;charset=utf8',
@@ -45,10 +47,7 @@ abstract class MySqlTestCase extends TestCase
         self::initializeTestDatabase();
     }
 
-    /**
-     * @return void
-     */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::dropTestDatabase();
         self::$pdo = null;
@@ -128,3 +127,5 @@ abstract class MySqlTestCase extends TestCase
         }
     }
 }
+
+MySqlTestCase::init();

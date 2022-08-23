@@ -37,26 +37,12 @@ class PhpPropertyAnnotationGenerator
         $this->output->addLine(
             sprintf(
                 '* @var %s',
-                $this->resolveType($this->type)
+                Utils::resolveTypeForAnnotation($this->type)
             ),
             $indentationSpaces + 1
         );
         $this->output->addLine('*/', $indentationSpaces + 1);
 
         return $this->output->get();
-    }
-
-    /**
-     * @param PhpType $type
-     * @return string
-     */
-    private function resolveType(PhpType $type) : string
-    {
-        $nullableText = $type->isNullable() === true ? '|null' :  '';
-        if ($type instanceof PhpObjectType) {
-            return (string) $type->getClassName() . $nullableText;
-        }
-
-        return (string) $type->getType() . $nullableText;
     }
 }

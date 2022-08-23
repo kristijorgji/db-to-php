@@ -22,7 +22,7 @@ class TimesEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return TimesEntity
      */
-    public static function make(array $data = []) : TimesEntity
+    public static function make(array $data = []): TimesEntity
     {
         return self::makeFromData(self::makeData($data));
     }
@@ -31,7 +31,7 @@ class TimesEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return TimesEntity
      */
-    public static function makeFromData(array $data) : TimesEntity
+    public static function makeFromData(array $data): TimesEntity
     {
         self::validateData($data);
         return self::mapArrayToEntity($data, TimesEntity::class);
@@ -41,7 +41,7 @@ class TimesEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return array
      */
-    public static function makeData(array $data = []) : array
+    public static function makeData(array $data = []): array
     {
         self::validateData($data);
         return [

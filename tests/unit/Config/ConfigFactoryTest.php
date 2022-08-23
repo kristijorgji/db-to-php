@@ -19,7 +19,7 @@ class ConfigFactoryTest extends TestCase
      */
     private $configFactory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fileSystem = $this->getMockBuilder(FileSystemInterface::class)->getMock();
         $this->configFactory = new ConfigFactory(

@@ -12,7 +12,7 @@ class EnumTest extends TestCase
      */
     private $testEnum;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->testEnum = new TestEnum(TestEnum::ANOTHER_TEST);
     }

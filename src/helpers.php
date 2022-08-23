@@ -29,6 +29,18 @@ if (!function_exists('snakeToPascalCase')) {
     }
 }
 
+if (!function_exists('camelToSnakeCase')) {
+
+    /**
+     * @param string $input
+     * @return string
+     */
+    function camelToSnakeCase(string $input) : string
+    {
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
+    }
+}
+
 if (!function_exists('basePath')) {
 
     /**

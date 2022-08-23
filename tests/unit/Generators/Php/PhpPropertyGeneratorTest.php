@@ -37,12 +37,12 @@ class PhpPropertyGeneratorTest extends TestCase
         return [
             'no_annotations' => [
                 $this->getSampleProperty(),
-                new PhpPropertyGeneratorConfig(false),
+                new PhpPropertyGeneratorConfig(false, false),
                 $expected['no_annotations']
             ],
             'with_annotations_nullable' => [
                 $this->getSampleProperty(),
-                new PhpPropertyGeneratorConfig(true),
+                new PhpPropertyGeneratorConfig(true, false),
                 $expected['with_annotations_nullable']
             ],
             'with_annotations_not_nullable' => [
@@ -51,8 +51,17 @@ class PhpPropertyGeneratorTest extends TestCase
                      new PhpType(new PhpTypes(PhpTypes::INTEGER), false),
                      'employeeAge'
                  ),
-                new PhpPropertyGeneratorConfig(true),
+                new PhpPropertyGeneratorConfig(true, false),
                 $expected['with_annotations_not_nullable']
+            ],
+            'with_type_hints_no_annotation' => [
+                new PhpProperty(
+                    new PhpAccessModifiers(PhpAccessModifiers::PROTECTED),
+                    new PhpType(new PhpTypes(PhpTypes::STRING), true),
+                    'secretValue'
+                ),
+                new PhpPropertyGeneratorConfig(false, true),
+                $expected['with_type_hints_no_annotation']
             ]
         ];
     }

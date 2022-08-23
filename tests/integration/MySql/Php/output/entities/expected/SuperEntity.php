@@ -77,7 +77,7 @@ class SuperEntity
     /**
      * @return int
      */
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -95,7 +95,7 @@ class SuperEntity
     /**
      * @return string
      */
-    public function getEvent() : string
+    public function getEvent(): string
     {
         return $this->event;
     }
@@ -113,7 +113,7 @@ class SuperEntity
     /**
      * @return string
      */
-    public function getPayload() : string
+    public function getPayload(): string
     {
         return $this->payload;
     }
@@ -131,7 +131,7 @@ class SuperEntity
     /**
      * @return string
      */
-    public function getStatus() : string
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -149,7 +149,7 @@ class SuperEntity
     /**
      * @return string
      */
-    public function getSuperStatus() : string
+    public function getSuperStatus(): string
     {
         return $this->superStatus;
     }
@@ -167,7 +167,7 @@ class SuperEntity
     /**
      * @return bool
      */
-    public function getActive() : bool
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -185,7 +185,7 @@ class SuperEntity
     /**
      * @return string
      */
-    public function getFile() : string
+    public function getFile(): string
     {
         return $this->file;
     }
@@ -203,7 +203,7 @@ class SuperEntity
     /**
      * @return string
      */
-    public function getTime() : string
+    public function getTime(): string
     {
         return $this->time;
     }
@@ -221,7 +221,7 @@ class SuperEntity
     /**
      * @return int|null
      */
-    public function getCanBeNulled() : ?int
+    public function getCanBeNulled(): ?int
     {
         return $this->canBeNulled;
     }
@@ -239,7 +239,7 @@ class SuperEntity
     /**
      * @return string
      */
-    public function getCreatedAt() : string
+    public function getCreatedAt(): string
     {
         return $this->createdAt;
     }
@@ -257,7 +257,7 @@ class SuperEntity
     /**
      * @return string
      */
-    public function getUpdatedAt() : string
+    public function getUpdatedAt(): string
     {
         return $this->updatedAt;
     }
@@ -275,7 +275,7 @@ class SuperEntity
     /**
      * @return bool|null
      */
-    public function getNewColumn() : ?bool
+    public function getNewColumn(): ?bool
     {
         return $this->newColumn;
     }

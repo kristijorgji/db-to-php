@@ -27,7 +27,7 @@ class Test2EntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return Test2Entity
      */
-    public static function make(array $data = []) : Test2Entity
+    public static function make(array $data = []): Test2Entity
     {
         return self::makeFromData(self::makeData($data));
     }
@@ -36,7 +36,7 @@ class Test2EntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return Test2Entity
      */
-    public static function makeFromData(array $data) : Test2Entity
+    public static function makeFromData(array $data): Test2Entity
     {
         self::validateData($data);
         return self::mapArrayToEntity($data, Test2Entity::class);
@@ -46,7 +46,7 @@ class Test2EntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return array
      */
-    public static function makeData(array $data = []) : array
+    public static function makeData(array $data = []): array
     {
         self::validateData($data);
         return [

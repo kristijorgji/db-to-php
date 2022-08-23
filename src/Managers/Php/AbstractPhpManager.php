@@ -5,6 +5,7 @@ namespace kristijorgji\DbToPhp\Managers\Php;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
 use kristijorgji\DbToPhp\Db\TablesCollection;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
+use kristijorgji\DbToPhp\Managers\Exceptions\TableDoesNotExistException;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
 
 class AbstractPhpManager
@@ -59,23 +60,42 @@ class AbstractPhpManager
 
     /**
      * @param TablesCollection $tables
-     * @param array $filter
+     * @param string[] $selectedTableNames
      * @return TablesCollection
+     * @throws TableDoesNotExistException
      */
-    public function filterTables(TablesCollection $tables, array $filter) : TablesCollection
+    public function filterTables(TablesCollection $tables, array $selectedTableNames) : TablesCollection
     {
-        if ($filter[0] === '*') {
+        if ($selectedTableNames[0] === '*') {
             return $tables;
         }
 
+        $tablesMap = $this->formTablesMap($tables);
         $selectedTables = [];
 
-        foreach ($tables->all() as $table) {
-            if (in_array($table->getName(), $filter)) {
-                $selectedTables[] = $table;
+        foreach ($selectedTableNames as $selectedTableName) {
+            if (! array_key_exists($selectedTableName, $tablesMap)) {
+                throw new TableDoesNotExistException($selectedTableName);
             }
+
+            $selectedTables[] = $tablesMap[$selectedTableName];
         }
 
         return new TablesCollection(...$selectedTables);
+    }
+
+    /**
+     * @param TablesCollection $tablesCollection
+     * @return array
+     */
+    protected function formTablesMap(TablesCollection $tablesCollection) : array
+    {
+        $tablesMap = [];
+
+        foreach ($tablesCollection->all() as $table) {
+            $tablesMap[$table->getName()] = $table;
+        }
+
+        return $tablesMap;
     }
 }

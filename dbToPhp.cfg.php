@@ -4,9 +4,9 @@ return [
     'typeHint' => true,
     'databaseDriver' => kristijorgji\DbToPhp\DatabaseDrivers::MYSQL,
     'connection' => [
-        'host' => '127.0.0.1',
+        'host' => '192.168.66.7',
         'port' => 3306,
-        'database' => 'db_to_php',
+        'database' => 'test_db_to_php',
         'username' => 'root',
         'password' => 'Test123@',
     ],
@@ -23,7 +23,8 @@ return [
         'fluentSetters' => true,
         'properties' => [
             'accessModifier' => \kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers::PRIVATE
-        ]
+        ],
+        'trackChangesFor' => []
     ],
     'factories' => [
         'includeTables' => ['*'],

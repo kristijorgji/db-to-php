@@ -52,13 +52,13 @@ class PhpMethodAnnotationGenerator
 
         foreach ($this->parameters->all() as $argument) {
             $this->output->addLine(
-                sprintf('* @param %s $%s', $this->resolveType($argument->getType()), $argument->getName()),
+                sprintf('* @param %s $%s',Utils::resolveTypeForAnnotation($argument->getType()), $argument->getName()),
                 $indentationSpaces + 1
             );
         }
 
         if ($this->returnType !== null) {
-            $returnType = $this->resolveType($this->returnType);
+            $returnType = Utils::resolveTypeForAnnotation($this->returnType);
         } else {
             $returnType = 'void';
         }
@@ -71,19 +71,5 @@ class PhpMethodAnnotationGenerator
         $this->output->addLine('*/', $indentationSpaces + 1);
 
         return $this->output->get();
-    }
-
-    /**
-     * @param PhpType $type
-     * @return string
-     */
-    private function resolveType(PhpType $type) : string
-    {
-        $nullableText = $type->isNullable() === true ? '|null' :  '';
-        if ($type instanceof PhpObjectType) {
-            return (string) $type->getClassName() . $nullableText;
-        }
-
-        return (string) $type->getType() . $nullableText;
     }
 }

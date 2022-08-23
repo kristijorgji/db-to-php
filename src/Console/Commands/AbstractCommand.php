@@ -8,7 +8,6 @@ use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterFactory;
 use kristijorgji\DbToPhp\Managers\GenerateResponse;
 use kristijorgji\DbToPhp\Managers\ManagerContract;
 use kristijorgji\DbToPhp\Managers\ManagerFactory;
-use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -98,8 +97,7 @@ abstract class AbstractCommand extends Command
     protected function loadManager() : ManagerContract
     {
         return (new ManagerFactory(
-            new DatabaseAdapterFactory(),
-            new PhpTypeMapperFactory()
+            new DatabaseAdapterFactory()
         ))->get($this->getConfig());
     }
 

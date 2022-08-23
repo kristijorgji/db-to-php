@@ -27,7 +27,7 @@ class BinariusEntity
     /**
      * @return string|null
      */
-    public function getFile() : ?string
+    public function getFile(): ?string
     {
         return $this->file;
     }
@@ -45,7 +45,7 @@ class BinariusEntity
     /**
      * @return string|null
      */
-    public function getImage() : ?string
+    public function getImage(): ?string
     {
         return $this->image;
     }

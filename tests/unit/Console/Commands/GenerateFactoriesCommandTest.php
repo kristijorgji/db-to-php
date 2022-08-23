@@ -13,7 +13,7 @@ class GenerateFactoriesCommandTest extends AbstractCommandTestCase
      */
     protected $command;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->command = new GenerateFactoriesCommand(

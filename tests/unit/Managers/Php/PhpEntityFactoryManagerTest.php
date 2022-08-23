@@ -25,7 +25,7 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
      */
     protected $manager;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->config = $this->config['factories'];

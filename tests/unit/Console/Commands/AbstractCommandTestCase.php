@@ -32,7 +32,7 @@ abstract class AbstractCommandTestCase extends TestCase
      */
     protected $output;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->configFactory = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()

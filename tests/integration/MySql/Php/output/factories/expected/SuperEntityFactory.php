@@ -29,7 +29,7 @@ class SuperEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return SuperEntity
      */
-    public static function make(array $data = []) : SuperEntity
+    public static function make(array $data = []): SuperEntity
     {
         return self::makeFromData(self::makeData($data));
     }
@@ -38,7 +38,7 @@ class SuperEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return SuperEntity
      */
-    public static function makeFromData(array $data) : SuperEntity
+    public static function makeFromData(array $data): SuperEntity
     {
         self::validateData($data);
         return self::mapArrayToEntity($data, SuperEntity::class);
@@ -48,7 +48,7 @@ class SuperEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return array
      */
-    public static function makeData(array $data = []) : array
+    public static function makeData(array $data = []): array
     {
         self::validateData($data);
         return [

@@ -66,7 +66,7 @@ class TestEntity
     /**
      * @return float|null
      */
-    public function getSalary() : ?float
+    public function getSalary(): ?float
     {
         return $this->salary;
     }
@@ -84,7 +84,7 @@ class TestEntity
     /**
      * @return bool
      */
-    public function getActive() : bool
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -102,7 +102,7 @@ class TestEntity
     /**
      * @return string|null
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -120,7 +120,7 @@ class TestEntity
     /**
      * @return int|null
      */
-    public function getYear() : ?int
+    public function getYear(): ?int
     {
         return $this->year;
     }
@@ -156,7 +156,7 @@ class TestEntity
     /**
      * @return float|null
      */
-    public function getSalary() : ?float
+    public function getSalary(): ?float
     {
         return $this->salary;
     }
@@ -164,7 +164,7 @@ class TestEntity
     /**
      * @return bool
      */
-    public function getActive() : bool
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -172,7 +172,7 @@ class TestEntity
     /**
      * @return string|null
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -180,7 +180,7 @@ class TestEntity
     /**
      * @return int|null
      */
-    public function getYear() : ?int
+    public function getYear(): ?int
     {
         return $this->year;
     }
@@ -251,6 +251,110 @@ class TestEntity
     {
         $this->year = $year;
         return $this;
+    }
+}
+
+##[track_changes_no_properties]##
+<?php
+
+namespace MyApp\Entities;
+
+class TestEntity
+{
+    /**
+     * @var float|null
+     */
+    public $salary;
+
+    /**
+     * @var bool
+     */
+    private $active;
+
+    /**
+     * @var string|null
+     */
+    protected $name;
+
+    /**
+     * @var int|null
+     */
+    private $year;
+
+    /**
+     * @param float|null $salary
+     * @return $this
+     */
+    public function setSalary(?float $salary)
+    {
+        $this->salary = $salary;
+        $this->track('salary', $salary);
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getSalary(): ?float
+    {
+        return $this->salary;
+    }
+
+    /**
+     * @param bool $active
+     * @return $this
+     */
+    public function setActive(bool $active)
+    {
+        $this->active = $active;
+        $this->track('active', $active);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param string|null $name
+     * @return $this
+     */
+    public function setName(?string $name)
+    {
+        $this->name = $name;
+        $this->track('name', $name);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param int|null $year
+     * @return $this
+     */
+    public function setYear(?int $year)
+    {
+        $this->year = $year;
+        $this->track('year', $year);
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getYear(): ?int
+    {
+        return $this->year;
     }
 }
 

@@ -69,6 +69,7 @@ return [
         'outputDirectory' => 'Entities',
         'namespace' => 'Entities',
         'includeAnnotations' => true,
+        'typeHintProperties' => true,
         'includeSetters' => true,
         'includeGetters' => true,
         'fluentSetters' => true,
@@ -99,7 +100,7 @@ Example with ```typehint=true```:
  * @param array $data
  * @return TestEntity
  */
-public static function make(array $data = []) : TestEntity
+public static function make(array $data = []): TestEntity
 {
     return self::makeFromData(self::makeData($data));
 }
@@ -257,7 +258,7 @@ class UsersDemoEntity
     /**
      * @return int
      */
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -275,7 +276,7 @@ class UsersDemoEntity
     /**
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -293,7 +294,7 @@ class UsersDemoEntity
     /**
      * @return string
      */
-    public function getSurname() : string
+    public function getSurname(): string
     {
         return $this->surname;
     }
@@ -311,7 +312,7 @@ class UsersDemoEntity
     /**
      * @return string|null
      */
-    public function getPreferences() : ?string
+    public function getPreferences(): ?string
     {
         return $this->preferences;
     }
@@ -329,7 +330,7 @@ class UsersDemoEntity
     /**
      * @return int
      */
-    public function getBirthYear() : int
+    public function getBirthYear(): int
     {
         return $this->birthYear;
     }
@@ -347,7 +348,7 @@ class UsersDemoEntity
     /**
      * @return int
      */
-    public function getNrCars() : int
+    public function getNrCars(): int
     {
         return $this->nrCars;
     }
@@ -365,7 +366,7 @@ class UsersDemoEntity
     /**
      * @return float
      */
-    public function getSalary() : float
+    public function getSalary(): float
     {
         return $this->salary;
     }
@@ -383,7 +384,7 @@ class UsersDemoEntity
     /**
      * @return bool
      */
-    public function getActive() : bool
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -401,7 +402,7 @@ class UsersDemoEntity
     /**
      * @return string
      */
-    public function getCreatedAt() : string
+    public function getCreatedAt(): string
     {
         return $this->createdAt;
     }
@@ -482,7 +483,7 @@ class UsersDemoEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return UsersDemoEntity
      */
-    public static function make(array $data = []) : UsersDemoEntity
+    public static function make(array $data = []): UsersDemoEntity
     {
         return self::makeFromData(self::makeData($data));
     }
@@ -491,7 +492,7 @@ class UsersDemoEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return UsersDemoEntity
      */
-    public static function makeFromData(array $data) : UsersDemoEntity
+    public static function makeFromData(array $data): UsersDemoEntity
     {
         return self::mapArrayToEntity($data, UsersDemoEntity::class);
     }
@@ -500,7 +501,7 @@ class UsersDemoEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return array
      */
-    public static function makeData(array $data = []) : array
+    public static function makeData(array $data = []): array
     {
         return [
             'id' => $data['id'] ?? self::randomInt64(),

@@ -19,7 +19,7 @@ class BinariusEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return BinariusEntity
      */
-    public static function make(array $data = []) : BinariusEntity
+    public static function make(array $data = []): BinariusEntity
     {
         return self::makeFromData(self::makeData($data));
     }
@@ -28,7 +28,7 @@ class BinariusEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return BinariusEntity
      */
-    public static function makeFromData(array $data) : BinariusEntity
+    public static function makeFromData(array $data): BinariusEntity
     {
         self::validateData($data);
         return self::mapArrayToEntity($data, BinariusEntity::class);
@@ -38,7 +38,7 @@ class BinariusEntityFactory extends AbstractEntityFactory
      * @param array $data
      * @return array
      */
-    public static function makeData(array $data = []) : array
+    public static function makeData(array $data = []): array
     {
         self::validateData($data);
         return [

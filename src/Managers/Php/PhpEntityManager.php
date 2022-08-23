@@ -2,6 +2,7 @@
 
 namespace kristijorgji\DbToPhp\Managers\Php;
 
+use kristijorgji\DbToPhp\Data\AbstractEntity;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
 use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
@@ -76,16 +77,55 @@ class PhpEntityManager extends AbstractPhpManager
      */
     public function generateEntity(string $tableName) : string
     {
-        $className = $this->formClassName($tableName);
         $fields = $this->databaseAdapter->getFields($tableName);
         $properties = $this->formProperties($fields);
 
-        $entityGeneratorConfig = new PhpEntityGeneratorConfig(
+        $entityGeneratorConfig = $this->parseConfigForEntity($tableName);
+
+        $entityGenerator = new PhpEntityGenerator(
+            $entityGeneratorConfig,
+            $properties
+        );
+
+        $entityFileAsString = $entityGenerator->generate();
+        $entityFileName = $entityGeneratorConfig->getPhpClassGeneratorConfig()->getClassName() . '.php';
+
+        if (!$this->fileSystem->exists($this->config['outputDirectory'])) {
+            $this->fileSystem->createDirectory($this->config['outputDirectory'], true);
+        }
+
+        $outputPath = $this->config['outputDirectory'] . '/' . $entityFileName;
+
+        $this->fileSystem->write(
+            $outputPath,
+            $entityFileAsString
+        );
+
+        return $outputPath;
+    }
+
+    /**
+     * @param string $tableName
+     * @return PhpEntityGeneratorConfig
+     */
+    protected function parseConfigForEntity(string $tableName) : PhpEntityGeneratorConfig
+    {
+        $className = $this->formClassName($tableName);
+        $shouldTrackChanges = $this->shouldTrackChanges($tableName);
+        $extends = null;
+        $uses = [];
+
+        if ($shouldTrackChanges) {
+            $extends = $this->stripClassName(AbstractEntity::class);
+            $uses[] = AbstractEntity::class;
+        }
+
+        return new PhpEntityGeneratorConfig(
             new PhpClassGeneratorConfig(
                 $this->config['namespace'],
                 $className,
-                new StringCollection(... []),
-                null,
+                new StringCollection(... $uses),
+                $extends,
                 $this->config['includeAnnotations']
             ),
             $this->config['includeSetters'],
@@ -100,30 +140,25 @@ class PhpEntityManager extends AbstractPhpManager
                 $this->typeHint
             ),
             new PhpPropertyGeneratorConfig(
-                $this->config['includeAnnotations']
-            )
+                $this->config['includeAnnotations'],
+                $this->config['typeHintProperties'] ?? false
+            ),
+            $shouldTrackChanges
         );
+    }
 
-        $entityGenerator = new PhpEntityGenerator(
-            $entityGeneratorConfig,
-            $properties
-        );
-
-        $entityFileAsString = $entityGenerator->generate();
-        $entityFileName = $className . '.php';
-
-        if (!$this->fileSystem->exists($this->config['outputDirectory'])) {
-            $this->fileSystem->createDirectory($this->config['outputDirectory'], true);
-        }
-
-        $outputPath = $this->config['outputDirectory'] . '/' . $entityFileName;
-
-        $this->fileSystem->write(
-            $outputPath,
-            $entityFileAsString
-        );
-
-        return $outputPath;
+    /**
+     * @param string $tableName
+     * @return bool
+     */
+    protected function shouldTrackChanges(string $tableName) : bool
+    {
+        return $this->config['trackChangesFor'] === '*'
+            || (
+                array_key_exists(0, $this->config['trackChangesFor'])
+                && $this->config['trackChangesFor'][0] === '*'
+                )
+            || in_array($tableName, $this->config['trackChangesFor']);
     }
 
     /**

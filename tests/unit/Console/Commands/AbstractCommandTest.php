@@ -24,7 +24,7 @@ class AbstractCommandTest extends TestCase
      */
     private $appName;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->configFactory = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()

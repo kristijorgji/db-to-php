@@ -10,20 +10,30 @@ class PhpPropertyGeneratorConfig
     private $includeAnnotations;
 
     /**
+     * @var bool
+     */
+    private $typed;
+
+    /**
      * @param bool $includeAnnotations
+     * @param bool $typed
      */
     public function __construct(
-        bool $includeAnnotations
+        bool $includeAnnotations,
+        bool $typed
     )
     {
         $this->includeAnnotations = $includeAnnotations;
+        $this->typed = $typed;
     }
 
-    /**
-     * @return boolean
-     */
     public function shouldIncludeAnnotations(): bool
     {
         return $this->includeAnnotations;
+    }
+
+    public function shouldBeTypeHinted(): bool
+    {
+        return $this->typed;
     }
 }

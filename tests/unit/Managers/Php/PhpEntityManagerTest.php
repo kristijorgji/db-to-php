@@ -2,15 +2,22 @@
 
 namespace kristijorgji\UnitTests\Managers\Php;
 
+use kristijorgji\DbToPhp\Data\AbstractEntity;
 use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
 use kristijorgji\DbToPhp\Db\Table;
 use kristijorgji\DbToPhp\Db\TablesCollection;
+use kristijorgji\DbToPhp\Generators\Php\Configs\PhpClassGeneratorConfig;
+use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityGeneratorConfig;
+use kristijorgji\DbToPhp\Generators\Php\Configs\PhpGetterGeneratorConfig;
+use kristijorgji\DbToPhp\Generators\Php\Configs\PhpPropertyGeneratorConfig;
+use kristijorgji\DbToPhp\Generators\Php\Configs\PhpSetterGeneratorConfig;
 use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
 use kristijorgji\DbToPhp\Managers\GenerateResponse;
 use kristijorgji\DbToPhp\Managers\Php\PhpEntityManager;
 use kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers;
 use kristijorgji\DbToPhp\Rules\Php\PhpPropertiesCollection;
 use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
+use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Factories\Db\Fields\FieldFactory;
 use kristijorgji\Tests\Factories\Db\Fields\FieldsCollectionFactory;
 use kristijorgji\Tests\Factories\Db\TablesCollectionFactory;
@@ -31,7 +38,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
      */
     protected $manager;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->config = $this->config['entities'];
@@ -130,9 +137,132 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
 
         $this->fileSystem->expects($this->once())
             ->method('write')
-            ->with($this->config['outputDirectory'] . '/TestTableEntity.php', $this->anything());
+            ->with(
+                $this->config['outputDirectory'] . '/TestTableEntity.php',
+                $this->anything()
+            );
 
         $this->manager->generateEntity($tableName);
+    }
+
+    /**
+     * @dataProvider parseConfigForEntityProvider
+     * @param array $config
+     * @param string $tableName
+     * @param PhpEntityGeneratorConfig $expected
+     */
+    public function testParseConfigForEntity(
+        array $config,
+        string $tableName,
+        PhpEntityGeneratorConfig $expected
+    ) {
+
+        $this->config = $config;
+        $this->createManager();
+
+        $method = $this->getPrivateMethod($this->manager, 'parseConfigForEntity');
+        $actual = $method->invokeArgs(
+            $this->manager,
+            [
+                $tableName
+            ]
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function parseConfigForEntityProvider()
+    {
+        return [
+            'should_not_track_changes' => [
+                [
+                    'includeTables' => ['*'],
+                    'tableToEntityClassName' => [
+                        'test' => 'SuperEntity'
+                    ],
+                    'outputDirectory' => 'Entities',
+                    'namespace' => 'Entities',
+                    'includeAnnotations' => true,
+                    'includeSetters' => true,
+                    'includeGetters' => true,
+                    'fluentSetters' => true,
+                    'properties' => [
+                        'accessModifier' => \kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers::PRIVATE
+                    ],
+                    'trackChangesFor' => []
+                ],
+                'test',
+                new PhpEntityGeneratorConfig(
+                    new PhpClassGeneratorConfig(
+                        'Entities',
+                        'SuperEntity',
+                        new StringCollection(... []),
+                        null,
+                        true
+                    ),
+                    true,
+                    true,
+                    new PhpSetterGeneratorConfig(
+                        true,
+                        true,
+                        true
+                    ),
+                    new PhpGetterGeneratorConfig(
+                        true,
+                        true
+                    ),
+                    new PhpPropertyGeneratorConfig(
+                        true,
+                        false
+                    ),
+                    false
+                )
+            ],
+            'should_track_changes' => [
+                [
+                    'includeTables' => ['*'],
+                    'tableToEntityClassName' => [
+                        'test' => 'SuperEntity'
+                    ],
+                    'outputDirectory' => 'Entities',
+                    'namespace' => 'Entities',
+                    'includeAnnotations' => true,
+                    'includeSetters' => true,
+                    'includeGetters' => true,
+                    'fluentSetters' => true,
+                    'properties' => [
+                        'accessModifier' => \kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers::PRIVATE
+                    ],
+                    'trackChangesFor' => ['test']
+                ],
+                'test',
+                new PhpEntityGeneratorConfig(
+                    new PhpClassGeneratorConfig(
+                        'Entities',
+                        'SuperEntity',
+                        new StringCollection(... [AbstractEntity::class]),
+                        'AbstractEntity',
+                        true
+                    ),
+                    true,
+                    true,
+                    new PhpSetterGeneratorConfig(
+                        true,
+                        true,
+                        true
+                    ),
+                    new PhpGetterGeneratorConfig(
+                        true,
+                        true
+                    ),
+                    new PhpPropertyGeneratorConfig(
+                        true,
+                        false
+                    ),
+                    true
+                )
+            ]
+        ];
     }
 
     public function testFormProperties()

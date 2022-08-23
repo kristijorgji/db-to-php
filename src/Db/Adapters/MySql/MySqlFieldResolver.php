@@ -82,7 +82,8 @@ class MySqlFieldResolver
 
         if (($type == 'tinyint(1)' || preg_match('#(?=^bit)#i', $type))) {
             return new BoolField($name, $nullable);
-        } else if (preg_match('#^(tiny|small|medium|big)*int\(\d+\)( unsigned)?#i', $type, $captured)) {
+        } else if (preg_match('#^(tiny|small|medium|big)*int\(\d+\)( unsigned)?#i', $type, $captured)
+            || preg_match('#^(tiny|small|medium|big)*int( unsigned)?#i', $type, $captured)) {
             $signed = empty($captured[2]) ? true : false;
             $length = $this->getIntLength(empty($captured[1])  ? 'int' : $captured[1]);
             return new IntegerField($name, $nullable, $length, $signed);

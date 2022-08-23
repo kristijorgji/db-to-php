@@ -19,7 +19,7 @@ class MySqlAdapterTest extends MySqlTestCase
      */
     private $databaseAdapter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->databaseAdapter = new MySqlAdapter(
             self::$mysqlConnection['host'],
@@ -30,7 +30,7 @@ class MySqlAdapterTest extends MySqlTestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->databaseAdapter = null;
     }
@@ -39,11 +39,14 @@ class MySqlAdapterTest extends MySqlTestCase
     {
         $expectedTableNames = [
             'binarius',
+            'special',
             'test',
-            'test_2'
+            'test_2',
+            'times'
         ];
 
         $tables = $this->databaseAdapter->getTables();
+        print_r($tables);
         foreach ($tables as $table) {
             $this->assertTrue(in_array($table->getName(), $expectedTableNames));
         }

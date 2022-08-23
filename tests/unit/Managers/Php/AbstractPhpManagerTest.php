@@ -3,6 +3,7 @@
 namespace kristijorgji\UnitTests\Managers\Php;
 
 use kristijorgji\DbToPhp\Db\TablesCollection;
+use kristijorgji\DbToPhp\Managers\Exceptions\TableDoesNotExistException;
 use kristijorgji\DbToPhp\Managers\Php\AbstractPhpManager;
 use kristijorgji\Tests\Factories\Db\TablesCollectionFactory;
 
@@ -13,7 +14,7 @@ class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
      */
     protected $manager;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->createManager();
@@ -56,15 +57,41 @@ class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
 
         $this->createManager();
 
-        $filterTablesMethod = $this->getPrivateMethod($this->manager, 'filterTables');
-        $filteredTables = $filterTablesMethod->invokeArgs($this->manager, [
+        $actualFilteredTables = $this->manager->filterTables(
             $tables,
             $this->config['entities']['includeTables']
-        ]);
+        );
 
         $expectedTables = new TablesCollection(... $expectedTables);
 
-        $this->assertEquals($expectedTables, $filteredTables);
+        $this->assertEquals($expectedTables, $actualFilteredTables);
+    }
+
+    public function testFilterTables_non_existing()
+    {
+        $nrTotalTables = 2;
+        $tables = TablesCollectionFactory::make($nrTotalTables);
+
+        $nonExistingTable = self::randomString() . microtime(true);
+        $this->config['entities']['includeTables'] = [
+            $tables->getAt(0)->getName(),
+            $nonExistingTable
+        ];
+
+        $this->createManager();
+
+        $thrownException = null;
+        try {
+            $this->manager->filterTables(
+                $tables,
+                $this->config['entities']['includeTables']
+            );
+        } catch (\Exception $e) {
+            $thrownException = $e;
+        }
+
+        $this->assertTrue($thrownException instanceof TableDoesNotExistException);
+        $this->assertEquals($nonExistingTable, $thrownException->getTableName());
     }
 
     private function createManager()
