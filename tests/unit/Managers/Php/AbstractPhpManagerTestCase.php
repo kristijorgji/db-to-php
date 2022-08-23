@@ -34,7 +34,7 @@ class AbstractPhpManagerTestCase extends TestCase
      */
     protected $typeHint;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->config = require $this->baseTestsPath('integration/MySql/Php/config.php');
 

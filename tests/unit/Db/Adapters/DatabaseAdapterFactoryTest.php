@@ -13,7 +13,7 @@ class DatabaseAdapterFactoryTest extends TestCase
      */
     private $databaseAdapterFactory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->databaseAdapterFactory = new DatabaseAdapterFactory();
     }

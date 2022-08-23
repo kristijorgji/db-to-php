@@ -31,7 +31,7 @@ class ManagerFactoryTest extends TestCase
      */
     private $managerFactory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->config = [
             'databaseDriver' => \kristijorgji\DbToPhp\DatabaseDrivers::MYSQL,

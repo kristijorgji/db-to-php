@@ -69,6 +69,7 @@ return [
         'outputDirectory' => 'Entities',
         'namespace' => 'Entities',
         'includeAnnotations' => true,
+        'typeHintProperties' => true,
         'includeSetters' => true,
         'includeGetters' => true,
         'fluentSetters' => true,

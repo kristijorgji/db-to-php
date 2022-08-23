@@ -23,6 +23,7 @@ class AbstractEntityFactoryTest extends TestCase
             'binaeraylk' => 'dummy',
             'f' => 'dummy',
         ]);
+        self::expectNotToPerformAssertions();
     }
 
     public function testValidateFields_invalid_field()
@@ -41,7 +42,7 @@ class AbstractEntityFactoryTest extends TestCase
     public function testRandomArray()
     {
         $actual = AbstractEntityFactory::randomArray();
-        $this->assertInternalType('array', $actual);
+        self::assertIsArray($actual);
     }
 
     public function testRandomJson()
@@ -53,7 +54,7 @@ class AbstractEntityFactoryTest extends TestCase
     public function testRandomBoolean()
     {
         $actual = AbstractEntityFactory::randomBoolean();
-        $this->assertInternalType('bool', $actual);
+        self::assertIsBool($actual);
     }
 
     public function testRandomDate()
@@ -162,14 +163,14 @@ class AbstractEntityFactoryTest extends TestCase
             $min = rand(1, 100);
             $max = rand(0, 1) ? rand(1, 100) : null;
             $actual = AbstractEntityFactory::randomFloat($nrDecimals, $min, $max);
-            $this->assertInternalType('float', $actual);
+            self::assertIsFloat($actual);
         }
     }
 
     public function testRandomFloat_min_greater_then_max()
     {
         $actual = AbstractEntityFactory::randomFloat(rand(1, 4), 21, 7);
-        $this->assertInternalType('float', $actual);
+        self::assertIsFloat($actual);
     }
 
     public function testRandomUnsignedNumber()

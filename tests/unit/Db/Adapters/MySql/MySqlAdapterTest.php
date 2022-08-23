@@ -19,7 +19,7 @@ class MySqlAdapterTest extends MySqlTestCase
      */
     private $databaseAdapter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->databaseAdapter = new MySqlAdapter(
             self::$mysqlConnection['host'],
@@ -30,7 +30,7 @@ class MySqlAdapterTest extends MySqlTestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->databaseAdapter = null;
     }

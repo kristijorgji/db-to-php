@@ -51,7 +51,7 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpGetterGeneratorConfig(true, true),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        new PhpAccessModifiers(PhpAccessModifiers::PRIVATE)
+                        false
                     ),
                     false
                 ),
@@ -66,7 +66,7 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpGetterGeneratorConfig(true, true),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        new PhpAccessModifiers(PhpAccessModifiers::PRIVATE)
+                        false
                     ),
                     false
                 ),
@@ -81,7 +81,7 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpGetterGeneratorConfig(true, true),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        new PhpAccessModifiers(PhpAccessModifiers::PRIVATE)
+                        false
                     ),
                     false
                 ),
@@ -96,7 +96,7 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpGetterGeneratorConfig(true, true),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        new PhpAccessModifiers(PhpAccessModifiers::PRIVATE)
+                        false
                     ),
                     false
                 ),
@@ -116,7 +116,7 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpGetterGeneratorConfig(true, true),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        new PhpAccessModifiers(PhpAccessModifiers::PRIVATE)
+                        false
                     ),
                     true
                 ),

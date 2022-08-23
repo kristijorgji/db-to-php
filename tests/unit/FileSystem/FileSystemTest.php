@@ -13,7 +13,7 @@ class FileSystemTest extends TestCase
      */
     private $fileSystem;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fileSystem = new FileSystem();
     }
@@ -23,6 +23,9 @@ class FileSystemTest extends TestCase
         $path = __DIR__ . '/test';
         $this->fileSystem->createDirectory($path);
         $this->fileSystem->deleteDirectory($path);
+        self::assertFalse(
+            $this->fileSystem->exists($path)
+        );
     }
 
     public function testReadFile()

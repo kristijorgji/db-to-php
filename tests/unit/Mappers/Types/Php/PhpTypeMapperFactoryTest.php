@@ -5,15 +5,16 @@ namespace kristijorgji\UnitTests\Mappers\Types\Php;
 use kristijorgji\DbToPhp\DatabaseDrivers;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapper;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperFactory;
+use kristijorgji\Tests\Helpers\TestCase;
 
-class PhpTypeMapperFactoryTest extends \PHPUnit_Framework_TestCase
+class PhpTypeMapperFactoryTest extends TestCase
 {
     /**
      * @var PhpTypeMapperFactory
      */
     protected $typeMapperFactory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->typeMapperFactory = new PhpTypeMapperFactory();
     }

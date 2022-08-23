@@ -27,7 +27,7 @@ class PhpTypeMapperTest extends TestCase
      */
     private $mapper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mapper = new PhpTypeMapper();
     }

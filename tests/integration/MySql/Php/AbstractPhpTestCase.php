@@ -34,13 +34,13 @@ abstract class AbstractPhpTestCase extends MySqlTestCase
         return __DIR__ . '/../test-mysql-db.sql';
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fileSystem = new FileSystem();
         $this->consoleApp = new DbToPhpApplication();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->fileSystem->emptyDirectory($this->actualOutputDirectory);
     }

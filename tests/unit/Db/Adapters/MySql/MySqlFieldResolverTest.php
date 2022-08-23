@@ -26,7 +26,7 @@ class MySqlFieldResolverTest extends TestCase
      */
     private $fieldResolver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fieldResolver = new MySqlFieldResolver();
     }

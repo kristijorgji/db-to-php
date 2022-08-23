@@ -10,3 +10,5 @@
      * @var int
      */
     protected $employeeAge;
+##[with_type_hints_no_annotation]##
+    protected ?string $secretValue;

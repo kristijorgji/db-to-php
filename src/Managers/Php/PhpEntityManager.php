@@ -140,7 +140,8 @@ class PhpEntityManager extends AbstractPhpManager
                 $this->typeHint
             ),
             new PhpPropertyGeneratorConfig(
-                $this->config['includeAnnotations']
+                $this->config['includeAnnotations'],
+                $this->config['typeHintProperties'] ?? false
             ),
             $shouldTrackChanges
         );

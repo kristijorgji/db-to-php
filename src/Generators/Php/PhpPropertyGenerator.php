@@ -58,13 +58,25 @@ class PhpPropertyGenerator
 
     private function addDeclaration()
     {
-        $this->output->add(
-            sprintf(
-                '%s $%s;',
-                (string) $this->property->getAccessModifier(),
-                $this->property->getName()
-            ),
-            4
-        );
+        if ($this->config->shouldBeTypeHinted()) {
+            $this->output->add(
+                sprintf(
+                    '%s %s $%s;',
+                    (string) $this->property->getAccessModifier(),
+                    Utils::resolveType($this->property->getType()),
+                    $this->property->getName()
+                ),
+                4
+            );
+        } else {
+            $this->output->add(
+                sprintf(
+                    '%s $%s;',
+                    (string) $this->property->getAccessModifier(),
+                    $this->property->getName()
+                ),
+                4
+            );
+        }
     }
 }

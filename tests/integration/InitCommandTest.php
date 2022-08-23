@@ -34,7 +34,7 @@ class InitCommandTest extends TestCase
      */
     private $command;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fileSystem = new FileSystem();
         $this->consoleApp = new DbToPhpApplication();
@@ -42,7 +42,7 @@ class InitCommandTest extends TestCase
         $this->command = 'init';
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         chdir($this->originalCwd);
     }

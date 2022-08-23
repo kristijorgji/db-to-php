@@ -27,10 +27,7 @@ abstract class MySqlTestCase extends TestCase
         ];
     }
 
-    /**
-     * @return void
-     */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $dsn = sprintf(
             'mysql:host=%s:%s;charset=utf8',
@@ -50,10 +47,7 @@ abstract class MySqlTestCase extends TestCase
         self::initializeTestDatabase();
     }
 
-    /**
-     * @return void
-     */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::dropTestDatabase();
         self::$pdo = null;

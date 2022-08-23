@@ -38,7 +38,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
      */
     protected $manager;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->config = $this->config['entities'];
@@ -212,7 +212,8 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                         true
                     ),
                     new PhpPropertyGeneratorConfig(
-                        true
+                        true,
+                        false
                     ),
                     false
                 )
@@ -255,7 +256,8 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                         true
                     ),
                     new PhpPropertyGeneratorConfig(
-                        true
+                        true,
+                        false
                     ),
                     true
                 )
