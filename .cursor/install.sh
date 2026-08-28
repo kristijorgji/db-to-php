@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 # Idempotent repository bootstrap for the db-to-php Cloud Agent environment.
 #
-# The project targets PHP 7.x (fzaninotto/faker v1.9.1 in composer.lock does not
-# support PHP 8), so we pin PHP 7.4 which satisfies every locked dependency.
+# The project targets PHP 8.3+ (see composer.json), so we install PHP 8.5.
 # MySQL-only library => a local MariaDB server is provisioned for integration tests.
 set -euo pipefail
 
@@ -11,21 +10,21 @@ cd "$REPO_ROOT"
 
 export DEBIAN_FRONTEND=noninteractive
 
-# --- System packages: PHP 7.4 + extensions and MariaDB (durable, cached in build) ---
-if ! command -v php7.4 >/dev/null 2>&1; then
+# --- System packages: PHP 8.5 + extensions and MariaDB (durable, cached in build) ---
+if ! command -v php8.5 >/dev/null 2>&1; then
   sudo apt-get update -y
   sudo apt-get install -y software-properties-common
   sudo add-apt-repository -y ppa:ondrej/php
   sudo apt-get update -y
   sudo apt-get install -y \
-    php7.4-cli php7.4-mysql php7.4-mbstring php7.4-xml php7.4-curl php7.4-bcmath \
+    php8.5-cli php8.5-mysql php8.5-mbstring php8.5-xml php8.5-curl php8.5-bcmath \
     mariadb-server mariadb-client unzip
 fi
 
-# Make PHP 7.4 the default `php` interpreter.
-sudo update-alternatives --set php /usr/bin/php7.4
+# Make PHP 8.5 the default `php` interpreter.
+sudo update-alternatives --set php /usr/bin/php8.5
 
-# --- Composer (standalone phar; the apt package drags in PHP 8 Symfony libs) ---
+# --- Composer (standalone phar; avoids the distro package's own PHP deps) ---
 if ! command -v composer >/dev/null 2>&1; then
   EXPECTED_CHECKSUM="$(php -r "copy('https://composer.github.io/installer.sig', 'php://stdout');")"
   php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');"
