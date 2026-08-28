@@ -7,10 +7,7 @@ use Entities\Test2Entity;
 
 class Test2EntityFactory extends AbstractEntityFactory
 {
-    /**
-     * @var array
-     */
-    protected static $fields = [
+    protected static array $fields = [
         'id',
         'name',
         'surname',

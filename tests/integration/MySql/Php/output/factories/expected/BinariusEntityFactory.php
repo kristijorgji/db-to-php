@@ -7,10 +7,7 @@ use Entities\BinariusEntity;
 
 class BinariusEntityFactory extends AbstractEntityFactory
 {
-    /**
-     * @var array
-     */
-    protected static $fields = [
+    protected static array $fields = [
         'file',
         'image',
     ];

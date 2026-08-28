@@ -7,10 +7,7 @@ use Entities\TimesEntity;
 
 class TimesEntityFactory extends AbstractEntityFactory
 {
-    /**
-     * @var array
-     */
-    protected static $fields = [
+    protected static array $fields = [
         'birthday_year',
         'birthday_time',
         'column_3',

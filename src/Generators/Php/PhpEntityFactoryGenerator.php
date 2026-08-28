@@ -35,14 +35,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
 
     private function addFieldsProperty(): void
     {
-        if ($this->config->shouldIncludeAnnotations()) {
-            $propertyAnnotationGenerator = new PhpPropertyAnnotationGenerator(
-                new PhpType(PhpTypes::ARRAY, false),
-            );
-            $this->output->add($propertyAnnotationGenerator->generate());
-        }
-
-        $this->output->addLine('protected static $fields = [', 4);
+        $this->output->addLine('protected static array $fields = [', 4);
         foreach ($this->fieldsInfo->all() as $fieldInfo) {
             $quotedDbFieldName = sprintf('\'%s\'', $fieldInfo->getDbFieldName());
             $this->output->addLine($quotedDbFieldName . ',', 8);

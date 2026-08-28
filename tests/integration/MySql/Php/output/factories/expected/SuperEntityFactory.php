@@ -7,10 +7,7 @@ use Entities\SuperEntity;
 
 class SuperEntityFactory extends AbstractEntityFactory
 {
-    /**
-     * @var array
-     */
-    protected static $fields = [
+    protected static array $fields = [
         'id',
         'event',
         'payload',
