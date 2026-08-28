@@ -77,13 +77,21 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
             ->with($returnedTables)
             ->willReturn($returnedTables);
 
+        $expectedTableNames = array_map(function ($table) {
+            return $table->getName();
+        }, $returnedTables->all());
+
+        $actualTableNames = [];
         $this->manager->expects($this->exactly(count($returnedTables->all())))
             ->method('generateEntity')
-            ->withConsecutive(... array_map(function ($table) {
-                return [$table->getName()];
-            }, $returnedTables->all()));
+            ->willReturnCallback(function ($tableName) use (&$actualTableNames) {
+                $actualTableNames[] = $tableName;
+                return '';
+            });
 
         $this->manager->generateEntities();
+
+        $this->assertSame($expectedTableNames, $actualTableNames);
     }
 
     public function testGenerateEntities_on_error()
@@ -145,12 +153,11 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
         $this->manager->generateEntity($tableName);
     }
 
-    /**
-     * @dataProvider parseConfigForEntityProvider
-     * @param array $config
+    /**     * @param array $config
      * @param string $tableName
      * @param PhpEntityGeneratorConfig $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('parseConfigForEntityProvider')]
     public function testParseConfigForEntity(
         array $config,
         string $tableName,
@@ -171,7 +178,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function parseConfigForEntityProvider()
+    public static function parseConfigForEntityProvider()
     {
         return [
             'should_not_track_changes' => [
@@ -275,12 +282,15 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
             return PhpTypeFactory::make();
         }, $fields->all());
 
+        $expectedFields = $fields->all();
+        $actualFields = [];
+        $mapCallIndex = 0;
         $this->typeMapper->expects($this->exactly(count($fields->all())))
             ->method('map')
-            ->withConsecutive(... array_map(function ($field) {
-                return [$field];
-            }, $fields->all()))
-            ->willReturnOnConsecutiveCalls(... $returnedTypes);
+            ->willReturnCallback(function ($field) use (&$actualFields, &$mapCallIndex, $returnedTypes) {
+                $actualFields[] = $field;
+                return $returnedTypes[$mapCallIndex++];
+            });
 
         $expectedProperties = new PhpPropertiesCollection(... array_map(function ($field, $type) {
             return new PhpProperty(
@@ -293,21 +303,21 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
 
         $actualProperties = $this->manager->formProperties($fields);
 
+        $this->assertSame($expectedFields, $actualFields);
         $this->assertEquals($expectedProperties, $actualProperties);
     }
 
-    /**
-     * @dataProvider formClassNameProvider
-     * @param string $tableName
+    /**     * @param string $tableName
      * @param string $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('formClassNameProvider')]
     public function testFormClassName(string $tableName, string $expected)
     {
         $actual = $this->manager->formClassName($tableName);
         $this->assertEquals($expected, $actual);
     }
 
-    public function formClassNameProvider()
+    public static function formClassNameProvider()
     {
         return [
             ['super_table', 'SuperTableEntity'],
@@ -338,7 +348,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                     $this->config
                 ]
             )
-            ->setMethods($methodsToMock)
+            ->onlyMethods($methodsToMock)
             ->getMock();
     }
 }

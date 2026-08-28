@@ -30,11 +30,10 @@ class PhpEntityFactoryFieldFunctionResolverTest extends TestCase
         $this->resolver = new PhpEntityFactoryFieldFunctionResolver();
     }
 
-    /**
-     * @dataProvider resolveProvider
-     * @param Field $field
+    /**     * @param Field $field
      * @param string $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('resolveProvider')]
     public function testResolve(Field $field, string $expected)
     {
         $actual = $this->resolver->resolve($field);
@@ -49,7 +48,7 @@ class PhpEntityFactoryFieldFunctionResolverTest extends TestCase
         );
     }
 
-    public function resolveProvider()
+    public static function resolveProvider()
     {
         $name = self::randomString();
 

@@ -14,11 +14,10 @@ class HelpersTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider camelToSnakeCaseProvider
-     * @param string $input
+    /**     * @param string $input
      * @param string $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('camelToSnakeCaseProvider')]
     public function testCamelToSnakeCase(
         string $input,
         string $expected
@@ -30,7 +29,7 @@ class HelpersTest extends TestCase
         );
     }
 
-    public function camelToSnakeCaseProvider()
+    public static function camelToSnakeCaseProvider()
     {
         return [
             [

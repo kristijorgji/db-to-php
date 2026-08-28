@@ -19,11 +19,10 @@ class PhpTypeMapperFactoryTest extends TestCase
         $this->typeMapperFactory = new PhpTypeMapperFactory();
     }
 
-    /**
-     * @dataProvider getProvider
-     * @param string $databaseDriver
+    /**     * @param string $databaseDriver
      * @param string $expectedMapperClass
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getProvider')]
     public function testGet(string $databaseDriver, string $expectedMapperClass)
     {
         $actualMapper = $this->typeMapperFactory->get($databaseDriver);
@@ -36,7 +35,7 @@ class PhpTypeMapperFactoryTest extends TestCase
         $this->typeMapperFactory->get(-2);
     }
 
-    public function getProvider()
+    public static function getProvider()
     {
         return [
             [DatabaseDrivers::MYSQL, PhpTypeMapper::class]

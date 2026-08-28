@@ -11,13 +11,12 @@ use kristijorgji\Tests\Helpers\TestCase;
 
 class PhpMethodAnnotationGeneratorTest extends TestCase
 {
-    /**
-     * @dataProvider generateProvider
-     * @param PhpFunctionParametersCollection $parameters
+    /**     * @param PhpFunctionParametersCollection $parameters
      * @param PhpType|null $returnType
      * @param bool $typeHint
      * @param string $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('generateProvider')]
     public function testGenerate(
         PhpFunctionParametersCollection $parameters,
         ?PhpType $returnType,
@@ -36,7 +35,7 @@ class PhpMethodAnnotationGeneratorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function generateProvider()
+    public static function generateProvider()
     {
         $expected = self::getExpected(__DIR__ . '/expected/method_annotation_generator.txt');
         return [

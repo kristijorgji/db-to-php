@@ -107,7 +107,6 @@ trait TestHelpers
     {
         $reflector = new ReflectionClass($className);
         $property = $reflector->getProperty($propertyName);
-        $property->setAccessible(true);
 
         return $property;
     }
@@ -121,7 +120,6 @@ trait TestHelpers
     {
         $class = new ReflectionClass($instance);
         $method = $class->getMethod($name);
-        $method->setAccessible(true);
         return $method;
     }
 
@@ -158,9 +156,7 @@ trait TestHelpers
         $reflectionClass = new ReflectionClass(get_class($object));
         $array = array();
         foreach ($reflectionClass->getProperties() as $property) {
-            $property->setAccessible(true);
             $array[$property->getName()] = $property->getValue($object);
-            $property->setAccessible(false);
         }
         return $array;
     }

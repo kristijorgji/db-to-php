@@ -13,7 +13,7 @@ trait SamplePhpProperties
     /**
      * @return PhpProperty
      */
-    public function getSampleProperty() : PhpProperty
+    public static function getSampleProperty() : PhpProperty
     {
         return new PhpProperty(
             new PhpAccessModifiers(PhpAccessModifiers::PUBLIC),
@@ -25,7 +25,7 @@ trait SamplePhpProperties
     /**
      * @return PhpPropertiesCollection
      */
-    public function getSampleProperties() : PhpPropertiesCollection
+    public static function getSampleProperties() : PhpPropertiesCollection
     {
         return new PhpPropertiesCollection(... [
             new PhpProperty(
