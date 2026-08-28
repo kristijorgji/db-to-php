@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Db\Adapters\MySql;
 
-use kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions\UnknownMySqlTypeException;
+use InvalidArgumentException;
 use kristijorgji\DbToPhp\Db\Adapters\MySql\MySqlFieldResolver;
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
@@ -18,54 +18,49 @@ use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Db\Fields\YearField;
 use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MySqlFieldResolverTest extends TestCase
 {
-    /**
-     * @var MySqlFieldResolver
-     */
-    private $fieldResolver;
+    private MySqlFieldResolver $fieldResolver;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->fieldResolver = new MySqlFieldResolver();
+        $this->fieldResolver = new MySqlFieldResolver;
     }
 
-    public function testResolveField_unknown_field()
+    public function testResolveField_unknown_field(): void
     {
         $actual = $this->fieldResolver->resolveField(
             self::randomString(),
             self::randomString(),
-            self::randomString()
+            self::randomString(),
         );
 
         $this->assertInstanceOf(TextField::class, $actual);
     }
 
     /**     * @param string $name
-     * @param string $type
-     * @param string $null
-     * @param Field $expectedField
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('resolveFieldProvider')]
-    public function testResolveField(string $name, string $type, string $null, Field $expectedField)
+    #[DataProvider('resolveFieldProvider')]
+    public function testResolveField(string $name, string $type, string $null, Field $expectedField): void
     {
         $actualField = $this->fieldResolver->resolveField(
             $name,
             $type,
-            $null
+            $null,
         );
 
         $this->assertEquals($expectedField, $actualField);
     }
 
-    public static function resolveFieldProvider()
+    public static function resolveFieldProvider(): array
     {
         $name = self::randomString(4);
 
         $h = function (Field $field, string $mysqlType) use ($name) {
             return [
-                $name, $mysqlType, ($field->isNullable() ? 'YES' : 'NO'), $field
+                $name, $mysqlType, ($field->isNullable() ? 'YES' : 'NO'), $field,
             ];
         };
 
@@ -74,12 +69,15 @@ class MySqlFieldResolverTest extends TestCase
             'not_nullable' => $h(new TextField($name, false, 1), 'char(1)'),
             'enum' => $h(
                 new EnumField($name, false, new StringCollection(
-                    ... ['j,aru', 'naru', 'daru'])),
-                'enum(\'j,aru\',\'naru\',\'daru\')'
+                    ... ['j,aru', 'naru', 'daru'],
+                    )),
+                'enum(\'j,aru\',\'naru\',\'daru\')',
             ),
-            'enum_1' => $h(new EnumField($name, false, new StringCollection(
-                ... ['1', '4', '111'])),
-                'enum(\'1\',\'4\',\'111\')'
+            'enum_1' => $h(
+                new EnumField($name, false, new StringCollection(
+                ... ['1', '4', '111'],
+                )),
+                'enum(\'1\',\'4\',\'111\')',
             ),
 
             'unsigned_int8_no_length' => $h(new IntegerField($name, false, 8, false), 'tinyint unsigned'),
@@ -150,10 +148,10 @@ class MySqlFieldResolverTest extends TestCase
         ];
     }
 
-    public function testGetIntLength_on_unknown_type()
+    public function testGetIntLength_on_unknown_type(): void
     {
         $method = $this->getPrivateMethod($this->fieldResolver, 'getIntLength');
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $method->invokeArgs($this->fieldResolver, [self::randomString()]);
     }
 }

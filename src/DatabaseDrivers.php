@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp;
 
 class DatabaseDrivers
 {
-    const MYSQL = 'mysql';
+    public const MYSQL = 'mysql';
 }

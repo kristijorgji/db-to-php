@@ -1,47 +1,43 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Managers;
 
+use kristijorgji\DbToPhp\DatabaseDrivers;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterFactory;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
 use kristijorgji\DbToPhp\Managers\ManagerFactory;
 use kristijorgji\DbToPhp\Managers\Php\PhpManager;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperFactory;
 use kristijorgji\Tests\Helpers\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use function array_map;
+use function array_values;
+use function range;
 
 class ManagerFactoryTest extends TestCase
 {
-    /**
-     * @var array
-     */
-    private $config;
+    private array $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
-    private $databaseAdapterFactory;
+    private MockObject $databaseAdapterFactory;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $typeMapperFactory;
+    private MockObject $typeMapperFactory;
+    private ManagerFactory $managerFactory;
 
-    /**
-     * @var ManagerFactory
-     */
-    private $managerFactory;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->config = [
-            'databaseDriver' => \kristijorgji\DbToPhp\DatabaseDrivers::MYSQL,
+            'databaseDriver' => DatabaseDrivers::MYSQL,
             'connection' => [
                 'host' => '127.0.0.1',
                 'port' => 3306,
                 'database' => 'db_to_php',
                 'username' => 'root',
                 'password' => 'Test123@',
-            ]
+            ],
         ];
 
         $this->databaseAdapterFactory = $this->getMockBuilder(DatabaseAdapterFactory::class)
@@ -53,15 +49,14 @@ class ManagerFactoryTest extends TestCase
 
         $this->managerFactory = new ManagerFactory(
             $this->databaseAdapterFactory,
-            $this->typeMapperFactory
+            $this->typeMapperFactory,
         );
     }
 
     /**     * @param array $config
-     * @param string $expectedManagerClass
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getProvider')]
-    public function testGet(array $config, string $expectedManagerClass)
+    #[DataProvider('getProvider')]
+    public function testGet(array $config, string $expectedManagerClass): void
     {
         $this->databaseAdapterFactory->expects($this->once())
             ->method('get')
@@ -70,23 +65,23 @@ class ManagerFactoryTest extends TestCase
 
         $actualManager = $this->managerFactory->get($config);
 
-        $this->assertEquals($expectedManagerClass, get_class($actualManager));
+        $this->assertInstanceOf($expectedManagerClass, $actualManager);
     }
 
-    public static function getProvider()
+    public static function getProvider(): array
     {
         $config = [
             'typeHint' => true,
-            'databaseDriver' => \kristijorgji\DbToPhp\DatabaseDrivers::MYSQL,
+            'databaseDriver' => DatabaseDrivers::MYSQL,
             'connection' => [],
             'entities' => ['namespace' => 'Entities'],
-            'factories' => []
+            'factories' => [],
         ];
 
         return [
-            array_values(array_map(function() use ($config) {
+            array_values(array_map(function () use ($config) {
                 return [$config, PhpManager::class];
-            }, range(0, 0)))[0]
+            }, range(0, 0)))[0],
         ];
     }
 }

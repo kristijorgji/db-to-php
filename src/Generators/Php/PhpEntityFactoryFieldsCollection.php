@@ -1,24 +1,24 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Generators\Php;
 
 class PhpEntityFactoryFieldsCollection
 {
     /**
-     * @var PhpEntityFactoryField[]
+     * @var array<PhpEntityFactoryField>
      */
-    private $fields = [];
+    private array $fields = [];
 
     /**
-     * @param PhpEntityFactoryField[] $fields
+     * @param PhpEntityFactoryField<PhpEntityFactoryField> $fields
      */
-    public function __construct(PhpEntityFactoryField... $fields)
+    public function __construct(PhpEntityFactoryField ... $fields)
     {
         $this->fields = $fields;
     }
 
     /**
-     * @return PhpEntityFactoryField[]
+     * @return array<PhpEntityFactoryField>
      */
     public function all() : array
     {

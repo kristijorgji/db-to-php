@@ -1,37 +1,19 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Generators\Php;
 
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpPropertyGeneratorConfig;
 use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
 use kristijorgji\DbToPhp\Support\TextBuffer;
+use function sprintf;
 
 class PhpPropertyGenerator
 {
-    /**
-     * @var PhpProperty
-     */
-    private $property;
+    private TextBuffer $output;
 
-    /**
-     * @var PhpPropertyGeneratorConfig
-     */
-    private $config;
-
-    /**
-     * @var TextBuffer
-     */
-    private $output;
-
-    /**
-     * @param PhpProperty $property
-     * @param PhpPropertyGeneratorConfig $config
-     */
-    public function __construct(PhpProperty $property, PhpPropertyGeneratorConfig $config)
+    public function __construct(private PhpProperty $property, private PhpPropertyGeneratorConfig $config)
     {
-        $this->property = $property;
-        $this->config = $config;
-        $this->output = new TextBuffer();
+        $this->output = new TextBuffer;
     }
 
     public function generate() : string
@@ -45,18 +27,18 @@ class PhpPropertyGenerator
         return $this->output->get();
     }
 
-    private function addAnnotation()
+    private function addAnnotation(): void
     {
         $propertyAnnotationGenerator = new PhpPropertyAnnotationGenerator(
-            $this->property->getType()
+            $this->property->getType(),
         );
 
         $this->output->add(
-            $propertyAnnotationGenerator->generate()
+            $propertyAnnotationGenerator->generate(),
         );
     }
 
-    private function addDeclaration()
+    private function addDeclaration(): void
     {
         if ($this->config->shouldBeTypeHinted()) {
             $this->output->add(
@@ -64,18 +46,18 @@ class PhpPropertyGenerator
                     '%s %s $%s;',
                     $this->property->getAccessModifier()->value,
                     Utils::resolveType($this->property->getType()),
-                    $this->property->getName()
+                    $this->property->getName(),
                 ),
-                4
+                4,
             );
         } else {
             $this->output->add(
                 sprintf(
                     '%s $%s;',
                     $this->property->getAccessModifier()->value,
-                    $this->property->getName()
+                    $this->property->getName(),
                 ),
-                4
+                4,
             );
         }
     }

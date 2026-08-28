@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Db\Adapters;
 
@@ -8,19 +8,16 @@ use kristijorgji\Tests\Helpers\TestCase;
 
 class DatabaseAdapterFactoryTest extends TestCase
 {
-    /**
-     * @var DatabaseAdapterFactory
-     */
-    private $databaseAdapterFactory;
+    private DatabaseAdapterFactory $databaseAdapterFactory;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->databaseAdapterFactory = new DatabaseAdapterFactory();
+        $this->databaseAdapterFactory = new DatabaseAdapterFactory;
     }
 
-    public function testGet_invalid_database_driver()
+    public function testGet_invalid_database_driver(): void
     {
         $this->expectException(InvalidDatabaseDriverException::class);
-        $this->databaseAdapterFactory->get(-23, []);
+        $this->databaseAdapterFactory->get('invalid-driver', []);
     }
 }

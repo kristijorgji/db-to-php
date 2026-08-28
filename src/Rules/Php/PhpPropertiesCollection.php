@@ -1,20 +1,22 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Rules\Php;
 
+use ArrayIterator;
+use IteratorAggregate;
 use Traversable;
 
-class PhpPropertiesCollection implements \IteratorAggregate
+class PhpPropertiesCollection implements IteratorAggregate
 {
     /**
-     * @var PhpProperty[]
+     * @var array<PhpProperty>
      */
-    private $properties = [];
+    private array $properties = [];
 
     /**
-     * @param PhpProperty[] $properties
+     * @param PhpProperty<PhpProperty> $properties
      */
-    public function __construct(PhpProperty... $properties)
+    public function __construct(PhpProperty ... $properties)
     {
         $this->properties = $properties;
     }
@@ -24,11 +26,11 @@ class PhpPropertiesCollection implements \IteratorAggregate
      */
     public function getIterator() : Traversable
     {
-        return new \ArrayIterator($this->properties);
+        return new ArrayIterator($this->properties);
     }
 
     /**
-     * @return PhpProperty[]
+     * @return array<PhpProperty>
      */
     public function all() : array
     {

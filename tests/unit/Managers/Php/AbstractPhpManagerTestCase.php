@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Managers\Php;
 
@@ -6,35 +6,22 @@ use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
 use kristijorgji\Tests\Helpers\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class AbstractPhpManagerTestCase extends TestCase
 {
-    /**
-     * @var array
-     */
-    protected $config;
+    protected array $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
-    protected $databaseAdapter;
+    protected MockObject $databaseAdapter;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $typeMapper;
+    protected MockObject $typeMapper;
+    protected MockObject $fileSystem;
+    protected bool $typeHint;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fileSystem;
-
-    /**
-     * @var bool
-     */
-    protected $typeHint;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->config = require $this->baseTestsPath('integration/MySql/Php/config.php');
 

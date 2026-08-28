@@ -1,28 +1,24 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\Tests\Factories\Db\Fields;
 
 use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\Tests\Factories\BaseFactory;
+use function count;
+use function rand;
 
 abstract class FieldFactory extends BaseFactory
 {
-    /**
-     * @var array
-     */
-    private static $factories = [
+    private static array $factories = [
         BoolFieldFactory::class,
         TextFieldFactory::class,
         BinaryFieldFactory::class,
         IntegerFieldFactory::class,
         DoubleFieldFactory::class,
         FloatFieldFactory::class,
-        EnumFieldFactory::class
+        EnumFieldFactory::class,
     ];
 
-    /**
-     * @return Field
-     */
     public static function make() : Field
     {
         return self::$factories[rand(0, count(self::$factories) - 1)]::make();

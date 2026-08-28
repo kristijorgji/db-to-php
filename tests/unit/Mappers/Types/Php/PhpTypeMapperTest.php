@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Mappers\Types\Php;
 
@@ -19,34 +19,32 @@ use kristijorgji\DbToPhp\Rules\Php\PhpType;
 use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
 use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PhpTypeMapperTest extends TestCase
 {
-    /**
-     * @var PhpTypeMapper
-     */
-    private $mapper;
+    private PhpTypeMapper $mapper;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->mapper = new PhpTypeMapper();
+        $this->mapper = new PhpTypeMapper;
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('mapProvider')]
-    public function testMap(Field $field, $expectedType)
+    #[DataProvider('mapProvider')]
+    public function testMap(Field $field, PhpType $expectedType): void
     {
         $actualType = $this->mapper->map($field);
         $this->assertEquals($expectedType, $actualType);
     }
 
-    public function testMap_unknown_type()
+    public function testMap_unknown_type(): void
     {
         $field = new TestDbField('test', false);
         $this->expectException(UnknownDatabaseFieldTypeException::class);
         $this->mapper->map($field);
     }
 
-    public static function mapProvider()
+    public static function mapProvider(): array
     {
         $name = self::randomString(2);
 
@@ -57,7 +55,10 @@ class PhpTypeMapperTest extends TestCase
 
             [new DecimalField($name, false, 4), new PhpType(PhpTypes::INTEGER, false)],
             'decimal_with_fractional' => [new DecimalField($name, false, 16, 4), new PhpType(PhpTypes::FLOAT, false)],
-            'decimal_without_fractional' => [new DecimalField($name, false, 20, 0), new PhpType(PhpTypes::INTEGER, false)],
+            'decimal_without_fractional' => [new DecimalField($name, false, 20, 0), new PhpType(
+                PhpTypes::INTEGER,
+                false,
+            )],
 
             [new DoubleField($name, false), new PhpType(PhpTypes::FLOAT, false)],
             [new EnumField($name, false, new StringCollection('d')), new PhpType(PhpTypes::STRING, false)],

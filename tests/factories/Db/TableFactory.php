@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\Tests\Factories\Db;
 
@@ -7,13 +7,10 @@ use kristijorgji\Tests\Factories\BaseFactory;
 
 class TableFactory extends BaseFactory
 {
-    /**
-     * @return Table
-     */
     public static function make() : Table
     {
         return new Table(
-            self::randomString()
+            self::randomString(),
         );
     }
 }

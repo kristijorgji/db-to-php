@@ -1,20 +1,22 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Db;
 
+use ArrayIterator;
+use IteratorAggregate;
 use Traversable;
 
-class TablesCollection implements \IteratorAggregate
+class TablesCollection implements IteratorAggregate
 {
     /**
-     * @var Table[]
+     * @var array<Table>
      */
-    private $tables = [];
+    private array $tables = [];
 
     /**
-     * @param Table[] $fields
+     * @param Table<Table> $fields
      */
-    public function __construct(Table... $fields)
+    public function __construct(Table ... $fields)
     {
         $this->tables = $fields;
     }
@@ -24,21 +26,17 @@ class TablesCollection implements \IteratorAggregate
      */
     public function getIterator() : Traversable
     {
-        return new \ArrayIterator($this->tables);
+        return new ArrayIterator($this->tables);
     }
 
     /**
-     * @return Table[]
+     * @return array<Table>
      */
     public function all() : array
     {
         return $this->tables;
     }
 
-    /**
-     * @param int $index
-     * @return Table
-     */
     public function getAt(int $index) : Table
     {
         return $this->tables[$index];

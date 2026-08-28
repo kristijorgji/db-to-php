@@ -1,40 +1,21 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Generators\Php;
 
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityGeneratorConfig;
 use kristijorgji\DbToPhp\Rules\Php\PhpPropertiesCollection;
 use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
+use function count;
 
 class PhpEntityGenerator extends PhpClassGenerator
 {
-    /**
-     * @var PhpEntityGeneratorConfig
-     */
-    private $config;
-
-    /**
-     * @var PhpPropertiesCollection[]
-     */
-    private $properties;
-
-    /**
-     * @param PhpEntityGeneratorConfig $config
-     * @param PhpPropertiesCollection $properties
-     */
     public function __construct(
-        PhpEntityGeneratorConfig $config,
-        PhpPropertiesCollection $properties
-    )
-    {
+        private PhpEntityGeneratorConfig $config,
+        private PhpPropertiesCollection $properties,
+    ) {
         parent::__construct($config->getPhpClassGeneratorConfig());
-        $this->config = $config;
-        $this->properties = $properties;
     }
 
-    /**
-     * @return string
-     */
     public function generate() : string
     {
         $this->addClassDeclaration();
@@ -48,10 +29,7 @@ class PhpEntityGenerator extends PhpClassGenerator
         return $this->output->get();
     }
 
-    /**
-     * @return void
-     */
-    private function addProperties()
+    private function addProperties(): void
     {
         $propertiesCount = count($this->properties->all());
 
@@ -63,10 +41,7 @@ class PhpEntityGenerator extends PhpClassGenerator
         }
     }
 
-    /**
-     * @return void
-     */
-    private function addSettersAndGetters()
+    private function addSettersAndGetters(): void
     {
         $propertiesCount = count($this->properties->all());
 
@@ -89,10 +64,7 @@ class PhpEntityGenerator extends PhpClassGenerator
         }
     }
 
-    /**
-     * @param PhpProperty $property
-     */
-    private function addSetter(PhpProperty $property)
+    private function addSetter(PhpProperty $property): void
     {
         $extraLines = [];
         if ($this->config->shouldTrackChanges()) {
@@ -102,29 +74,23 @@ class PhpEntityGenerator extends PhpClassGenerator
             (new PhpSetterGenerator(
                 $property,
                 $this->config->getPhpSetterGeneratorConfig(),
-                $extraLines
-            ))->generate()
+                $extraLines,
+            ))->generate(),
         );
     }
 
-    /**
-     * @param PhpProperty $property
-     */
-    private function addGetter(PhpProperty $property)
+    private function addGetter(PhpProperty $property): void
     {
         $this->output->addLine(
-            (new PhpGetterGenerator($property, $this->config->getPhpGetterGeneratorConfig()))->generate()
+            (new PhpGetterGenerator($property, $this->config->getPhpGetterGeneratorConfig()))->generate(),
         );
     }
 
-    /**
-     * @param PhpProperty $property
-     */
-    private function addProperty(PhpProperty $property)
+    private function addProperty(PhpProperty $property): void
     {
         $propertyGenerator = new PhpPropertyGenerator(
             $property,
-            $this->config->getPhpPropertyGeneratorConfig()
+            $this->config->getPhpPropertyGeneratorConfig(),
         );
 
         $this->output->addLine($propertyGenerator->generate());

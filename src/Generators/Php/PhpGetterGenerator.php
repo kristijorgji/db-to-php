@@ -1,37 +1,20 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Generators\Php;
 
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpGetterGeneratorConfig;
 use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
 use kristijorgji\DbToPhp\Support\TextBuffer;
+use function sprintf;
+use function ucfirst;
 
 class PhpGetterGenerator
 {
-    /**
-     * @var PhpProperty
-     */
-    private $property;
+    private TextBuffer $output;
 
-    /**
-     * @var TextBuffer
-     */
-    private $output;
-
-    /**
-     * @var PhpGetterGeneratorConfig
-     */
-    private $config;
-
-    /**
-     * @param PhpProperty $property
-     * @param PhpGetterGeneratorConfig $config
-     */
-    public function __construct(PhpProperty $property, PhpGetterGeneratorConfig $config)
+    public function __construct(private PhpProperty $property, private PhpGetterGeneratorConfig $config)
     {
-        $this->property = $property;
-        $this->output = new TextBuffer();
-        $this->config = $config;
+        $this->output = new TextBuffer;
     }
 
     public function generate(): string
@@ -44,7 +27,7 @@ class PhpGetterGenerator
         return $this->output->get();
     }
 
-    private function addAnnotation()
+    private function addAnnotation(): void
     {
         $type  = $this->property->getType();
         $nullableText = $type->isNullable() === true ? '|null' :  '';
@@ -52,12 +35,12 @@ class PhpGetterGenerator
         $this->output->addLine('/**', 4);
         $this->output->addLine(
             sprintf('* @return %s', $this->property->getType()->getType()->value . $nullableText),
-            5
+            5,
         );
         $this->output->addLine('*/', 5);
     }
 
-    private function addDeclaration()
+    private function addDeclaration(): void
     {
         $type  = $this->property->getType();
         $returnType = '';
@@ -71,18 +54,18 @@ class PhpGetterGenerator
             sprintf(
                 'public function %s()%s',
                 $functionName,
-                $returnType
+                $returnType,
             ),
-            4
+            4,
         );
     }
 
-    private function addBody()
+    private function addBody(): void
     {
         $this->output->addLine('{', 4);
         $this->output->addLine(
             sprintf('return $this->%s;', $this->property->getName()),
-            8
+            8,
         );
         $this->output->add('}', 4);
     }

@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp;
 
 class AppInfo
 {
-    const NAME = 'dbToPhp';
-    const VERSION = '1.0.3';
-    const DEFAULT_CONFIG_FILENAME = 'dbToPhp.cfg.php';
+    public const NAME = 'dbToPhp';
+    public const VERSION = '1.0.3';
+    public const DEFAULT_CONFIG_FILENAME = 'dbToPhp.cfg.php';
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Managers\Php;
 
@@ -6,32 +6,35 @@ use kristijorgji\DbToPhp\Db\TablesCollection;
 use kristijorgji\DbToPhp\Managers\Exceptions\TableDoesNotExistException;
 use kristijorgji\DbToPhp\Managers\Php\AbstractPhpManager;
 use kristijorgji\Tests\Factories\Db\TablesCollectionFactory;
+use Throwable;
+use function in_array;
+use function microtime;
+use function rand;
+use function sort;
+use const SORT_ASC;
 
 class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
 {
-    /**
-     * @var AbstractPhpManager
-     */
-    protected $manager;
+    protected AbstractPhpManager $manager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->createManager();
     }
 
-    public function testFilterTables()
+    public function testFilterTables(): void
     {
         $tables = TablesCollectionFactory::make();
         $filteredTables = $this->manager->filterTables(
             $tables,
-            $this->config['entities']['includeTables']
+            $this->config['entities']['includeTables'],
         );
 
         $this->assertEquals($tables, $filteredTables);
     }
 
-    public function testFilterTables_only_some()
+    public function testFilterTables_only_some(): void
     {
         $nrTotalTables = 10;
         $tables = TablesCollectionFactory::make($nrTotalTables);
@@ -59,7 +62,7 @@ class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
 
         $actualFilteredTables = $this->manager->filterTables(
             $tables,
-            $this->config['entities']['includeTables']
+            $this->config['entities']['includeTables'],
         );
 
         $expectedTables = new TablesCollection(... $expectedTables);
@@ -67,7 +70,7 @@ class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
         $this->assertEquals($expectedTables, $actualFilteredTables);
     }
 
-    public function testFilterTables_non_existing()
+    public function testFilterTables_non_existing(): void
     {
         $nrTotalTables = 2;
         $tables = TablesCollectionFactory::make($nrTotalTables);
@@ -75,7 +78,7 @@ class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
         $nonExistingTable = self::randomString() . microtime(true);
         $this->config['entities']['includeTables'] = [
             $tables->getAt(0)->getName(),
-            $nonExistingTable
+            $nonExistingTable,
         ];
 
         $this->createManager();
@@ -84,24 +87,24 @@ class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
         try {
             $this->manager->filterTables(
                 $tables,
-                $this->config['entities']['includeTables']
+                $this->config['entities']['includeTables'],
             );
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             $thrownException = $e;
         }
 
-        $this->assertTrue($thrownException instanceof TableDoesNotExistException);
+        $this->assertInstanceOf(TableDoesNotExistException::class, $thrownException);
         $this->assertEquals($nonExistingTable, $thrownException->getTableName());
     }
 
-    private function createManager()
+    private function createManager(): void
     {
         $this->manager = $this->getMockBuilder(AbstractPhpManager::class)
             ->setConstructorArgs([
                 $this->databaseAdapter,
                 $this->typeMapper,
                 $this->fileSystem,
-                $this->typeHint
+                $this->typeHint,
             ])
             ->onlyMethods([])
             ->getMock();

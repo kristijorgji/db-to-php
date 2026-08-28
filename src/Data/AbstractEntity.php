@@ -1,33 +1,26 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Data;
 
+use function array_key_exists;
+use function camelToSnakeCase;
+
 abstract class AbstractEntity
 {
-    /**
-     * @var array
-     */
-    private $__original = [];
+    private array $__original = [];
 
     public function __construct()
     {
         $this->sync();
     }
 
-    /**
-     * @param string $key
-     * @param $value
-     */
-    protected function track(string $key, $value)
+    protected function track(string $key, mixed $value): void
     {
         if (! array_key_exists($key, $this->__original)) {
             $this->__original[$key] = $value;
         }
     }
 
-    /**
-     * @return bool
-     */
     public function isDirty() : bool
     {
         foreach ($this->__original as $key => $value) {
@@ -39,9 +32,6 @@ abstract class AbstractEntity
         return false;
     }
 
-    /**
-     * @return array
-     */
     public function dirtyFields() : array
     {
         $dirty = [];
@@ -57,10 +47,7 @@ abstract class AbstractEntity
         return $dirty;
     }
 
-    /**
-     * @return void
-     */
-    public function sync()
+    public function sync(): void
     {
         foreach ($this as $key => $value) {
             if ($key !== '__original') {

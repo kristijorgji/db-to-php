@@ -1,30 +1,18 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Managers\Exceptions;
 
+use Exception;
 use kristijorgji\DbToPhp\Managers\GenerateResponse;
+use Throwable;
 
-class GenerateException extends \Exception
+class GenerateException extends Exception
 {
-    /**
-     * @var GenerateResponse
-     */
-    private $partialResponse;
-
-    /**
-     * @param string $message
-     * @param \Exception $previous
-     * @param GenerateResponse $partialResponse
-     */
-    public function __construct(string $message, \Exception $previous, GenerateResponse $partialResponse)
+    public function __construct(string $message, Throwable $previous, private GenerateResponse $partialResponse)
     {
         parent::__construct($message, -177, $previous);
-        $this->partialResponse = $partialResponse;
     }
 
-    /**
-     * @return GenerateResponse
-     */
     public function getPartialResponse(): GenerateResponse
     {
         return $this->partialResponse;

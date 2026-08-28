@@ -1,41 +1,40 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Console\Commands;
 
+use Exception;
 use kristijorgji\DbToPhp\Console\Commands\GenerateFactoriesCommand;
 use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
 use kristijorgji\DbToPhp\Managers\GenerateResponse;
+use Throwable;
 
 class GenerateFactoriesCommandTest extends AbstractCommandTestCase
 {
-    /**
-     * @var GenerateFactoriesCommand
-     */
-    protected $command;
+    protected GenerateFactoriesCommand $command;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->command = new GenerateFactoriesCommand(
             $this->configFactory,
-            self::randomString()
+            self::randomString(),
         );
     }
 
-    public function testExecute_on_error()
+    public function testExecute_on_error(): void
     {
         $this->mockSelf(['bootstrap', 'outputGenerationResult', 'getManager']);
         $this->command->expects($this->once())
             ->method('getManager')
             ->willReturn($this->manager);
 
-        $partialResponse = new GenerateResponse();
+        $partialResponse = new GenerateResponse;
         $partialResponse->addPath('test');
 
         $exception = new GenerateException(
             'error',
-            new \Exception(self::randomString(100)),
-            $partialResponse
+            new Exception(self::randomString(100)),
+            $partialResponse,
         );
 
         $this->manager->expects($this->once())
@@ -51,19 +50,19 @@ class GenerateFactoriesCommandTest extends AbstractCommandTestCase
         try {
             $executeMethod->invokeArgs($this->command, [
                 $this->input,
-                $this->output
+                $this->output,
             ]);
-        }catch (\Exception $e) {
+        }catch (Throwable $e) {
             $this->assertEquals($exception->getPrevious(), $e);
         }
     }
 
-    protected function mockSelf(array $methodsToMock)
+    protected function mockSelf(array $methodsToMock): void
     {
         $this->command = $this->getMockBuilder(GenerateFactoriesCommand::class)
             ->setConstructorArgs([
                 $this->configFactory,
-                self::randomString()
+                self::randomString(),
             ])
             ->onlyMethods($methodsToMock)
             ->getMock();

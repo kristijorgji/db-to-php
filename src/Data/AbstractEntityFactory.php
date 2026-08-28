@@ -1,44 +1,58 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Data;
 
+use InvalidArgumentException;
 use kristijorgji\DbToPhp\Data\Exceptions\InvalidEntityFactoryFieldException;
+use function array_keys;
+use function base64_encode;
+use function count;
+use function date;
+use function implode;
+use function in_array;
+use function json_encode;
+use function mt_getrandmax;
+use function mt_rand;
+use function pow;
+use function rand;
+use function random_bytes;
+use function round;
+use function snakeToPascalCase;
+use function sprintf;
+use function str_replace;
+use function strlen;
+use function substr;
+use function time;
+use const PHP_EOL;
+use const PHP_INT_MAX;
+use const PHP_INT_MIN;
 
 abstract class AbstractEntityFactory
 {
-    /**
-     * @var array
-     */
-    protected static $fields = [];
+    protected static array $fields = [];
 
     /**
-     * @param array $data
      * @throws InvalidEntityFactoryFieldException
      */
-    public static function validateData(array $data)
+    public static function validateData(array $data): void
     {
-        foreach ($data as $key => $value) {
+        foreach (array_keys($data) as $key) {
             if (!in_array($key, static::$fields)) {
                 throw new InvalidEntityFactoryFieldException(
                     sprintf(
                         'The given key: %s in the data array is not a valid key.%sAvailable keys are: (%s)',
                         $key,
                         PHP_EOL,
-                        implode(', ', static::$fields)
-                    )
+                        implode(', ', static::$fields),
+                    ),
                 );
             }
         }
     }
 
-    /**
-     * @param array $data
-     * @param $toClass
-     * @return mixed
-     */
-    public static function mapArrayToEntity(array $data, $toClass)
+    public static function mapArrayToEntity(array $data, string $toClass): mixed
     {
-        $item  = new $toClass();
+        $item  = new $toClass;
 
         foreach ($data as $key => $value) {
             $item->{'set' . snakeToPascalCase($key)}($value);
@@ -47,113 +61,72 @@ abstract class AbstractEntityFactory
         return $item;
     }
 
-    /**
-     * @return array
-     */
     public static function randomArray() : array
     {
         return [
-            self::randomString() => self::randomInt32()
+            self::randomString() => self::randomInt32(),
         ];
     }
 
-    /**
-     * @return string
-     */
     public static function randomJson() : string
     {
         return json_encode(self::randomArray());
     }
 
-    /**
-     * @param int $chanceOfGettingTrue
-     * @return bool
-     */
     public static function randomBoolean(int $chanceOfGettingTrue = 50) : bool
     {
         return mt_rand(1, 100) <= $chanceOfGettingTrue;
     }
 
-    /**
-     * @param string $format
-     * @return string
-     */
     public static function randomDate(string $format = 'Y-m-d H:i:s') : string
     {
         $now = time();
-        return date($format, $now - self::randomUnsignedNumber(strlen($now) - 1));
+        return date($format, $now - self::randomUnsignedNumber(strlen((string) $now) - 1));
     }
 
-    /**
-     * @return int
-     */
     public static function randomInt8() : int
     {
         return rand(-128, 127);
     }
 
-    /**
-     * @return int
-     */
     public static function randomUnsignedInt8() : int
     {
         return rand(0, 255);
     }
 
-    /**
-     * @return int
-     */
     public static function randomInt16() : int
     {
         return rand(-32768, 32767);
     }
 
-    /**
-     * @return int
-     */
     public static function randomUnsignedInt16() : int
     {
         return rand(0, 65535);
     }
 
-    /**
-     * @return int
-     */
     public static function randomInt24() : int
     {
         return rand(-8388608, 8388607);
     }
 
-    /**
-     * @return int
-     */
     public static function randomUnsignedInt24() : int
     {
         return rand(0, 16777215);
     }
 
-    /**
-     * @return int
-     */
     public static function randomInt32() : int
     {
         return rand(-2147483648, 2147483647);
     }
 
-    /**
-     * @return int
-     */
     public static function randomUnsignedInt32() : int
     {
         return rand(0, 4294967295);
     }
 
-    /**
-     * @return int
-     */
     public static function randomInt64() : int
     {
-        return rand(-9223372036854775808, 9223372036854775807);
+        return rand(PHP_INT_MIN, PHP_INT_MAX);
     }
 
     /**
@@ -161,17 +134,12 @@ abstract class AbstractEntityFactory
      * that's why in this case I return again an unsigned 32 bit int
      * which still is also a unsigned 64 bit int
      *
-     * @return int
      */
     public static function randomUnsignedInt64() : int
     {
         return self::randomUnsignedInt32();
     }
 
-    /**
-     * @param int $digits
-     * @return int
-     */
     public static function randomYear(int $digits) : int
     {
         return self::randomUnsignedNumber($digits, true);
@@ -180,20 +148,19 @@ abstract class AbstractEntityFactory
     /**
      * Return a random float number
      *
-     * @param int       $nbMaxDecimals
-     * @param int|float $min
-     * @param int|float $max
      * @example 48.8932
      *
-     * @return float
      */
-    public static function randomFloat($nbMaxDecimals = null, $min = 0, $max = null) : float
-    {
-        if (null === $nbMaxDecimals) {
+    public static function randomFloat(
+        ?int $nbMaxDecimals = null,
+        int|float $min = 0,
+        int|float|null $max = null,
+    ) : float {
+        if ($nbMaxDecimals === null) {
             $nbMaxDecimals = static::randomDigit();
         }
 
-        if (null === $max) {
+        if ($max === null) {
             $max = static::randomUnsignedNumber();
             if ($min > $max) {
                 $max = $min;
@@ -215,19 +182,20 @@ abstract class AbstractEntityFactory
      * The maximum value returned is mt_getrandmax()
      *
      * @param integer $nbDigits Defaults to a random number between 1 and 9
-     * @param boolean $strict   Whether the returned number should have exactly $nbDigits
+     * @param boolean $strict Whether the returned number should have exactly $nbDigits
      * @example 79907610
      *
-     * @return integer
      */
     public static function randomUnsignedNumber(?int $nbDigits = null, bool $strict = false) : int
     {
-        if (null === $nbDigits) {
+        if ($nbDigits === null) {
             $nbDigits = static::randomDigitNotNull();
         }
         $max = pow(10, $nbDigits) - 1;
         if ($max > mt_getrandmax()) {
-            throw new \InvalidArgumentException('randomUnsignedNumber() can only generate numbers up to mt_getrandmax()');
+            throw new InvalidArgumentException(
+                'randomUnsignedNumber() can only generate numbers up to mt_getrandmax()',
+            );
         }
         if ($strict) {
             return mt_rand(pow(10, $nbDigits - 1), $max);
@@ -236,38 +204,23 @@ abstract class AbstractEntityFactory
         return mt_rand(0, $max);
     }
 
-    /**
-     * @param int|null|null $nrDigits
-     * @param bool $strict
-     * @return int
-     */
     public static function randomNumber(?int $nrDigits = null, bool $strict = false) : int
     {
         $randomNumber = self::randomUnsignedNumber($nrDigits, $strict);
-        return self::randomBoolean() ? $randomNumber : (0 - $randomNumber);
+        return self::randomBoolean() ? $randomNumber : 0 - $randomNumber;
     }
 
-    /**
-     * @return integer
-     */
     public static function randomDigit() : int
     {
         return mt_rand(0, 9);
     }
 
-    /**
-     * @return integer
-     */
     public static function randomDigitNotNull() : int
     {
         return mt_rand(1, 9);
     }
 
-    /**
-     * @param int $length
-     * @return string
-     */
-    public static function randomString(int $length = 16)
+    public static function randomString(int $length = 16): string
     {
         $string = '';
 
@@ -283,10 +236,9 @@ abstract class AbstractEntityFactory
     }
 
     /**
-     * @param string[] ...$values
-     * @return string
+     * @param string<string> ...$values
      */
-    public static function chooseRandomString(string... $values) : string
+    public static function chooseRandomString(string ... $values) : string
     {
         return $values[rand(0, count($values) -1)];
     }

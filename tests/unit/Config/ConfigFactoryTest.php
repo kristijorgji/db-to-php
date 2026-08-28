@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Config;
 
@@ -6,28 +6,22 @@ use kristijorgji\DbToPhp\Config\ConfigFactory;
 use kristijorgji\DbToPhp\Config\Exceptions\ConfigParserException;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
 use kristijorgji\Tests\Helpers\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ConfigFactoryTest extends TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $fileSystem;
+    private MockObject $fileSystem;
+    private ConfigFactory $configFactory;
 
-    /**
-     * @var ConfigFactory
-     */
-    private $configFactory;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fileSystem = $this->getMockBuilder(FileSystemInterface::class)->getMock();
         $this->configFactory = new ConfigFactory(
-            $this->fileSystem
+            $this->fileSystem,
         );
     }
 
-    public function testGet_php()
+    public function testGet_php(): void
     {
         $path = __DIR__ . '/dummyConfig.php';
         $this->fileSystem->expects($this->once())
@@ -36,13 +30,13 @@ class ConfigFactoryTest extends TestCase
 
         $config = $this->configFactory->get($path);
         $expected = [
-            'success' => true
+            'success' => true,
         ];
 
         $this->assertEquals($expected, $config);
     }
 
-    public function testGet_unknown()
+    public function testGet_unknown(): void
     {
         $this->fileSystem->expects($this->once())
             ->method('getFileExtension')

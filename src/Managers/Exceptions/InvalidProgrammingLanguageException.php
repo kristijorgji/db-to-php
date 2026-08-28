@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Managers\Exceptions;
 
-class InvalidProgrammingLanguageException extends \Exception
+use Exception;
+
+class InvalidProgrammingLanguageException extends Exception
 {
 
 }

@@ -1,64 +1,29 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Db\Fields;
 
 class DecimalField extends Field
 {
-    /**
-     * @var int
-     */
-    private $decimalPrecision;
-
-    /**
-     * @var int
-     */
-    private $fractionalPrecision;
-
-    /**
-     * @var bool
-     */
-    private $signed;
-
-    /**
-     * @param string $name
-     * @param bool $nullable
-     * @param int $decimalPrecision
-     * @param int $fractionalPrecision
-     * @param bool $signed
-     */
     public function __construct(
         string $name,
         bool $nullable,
-        int $decimalPrecision,
-        int $fractionalPrecision = 0,
-        bool $signed = false
-    )
-    {
+        private int $decimalPrecision,
+        private int $fractionalPrecision = 0,
+        private bool $signed = false,
+    ) {
         parent::__construct($name, $nullable);
-        $this->decimalPrecision = $decimalPrecision;
-        $this->fractionalPrecision = $fractionalPrecision;
-        $this->signed = $signed;
     }
 
-    /**
-     * @return int
-     */
     public function getDecimalPrecision(): int
     {
         return $this->decimalPrecision;
     }
 
-    /**
-     * @return int
-     */
     public function getFractionalPrecision(): int
     {
         return $this->fractionalPrecision;
     }
 
-    /**
-     * @return boolean
-     */
     public function isSigned(): bool
     {
         return $this->signed;

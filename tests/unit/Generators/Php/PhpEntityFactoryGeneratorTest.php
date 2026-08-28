@@ -1,37 +1,31 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Generators\Php;
-
 
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpClassGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityFactoryGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryField;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryFieldsCollection;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryGenerator;
-use kristijorgji\DbToPhp\Rules\Php\PhpType;
-use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
 use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PhpEntityFactoryGeneratorTest extends TestCase
 {
     /**     * @param PhpEntityFactoryGeneratorConfig $config
-     * @param PhpEntityFactoryFieldsCollection $fields
-     * @param string $entityClassName
-     * @param string $expected
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('generateProvider')]
+    #[DataProvider('generateProvider')]
     public function testGenerate(
         PhpEntityFactoryGeneratorConfig $config,
         PhpEntityFactoryFieldsCollection $fields,
         string $entityClassName,
-        string $expected
-    )
-    {
+        string $expected,
+    ): void {
         $entityGenerator = new PhpEntityFactoryGenerator(
             $config,
             $fields,
-            $entityClassName
+            $entityClassName,
         );
 
         $actual = $entityGenerator->generate();
@@ -39,7 +33,7 @@ class PhpEntityFactoryGeneratorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public static function generateProvider()
+    public static function generateProvider(): array
     {
         $expected = self::getExpected(__DIR__ . '/expected/entity_factory_generator.txt');
 
@@ -50,19 +44,18 @@ class PhpEntityFactoryGeneratorTest extends TestCase
             'App\Factories\Entities',
             'TestEntityFactory',
             new StringCollection(...[$qualifiedEntityClassName]),
-            'BaseEntityFactory'
+            'BaseEntityFactory',
         );
 
         $generatorFields = new PhpEntityFactoryFieldsCollection(... [
            new PhpEntityFactoryField(
                'status',
-               'self::randomInt32()'
-
+               'self::randomInt32()',
            ),
             new PhpEntityFactoryField(
                 'credit_value',
-                'self::randomInt16()'
-            )
+                'self::randomInt16()',
+            ),
         ]);
 
         return [
@@ -70,42 +63,42 @@ class PhpEntityFactoryGeneratorTest extends TestCase
                 new PhpEntityFactoryGeneratorConfig(
                     $phpClassGeneratorConfig,
                     true,
-                    true
+                    true,
                 ),
                 $generatorFields,
                 $entityClassName,
-                $expected['type_hinted_annotations']
+                $expected['type_hinted_annotations'],
             ],
             'type_hinted_no_annotations' => [
                 new PhpEntityFactoryGeneratorConfig(
                     $phpClassGeneratorConfig,
                     true,
-                    false
+                    false,
                 ),
                 $generatorFields,
                 $entityClassName,
-                $expected['type_hinted_no_annotations']
+                $expected['type_hinted_no_annotations'],
             ],
             'not_type_hinted_annotations' => [
                 new PhpEntityFactoryGeneratorConfig(
                     $phpClassGeneratorConfig,
                     false,
-                    true
+                    true,
                 ),
                 $generatorFields,
                 $entityClassName,
-                $expected['not_type_hinted_annotations']
+                $expected['not_type_hinted_annotations'],
             ],
             'not_type_hinted_no_annotations' => [
                 new PhpEntityFactoryGeneratorConfig(
                     $phpClassGeneratorConfig,
                     false,
-                    false
+                    false,
                 ),
                 $generatorFields,
                 $entityClassName,
-                $expected['not_type_hinted_no_annotations']
-            ]
+                $expected['not_type_hinted_no_annotations'],
+            ],
         ];
     }
 }

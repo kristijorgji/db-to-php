@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\FileSystem;
 
@@ -8,50 +8,48 @@ use kristijorgji\Tests\Helpers\TestCase;
 
 class FileSystemTest extends TestCase
 {
-    /**
-     * @var FileSystem
-     */
-    private $fileSystem;
+    private FileSystem $fileSystem;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->fileSystem = new FileSystem();
+        $this->fileSystem = new FileSystem;
     }
 
-    public function testCreateAndDeleteDirectory()
+    public function testCreateAndDeleteDirectory(): void
     {
         $path = __DIR__ . '/test';
         $this->fileSystem->createDirectory($path);
         $this->fileSystem->deleteDirectory($path);
         self::assertFalse(
-            $this->fileSystem->exists($path)
+            $this->fileSystem->exists($path),
         );
     }
 
-    public function testReadFile()
+    public function testReadFile(): void
     {
         $expected = 'dfadsfd
 ';
         $this->assertEquals(
             $expected,
-            $this->fileSystem->readFile(__DIR__ . '/testfile.img')
+            $this->fileSystem->readFile(__DIR__ . '/testfile.img'),
         );
     }
-    public function testWrite_on_non_existing_directory()
+
+    public function testWrite_on_non_existing_directory(): void
     {
         $this->expectException(FileSystemException::class);
         $this->fileSystem->write(__DIR__. '/'. self::randomString(40) . '/' . self::randomString(), '232');
     }
 
-    public function testGetFileExtension()
+    public function testGetFileExtension(): void
     {
         $this->assertEquals(
             'img',
-            $this->fileSystem->getFileExtension(__DIR__ . '/testfile.img')
+            $this->fileSystem->getFileExtension(__DIR__ . '/testfile.img'),
         );
     }
 
-    public function testGetFileExtension_file_does_not_exist()
+    public function testGetFileExtension_file_does_not_exist(): void
     {
         $this->expectException(FileSystemException::class);
         $this->fileSystem->getFileExtension(self::randomString());

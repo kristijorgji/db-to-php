@@ -1,33 +1,32 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Support;
+
+use function count;
 
 class StringCollection
 {
     /**
-     * @var string[]
+     * @var array<string>
      */
-    private $elements = [];
+    private array $elements = [];
 
     /**
-     * @param string[] $fields
+     * @param string<string> $fields
      */
-    public function __construct(string... $fields)
+    public function __construct(string ... $fields)
     {
         $this->elements = $fields;
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function all() : array
     {
         return $this->elements;
     }
 
-    /**
-     * @return int
-     */
     public function count() : int
     {
         return count($this->elements);

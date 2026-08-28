@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Managers\Php;
 
+use Exception;
 use kristijorgji\DbToPhp\Data\AbstractEntity;
 use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
 use kristijorgji\DbToPhp\Db\Table;
@@ -23,40 +24,39 @@ use kristijorgji\Tests\Factories\Db\Fields\FieldsCollectionFactory;
 use kristijorgji\Tests\Factories\Db\TablesCollectionFactory;
 use kristijorgji\Tests\Factories\Rules\Php\PhpTypeFactory;
 use kristijorgji\UnitTests\Generators\Php\SamplePhpProperties;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Throwable;
+use function array_map;
+use function count;
+use function range;
+use function snakeToCamelCase;
 
 class PhpEntityManagerTest extends AbstractPhpManagerTestCase
 {
     use SamplePhpProperties;
 
-    /**
-     * @var array
-     */
-    protected $config;
+    protected array $config;
+    protected PhpEntityManager $manager;
 
-    /**
-     * @var PhpEntityManager
-     */
-    protected $manager;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->config = $this->config['entities'];
         $this->createManager();
     }
 
-    private function createManager()
+    private function createManager(): void
     {
         $this->manager = new PhpEntityManager(
             $this->databaseAdapter,
             $this->typeMapper,
             $this->fileSystem,
             $this->typeHint,
-            $this->config
+            $this->config,
         );
     }
 
-    public function testGenerateEntities()
+    public function testGenerateEntities(): void
     {
         $this->selfPartialMock(['filterTables', 'generateEntity']);
 
@@ -64,9 +64,8 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
             [
                 new Table('users'),
                 new Table('items'),
-                new Table('orders')
-            ]
-        );
+                new Table('orders'),
+            ]);
 
         $this->databaseAdapter->expects($this->once())
             ->method('getTables')
@@ -94,7 +93,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
         $this->assertSame($expectedTableNames, $actualTableNames);
     }
 
-    public function testGenerateEntities_on_error()
+    public function testGenerateEntities_on_error(): void
     {
         $this->selfPartialMock(['filterTables', 'generateEntity']);
 
@@ -109,22 +108,21 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
             ->with($returnedTables)
             ->willReturn($returnedTables);
 
-
-        $partialResponse = new GenerateResponse();
+        $partialResponse = new GenerateResponse;
         $partialResponse->addPath('test');
 
         $this->manager->expects($this->once())
             ->method('generateEntity')
-            ->willThrowException(new \Exception());
+            ->willThrowException(new Exception);
 
         try {
             $this->manager->generateEntities();
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             $this->assertInstanceOf(GenerateException::class, $e);
         }
     }
 
-    public function testGenerateEntity()
+    public function testGenerateEntity(): void
     {
         $this->selfPartialMock(['formProperties']);
         $tableName = 'test_table';
@@ -147,22 +145,20 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
             ->method('write')
             ->with(
                 $this->config['outputDirectory'] . '/TestTableEntity.php',
-                $this->anything()
+                $this->anything(),
             );
 
         $this->manager->generateEntity($tableName);
     }
 
     /**     * @param array $config
-     * @param string $tableName
-     * @param PhpEntityGeneratorConfig $expected
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('parseConfigForEntityProvider')]
+    #[DataProvider('parseConfigForEntityProvider')]
     public function testParseConfigForEntity(
         array $config,
         string $tableName,
-        PhpEntityGeneratorConfig $expected
-    ) {
+        PhpEntityGeneratorConfig $expected,
+    ): void {
 
         $this->config = $config;
         $this->createManager();
@@ -171,21 +167,21 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
         $actual = $method->invokeArgs(
             $this->manager,
             [
-                $tableName
-            ]
+                $tableName,
+            ],
         );
 
         $this->assertEquals($expected, $actual);
     }
 
-    public static function parseConfigForEntityProvider()
+    public static function parseConfigForEntityProvider(): array
     {
         return [
             'should_not_track_changes' => [
                 [
                     'includeTables' => ['*'],
                     'tableToEntityClassName' => [
-                        'test' => 'SuperEntity'
+                        'test' => 'SuperEntity',
                     ],
                     'outputDirectory' => 'Entities',
                     'namespace' => 'Entities',
@@ -194,9 +190,9 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                     'includeGetters' => true,
                     'fluentSetters' => true,
                     'properties' => [
-                        'accessModifier' => \kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers::PRIVATE
+                        'accessModifier' => PhpAccessModifiers::PRIVATE,
                     ],
-                    'trackChangesFor' => []
+                    'trackChangesFor' => [],
                 ],
                 'test',
                 new PhpEntityGeneratorConfig(
@@ -205,31 +201,31 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                         'SuperEntity',
                         new StringCollection(... []),
                         null,
-                        true
+                        true,
                     ),
                     true,
                     true,
                     new PhpSetterGeneratorConfig(
                         true,
                         true,
-                        true
+                        true,
                     ),
                     new PhpGetterGeneratorConfig(
                         true,
-                        true
+                        true,
                     ),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        false
+                        false,
                     ),
-                    false
-                )
+                    false,
+                ),
             ],
             'should_track_changes' => [
                 [
                     'includeTables' => ['*'],
                     'tableToEntityClassName' => [
-                        'test' => 'SuperEntity'
+                        'test' => 'SuperEntity',
                     ],
                     'outputDirectory' => 'Entities',
                     'namespace' => 'Entities',
@@ -238,9 +234,9 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                     'includeGetters' => true,
                     'fluentSetters' => true,
                     'properties' => [
-                        'accessModifier' => \kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers::PRIVATE
+                        'accessModifier' => PhpAccessModifiers::PRIVATE,
                     ],
-                    'trackChangesFor' => ['test']
+                    'trackChangesFor' => ['test'],
                 ],
                 'test',
                 new PhpEntityGeneratorConfig(
@@ -249,30 +245,30 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                         'SuperEntity',
                         new StringCollection(... [AbstractEntity::class]),
                         'AbstractEntity',
-                        true
+                        true,
                     ),
                     true,
                     true,
                     new PhpSetterGeneratorConfig(
                         true,
                         true,
-                        true
+                        true,
                     ),
                     new PhpGetterGeneratorConfig(
                         true,
-                        true
+                        true,
                     ),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        false
+                        false,
                     ),
-                    true
-                )
-            ]
+                    true,
+                ),
+            ],
         ];
     }
 
-    public function testFormProperties()
+    public function testFormProperties(): void
     {
         $fields = new FieldsCollection(... array_map(function () {
             return FieldFactory::make();
@@ -296,10 +292,9 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
             return new PhpProperty(
                 $this->config['properties']['accessModifier'],
                 $type,
-                snakeToCamelCase($field->getName())
+                snakeToCamelCase($field->getName()),
             );
         }, $fields->all(), $returnedTypes));
-
 
         $actualProperties = $this->manager->formProperties($fields);
 
@@ -308,16 +303,15 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
     }
 
     /**     * @param string $tableName
-     * @param string $expected
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('formClassNameProvider')]
-    public function testFormClassName(string $tableName, string $expected)
+    #[DataProvider('formClassNameProvider')]
+    public function testFormClassName(string $tableName, string $expected): void
     {
         $actual = $this->manager->formClassName($tableName);
         $this->assertEquals($expected, $actual);
     }
 
-    public static function formClassNameProvider()
+    public static function formClassNameProvider(): array
     {
         return [
             ['super_table', 'SuperTableEntity'],
@@ -329,7 +323,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
         ];
     }
 
-    public function testFormClassName_use_config()
+    public function testFormClassName_use_config(): void
     {
         $this->config['tableToEntityClassName']['some_specialTable'] = 'UseThisNameEntity';
         $this->createManager();
@@ -337,7 +331,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
         $this->assertEquals('UseThisNameEntity', $actual);
     }
 
-    private function selfPartialMock(array $methodsToMock)
+    private function selfPartialMock(array $methodsToMock): void
     {
         $this->manager = $this->getMockBuilder(PhpEntityManager::class)
             ->setConstructorArgs([
@@ -345,9 +339,8 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                     $this->typeMapper,
                     $this->fileSystem,
                     $this->typeHint,
-                    $this->config
-                ]
-            )
+                    $this->config,
+                ])
             ->onlyMethods($methodsToMock)
             ->getMock();
     }

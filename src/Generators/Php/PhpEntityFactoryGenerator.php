@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Generators\Php;
 
@@ -8,44 +8,18 @@ use kristijorgji\DbToPhp\Rules\Php\PhpFunctionParametersCollection;
 use kristijorgji\DbToPhp\Rules\Php\PhpObjectType;
 use kristijorgji\DbToPhp\Rules\Php\PhpType;
 use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
+use function sprintf;
 
 class PhpEntityFactoryGenerator extends PhpClassGenerator
 {
-    /**
-     * @var PhpEntityFactoryGeneratorConfig
-     */
-    private $config;
-
-    /**
-     * @var PhpEntityFactoryFieldsCollection
-     */
-    private $fieldsInfo;
-
-    /**
-     * @var string
-     */
-    private $entityClassName;
-
-    /**
-     * @param PhpEntityFactoryGeneratorConfig $config
-     * @param PhpEntityFactoryFieldsCollection $fieldsInfo
-     * @param string $entityClassName
-     */
     public function __construct(
-        PhpEntityFactoryGeneratorConfig $config,
-        PhpEntityFactoryFieldsCollection $fieldsInfo,
-        string $entityClassName
-    )
-    {
+        private PhpEntityFactoryGeneratorConfig $config,
+        private PhpEntityFactoryFieldsCollection $fieldsInfo,
+        private string $entityClassName,
+    ) {
         parent::__construct($config->getPhpClassGeneratorConfig());
-        $this->config = $config;
-        $this->fieldsInfo = $fieldsInfo;
-        $this->entityClassName = $entityClassName;
     }
 
-    /**
-     * @return string
-     */
     public function generate() : string
     {
         $this->addClassDeclaration();
@@ -59,14 +33,11 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
         return $this->output->get();
     }
 
-    /**
-     * @return void
-     */
-    private function addFieldsProperty()
+    private function addFieldsProperty(): void
     {
         if ($this->config->shouldIncludeAnnotations()) {
             $propertyAnnotationGenerator = new PhpPropertyAnnotationGenerator(
-                new PhpType(PhpTypes::ARRAY, false)
+                new PhpType(PhpTypes::ARRAY, false),
             );
             $this->output->add($propertyAnnotationGenerator->generate());
         }
@@ -80,10 +51,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
         $this->output->addEmptyLines();
     }
 
-    /**
-     * @return void
-     */
-    private function addMakeFunction()
+    private function addMakeFunction(): void
     {
         if ($this->config->shouldIncludeAnnotations()) {
             $this->addMakeFunctionAnnotations();
@@ -103,29 +71,23 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
         $this->output->addLine('}', 4);
     }
 
-    /**
-     * @return void
-     */
-    private function addMakeFunctionAnnotations()
+    private function addMakeFunctionAnnotations(): void
     {
         $arrayType = new PhpType(PhpTypes::ARRAY, false);
         $returnType = new PhpObjectType(false, $this->entityClassName);
 
         $methodAnnotationGenerator = new PhpMethodAnnotationGenerator(
             new PhpFunctionParametersCollection(... [
-                new PhpFunctionParameter('data', $arrayType)
+                new PhpFunctionParameter('data', $arrayType),
             ]),
             $returnType,
-            $this->config->shouldTypeHint()
+            $this->config->shouldTypeHint(),
         );
 
         $this->output->add($methodAnnotationGenerator->generate());
     }
 
-    /**
-     * @return void
-     */
-    private function addMakeFromDataFunction()
+    private function addMakeFromDataFunction(): void
     {
         if ($this->config->shouldIncludeAnnotations()) {
             $this->addMakeFromDataFunctionAnnotations();
@@ -143,24 +105,18 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
         $this->output->addLine('self::validateData($data);', 8);
         $this->output->addLine(
             sprintf('return self::mapArrayToEntity($data, %s::class);', $this->entityClassName),
-            8
+            8,
         );
 
         $this->output->addLine('}', 4);
     }
 
-    /**
-     * @return void
-     */
-    private function addMakeFromDataFunctionAnnotations()
+    private function addMakeFromDataFunctionAnnotations(): void
     {
         $this->addMakeFunctionAnnotations();
     }
 
-    /**
-     * @return void
-     */
-    private function addMakeDataFunction()
+    private function addMakeDataFunction(): void
     {
         if ($this->config->shouldIncludeAnnotations()) {
            $this->addMakeDataFunctionAnnotations();
@@ -184,18 +140,18 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
                 sprintf(
                     '%s => array_key_exists(%s, $data) ?',
                     $quotedDbFieldName,
-                    $quotedDbFieldName
+                    $quotedDbFieldName,
                 ),
-                12
+                12,
             );
 
             $this->output->addLine(
                 sprintf(
                     '$data[%s] : %s,',
                     $quotedDbFieldName,
-                    $fieldInfo->getResolvingCall()
+                    $fieldInfo->getResolvingCall(),
                 ),
-                16
+                16,
             );
         }
 
@@ -203,18 +159,15 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
         $this->output->addLine('}', 4);
     }
 
-    /**
-     * @return void
-     */
-    private function addMakeDataFunctionAnnotations()
+    private function addMakeDataFunctionAnnotations(): void
     {
         $arrayType = new PhpType(PhpTypes::ARRAY, false);
         $methodAnnotationGenerator = new PhpMethodAnnotationGenerator(
             new PhpFunctionParametersCollection(... [
-                new PhpFunctionParameter('data', $arrayType)
+                new PhpFunctionParameter('data', $arrayType),
             ]),
             $arrayType,
-            $this->config->shouldTypeHint()
+            $this->config->shouldTypeHint(),
         );
 
         $this->output->add($methodAnnotationGenerator->generate());

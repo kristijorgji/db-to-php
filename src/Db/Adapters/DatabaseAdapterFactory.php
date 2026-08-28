@@ -1,17 +1,15 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Db\Adapters;
 
 use kristijorgji\DbToPhp\DatabaseDrivers;
 use kristijorgji\DbToPhp\Db\Adapters\Exceptions\InvalidDatabaseDriverException;
 use kristijorgji\DbToPhp\Db\Adapters\MySql\MySqlAdapter;
+use function sprintf;
 
 class DatabaseAdapterFactory
 {
     /**
-     * @param string $databaseDriver
-     * @param array $config
-     * @return DatabaseAdapterInterface
      * @throws InvalidDatabaseDriverException
      */
     public function get(string $databaseDriver, array $config) : DatabaseAdapterInterface
@@ -20,14 +18,14 @@ class DatabaseAdapterFactory
             case DatabaseDrivers::MYSQL:
                 return new MySqlAdapter(
                     $config['host'],
-                    $config['port'],
+                    (int) $config['port'],
                     $config['database'],
                     $config['username'],
-                    $config['password']
+                    $config['password'],
                 );
             default:
                 throw new InvalidDatabaseDriverException(
-                    sprintf('Invalid database driver: %s !', $databaseDriver)
+                    sprintf('Invalid database driver: %s !', $databaseDriver),
                 );
         }
     }

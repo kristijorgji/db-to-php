@@ -1,44 +1,24 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Generators\Php;
 
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpSetterGeneratorConfig;
 use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
 use kristijorgji\DbToPhp\Support\TextBuffer;
+use function sprintf;
+use function str_replace;
+use function ucfirst;
 
 class PhpSetterGenerator
 {
-    /**
-     * @var PhpProperty
-     */
-    private $property;
+    private TextBuffer $output;
 
-    /**
-     * @var PhpSetterGeneratorConfig
-     */
-    private $config;
-
-    /**
-     * @var TextBuffer
-     */
-    private $output;
-
-    /**
-     * @var array
-     */
-    private $extraLines;
-
-    /**
-     * @param PhpProperty $property
-     * @param PhpSetterGeneratorConfig $config
-     * @param array $extraLines
-     */
-    public function __construct(PhpProperty $property, PhpSetterGeneratorConfig $config, array $extraLines = [])
-    {
-        $this->property = $property;
-        $this->config = $config;
-        $this->output = new TextBuffer();
-        $this->extraLines = $extraLines;
+    public function __construct(
+        private PhpProperty $property,
+        private PhpSetterGeneratorConfig $config,
+        private array $extraLines = [],
+    ) {
+        $this->output = new TextBuffer;
     }
 
     public function generate() : string
@@ -52,7 +32,7 @@ class PhpSetterGenerator
         return $this->output->get();
     }
 
-    private function addAnnotation()
+    private function addAnnotation(): void
     {
         $type  = $this->property->getType();
         $nullableText = $type->isNullable() === true ? '|null' :  '';
@@ -61,20 +41,20 @@ class PhpSetterGenerator
         $this->output->addLine('/**', 4);
         $this->output->addLine(
             sprintf('* @param %s $%s', $type, $this->property->getName()),
-            5
+            5,
         );
 
         if ($this->config->isFluent()) {
             $this->output->addLine(
                 sprintf('* @return %s', '$this'),
-                5
+                5,
             );
         }
 
         $this->output->addLine('*/', 5);
     }
 
-    private function addDeclaration()
+    private function addDeclaration(): void
     {
         $argumentType = '';
         if ($this->config->shouldTypeHint()) {
@@ -89,24 +69,24 @@ class PhpSetterGenerator
                 'public function %s(%s$%s)',
                 $functionName,
                 $argumentType,
-                $this->property->getName()
+                $this->property->getName(),
             ),
-            4
+            4,
         );
     }
 
-    private function addBody()
+    private function addBody(): void
     {
         $this->output->addLine('{', 4);
         $this->output->addLine(
             sprintf('$this->%s = $%s;', $this->property->getName(), $this->property->getName()),
-            8
+            8,
         );
 
         foreach ($this->extraLines as $extraLine) {
             $this->output->addLine(
                 str_replace('[%propertyName%]', $this->property->getName(), $extraLine),
-                8
+                8,
             );
         }
 

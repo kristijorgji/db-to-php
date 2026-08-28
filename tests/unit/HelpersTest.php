@@ -1,49 +1,51 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests;
 
 use kristijorgji\Tests\Helpers\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use function basePath;
+use function camelToSnakeCase;
+use function preg_match;
 
 class HelpersTest extends TestCase
 {
-    public function testGetBasePath()
+    public function testGetBasePath(): void
     {
         $actual = basePath();
         $this->assertTrue(
-            preg_match('#\/src\/\.\.\/$#', $actual) == true
+            preg_match('#\/src\/\.\.\/$#', $actual) === 1,
         );
     }
 
     /**     * @param string $input
-     * @param string $expected
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('camelToSnakeCaseProvider')]
+    #[DataProvider('camelToSnakeCaseProvider')]
     public function testCamelToSnakeCase(
         string $input,
-        string $expected
-    )
-    {
+        string $expected,
+    ): void {
         $this->assertEquals(
             $expected,
-            camelToSnakeCase($input)
+            camelToSnakeCase($input),
         );
     }
 
-    public static function camelToSnakeCaseProvider()
+    public static function camelToSnakeCaseProvider(): array
     {
         return [
             [
                 'iAmCamelCase',
-                'i_am_camel_case'
+                'i_am_camel_case',
             ],
             [
                 'allUsers',
-                'all_users'
+                'all_users',
             ],
             [
                 'AAA',
-                'a_a_a'
-            ]
+                'a_a_a',
+            ],
         ];
     }
 }

@@ -1,32 +1,22 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Support;
 
+use function str_repeat;
+use const PHP_EOL;
+
 class TextBuffer
 {
-    private $output;
-
-    /**
-     * @param string $output
-     */
-    public function __construct(string $output = '')
+    public function __construct(private string $output = '')
     {
-        $this->output = $output;
     }
 
-    /**
-     * @return string
-     */
     public function get() : string
     {
         return $this->output;
     }
 
-    /**
-     * @param string $text
-     * @param int $indentationSpaces
-     */
-    public function add(string $text,  int $indentationSpaces = 0)
+    public function add(string $text,  int $indentationSpaces = 0): void
     {
         if ($indentationSpaces > 0) {
             $this->output .= str_repeat(' ', $indentationSpaces);
@@ -35,11 +25,7 @@ class TextBuffer
         $this->output .= $text;
     }
 
-    /**
-     * @param string $text
-     * @param int $indentationSpaces
-     */
-    public function addLine(string $text, int $indentationSpaces = 0)
+    public function addLine(string $text, int $indentationSpaces = 0): void
     {
         if ($indentationSpaces > 0) {
             $this->output .= str_repeat(' ', $indentationSpaces);
@@ -48,10 +34,7 @@ class TextBuffer
         $this->output .= $text . PHP_EOL;
     }
 
-    /**
-     * @param int $nr
-     */
-    public function addEmptyLines(int $nr = 1)
+    public function addEmptyLines(int $nr = 1): void
     {
         $this->output .= str_repeat(PHP_EOL, $nr);
     }

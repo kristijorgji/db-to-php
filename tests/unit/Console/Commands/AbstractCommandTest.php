@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Console\Commands;
 
@@ -6,25 +6,23 @@ use kristijorgji\DbToPhp\AppInfo;
 use kristijorgji\DbToPhp\Config\ConfigFactory;
 use kristijorgji\DbToPhp\Console\Commands\AbstractCommand;
 use kristijorgji\Tests\Helpers\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use function getcwd;
+use function sprintf;
+use const DIRECTORY_SEPARATOR;
 
 class AbstractCommandTest extends TestCase
 {
-    /**
-     * @var AbstractCommand
-     */
-    private $command;
+    private AbstractCommand $command;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
-    private $configFactory;
+    private MockObject $configFactory;
 
-    /**
-     * @var string
-     */
-    private $appName;
+    private string $appName;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->configFactory = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
@@ -35,13 +33,13 @@ class AbstractCommandTest extends TestCase
         $this->command = $this->getMockBuilder(AbstractCommand::class)
             ->setConstructorArgs([
                 $this->configFactory,
-                self::randomString()
+                self::randomString(),
             ])
             ->onlyMethods([])
             ->getMock();
     }
 
-    public function testLocateDefaultConfigFile()
+    public function testLocateDefaultConfigFile(): void
     {
         $method = $this->getPrivateMethod($this->command, 'locateDefaultConfigFile');
         $located = $method->invoke($this->command);

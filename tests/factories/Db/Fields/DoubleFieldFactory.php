@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\Tests\Factories\Db\Fields;
 
@@ -14,8 +14,7 @@ class DoubleFieldFactory extends BaseFactory
     {
         return new DoubleField(
             self::faker()->text(20),
-            self::faker()->text(20),
-            self::faker()->boolean()
+            self::faker()->boolean(),
         );
     }
 }

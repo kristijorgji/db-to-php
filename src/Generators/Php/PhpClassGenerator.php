@@ -1,35 +1,21 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Generators\Php;
 
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpClassGeneratorConfig;
 use kristijorgji\DbToPhp\Support\TextBuffer;
+use function sprintf;
 
 abstract class PhpClassGenerator
 {
-    /**
-     * @var PhpClassGeneratorConfig
-     */
-    private $config;
+    protected TextBuffer $output;
 
-    /**
-     * @var TextBuffer
-     */
-    protected $output;
-
-    /**
-     * @param PhpClassGeneratorConfig $config
-     */
-    public function __construct(PhpClassGeneratorConfig $config)
+    public function __construct(private PhpClassGeneratorConfig $config)
     {
-        $this->config = $config;
-        $this->output = new TextBuffer();
+        $this->output = new TextBuffer;
     }
 
-    /**
-     * @return void
-     */
-    protected function addClassDeclaration()
+    protected function addClassDeclaration(): void
     {
         $this->output->addLine('<?php');
         $this->output->addEmptyLines();
@@ -55,10 +41,7 @@ abstract class PhpClassGenerator
         $this->output->addLine('{');
     }
 
-    /**
-     * @return void
-     */
-    protected function addClassEnding()
+    protected function addClassEnding(): void
     {
         $this->output->addLine('}');
     }

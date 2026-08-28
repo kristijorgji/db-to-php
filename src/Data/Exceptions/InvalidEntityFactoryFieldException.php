@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Data\Exceptions;
 
-class InvalidEntityFactoryFieldException extends \Exception
+use Exception;
+
+class InvalidEntityFactoryFieldException extends Exception
 {
 
 }
