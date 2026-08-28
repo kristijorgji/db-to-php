@@ -63,13 +63,21 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
             ->with($returnedTables)
             ->willReturn($returnedTables);
 
+        $expectedTableNames = array_map(function ($table) {
+            return $table->getName();
+        }, $returnedTables->all());
+
+        $actualTableNames = [];
         $this->manager->expects($this->exactly(count($returnedTables->all())))
             ->method('generateFactory')
-            ->withConsecutive(... array_map(function ($table) {
-                return [$table->getName()];
-            }, $returnedTables->all()));
+            ->willReturnCallback(function ($tableName) use (&$actualTableNames) {
+                $actualTableNames[] = $tableName;
+                return '';
+            });
 
         $this->manager->generateFactories();
+
+        $this->assertSame($expectedTableNames, $actualTableNames);
     }
 
     public function testGenerateFactories_on_error()
@@ -102,19 +110,18 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
         }
     }
 
-    /**
-     * @dataProvider formClassNameProvider
-     * @param string $tableName
+    /**     * @param string $tableName
      * @param string $entityClassName
      * @param string $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('formClassNameProvider')]
     public function testFormClassName(string $tableName, string $entityClassName, string $expected)
     {
         $actual = $this->manager->formClassName($tableName, $entityClassName);
         $this->assertEquals($expected, $actual);
     }
 
-    public function formClassNameProvider()
+    public static function formClassNameProvider()
     {
         return [
             ['super', 'SuperEntity', 'SuperEntityFactory'],
@@ -142,7 +149,7 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
                     $this->entityManager
                 ]
             )
-            ->setMethods($methodsToMock)
+            ->onlyMethods($methodsToMock)
             ->getMock();
     }
 }

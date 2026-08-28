@@ -8,11 +8,10 @@ use kristijorgji\DbToPhp\FileSystem\FileSystem;
 
 class PhpGenerateFactoriesTest extends AbstractPhpTestCase
 {
-    /**
-     * @dataProvider generateFactoriesProvider
-     * @param array $config
+    /**     * @param array $config
      * @param string $expectedOutputDirectory
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('generateFactoriesProvider')]
     public function testGenerateFactories(array $config, string $expectedOutputDirectory)
     {
         $this->actualOutputDirectory = $config['factories']['outputDirectory'];
@@ -44,7 +43,7 @@ class PhpGenerateFactoriesTest extends AbstractPhpTestCase
         $this->assertFoldersContentMatch(__DIR__ . '/output/factories/expected/', $this->actualOutputDirectory);
     }
 
-    public function generateFactoriesProvider()
+    public static function generateFactoriesProvider()
     {
         $config = require __DIR__ . '/config.php';
         $expectedOutputDirectory = __DIR__ . '/output/factories/expected/';

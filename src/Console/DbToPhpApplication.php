@@ -34,7 +34,7 @@ class DbToPhpApplication extends Application
      * @param OutputInterface $output
      * @return int 0 if everything went fine, or an error code
      */
-    public function doRun(InputInterface $input, OutputInterface $output)
+    public function doRun(InputInterface $input, OutputInterface $output): int
     {
         if ($input->hasParameterOption(['--help', '-h']) === false && $input->getFirstArgument() !== null) {
             $output->writeln(str_repeat('-', strlen($this->getLongVersion())));

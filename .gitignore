@@ -13,3 +13,4 @@ Thumbs.db
 desktop.ini
 .DS_Store
 .phpunit.result.cache
+.phpunit.cache/

@@ -8,7 +8,6 @@ use kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions\UnknownMySqlTypeException;
 use kristijorgji\DbToPhp\FileSystem\FileSystem;
 use kristijorgji\Tests\Helpers\CommandTestCaseHelper;
 use kristijorgji\Tests\Helpers\TestCase;
-use Symfony\Component\Debug\Exception\FatalErrorException;
 
 class InitCommandTest extends TestCase
 {
@@ -100,7 +99,7 @@ class InitCommandTest extends TestCase
             sprintf('%s', $this->command)
         );
 
-        $this->assertRegexp('#The file \".*\" already exists#', $output);
+        $this->assertMatchesRegularExpression('#The file \".*\" already exists#', $output);
 
         unlink($expectedConfigFilePath);
     }
@@ -114,6 +113,6 @@ class InitCommandTest extends TestCase
             sprintf('%s %s', $this->command, self::randomString() . DIRECTORY_SEPARATOR . self::randomString())
         );
 
-        $this->assertRegexp('#Cannot write \".+\"\. Please check#', $output);
+        $this->assertMatchesRegularExpression('#Cannot write \".+\"\. Please check#', $output);
     }
 }

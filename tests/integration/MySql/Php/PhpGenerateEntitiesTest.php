@@ -7,11 +7,10 @@ use kristijorgji\DbToPhp\FileSystem\FileSystem;
 
 class PhpGenerateEntitiesTest extends AbstractPhpTestCase
 {
-    /**
-     * @dataProvider generateEntitiesProvider
-     * @param array $config
+    /**     * @param array $config
      * @param string $expectedOutputDirectory
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('generateEntitiesProvider')]
     public function testGenerateEntities(array $config, string $expectedOutputDirectory)
     {
         $this->actualOutputDirectory = $config['entities']['outputDirectory'];
@@ -42,7 +41,7 @@ class PhpGenerateEntitiesTest extends AbstractPhpTestCase
         $this->assertFoldersContentMatch(__DIR__ . '/output/entities/expected/', $this->actualOutputDirectory);
     }
 
-    public function generateEntitiesProvider()
+    public static function generateEntitiesProvider()
     {
         $config = require __DIR__ . '/config.php';
         $expectedOutputDirectory = __DIR__ . '/output/entities/expected/';

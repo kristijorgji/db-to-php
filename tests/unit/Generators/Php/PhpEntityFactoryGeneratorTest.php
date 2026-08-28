@@ -15,13 +15,12 @@ use kristijorgji\Tests\Helpers\TestCase;
 
 class PhpEntityFactoryGeneratorTest extends TestCase
 {
-    /**
-     * @dataProvider generateProvider
-     * @param PhpEntityFactoryGeneratorConfig $config
+    /**     * @param PhpEntityFactoryGeneratorConfig $config
      * @param PhpEntityFactoryFieldsCollection $fields
      * @param string $entityClassName
      * @param string $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('generateProvider')]
     public function testGenerate(
         PhpEntityFactoryGeneratorConfig $config,
         PhpEntityFactoryFieldsCollection $fields,
@@ -40,7 +39,7 @@ class PhpEntityFactoryGeneratorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function generateProvider()
+    public static function generateProvider()
     {
         $expected = self::getExpected(__DIR__ . '/expected/entity_factory_generator.txt');
 
