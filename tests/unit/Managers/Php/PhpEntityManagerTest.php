@@ -294,7 +294,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
 
         $expectedProperties = new PhpPropertiesCollection(... array_map(function ($field, $type) {
             return new PhpProperty(
-                new PhpAccessModifiers($this->config['properties']['accessModifier']),
+                $this->config['properties']['accessModifier'],
                 $type,
                 snakeToCamelCase($field->getName())
             );

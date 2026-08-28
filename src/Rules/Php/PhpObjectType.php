@@ -16,7 +16,7 @@ class PhpObjectType extends PhpType
     public function __construct(bool $nullable, string $className)
     {
         parent::__construct(
-            new PhpTypes(new PhpTypes(PhpTypes::OBJECT)),
+            PhpTypes::OBJECT,
             $nullable
         );
         $this->className = $className;

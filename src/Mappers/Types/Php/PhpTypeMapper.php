@@ -33,28 +33,28 @@ class PhpTypeMapper implements PhpTypeMapperInterface
 
         switch(true) {
             case $field instanceof BoolField:
-                $resolvedPhpType = new PhpTypes(PhpTypes::BOOL);
+                $resolvedPhpType = PhpTypes::BOOL;
                 break;
             case $field instanceof DoubleField:
             case $field instanceof FloatField:
-                $resolvedPhpType = new PhpTypes(PhpTypes::FLOAT);
+                $resolvedPhpType = PhpTypes::FLOAT;
                 break;
             case $field instanceof EnumField:
             case $field instanceof TextField:
             case $field instanceof BinaryField:
             case $field instanceof JsonField:
             case $field instanceof DateField:
-                $resolvedPhpType = new PhpTypes(PhpTypes::STRING);
+                $resolvedPhpType = PhpTypes::STRING;
                 break;
             case $field instanceof IntegerField:
             case $field instanceof YearField:
-                $resolvedPhpType = new PhpTypes(PhpTypes::INTEGER);
+                $resolvedPhpType = PhpTypes::INTEGER;
                 break;
             case $field instanceof DecimalField:
                 if ($field->getFractionalPrecision() === 0) {
-                    $resolvedPhpType = new PhpTypes(PhpTypes::INTEGER);
+                    $resolvedPhpType = PhpTypes::INTEGER;
                 } else {
-                    $resolvedPhpType = new PhpTypes(PhpTypes::FLOAT);
+                    $resolvedPhpType = PhpTypes::FLOAT;
                 }
                 break;
             default:

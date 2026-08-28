@@ -51,7 +51,7 @@ class PhpGetterGenerator
 
         $this->output->addLine('/**', 4);
         $this->output->addLine(
-            sprintf('* @return %s', (string) $this->property->getType()->getType() . $nullableText),
+            sprintf('* @return %s', $this->property->getType()->getType()->value . $nullableText),
             5
         );
         $this->output->addLine('*/', 5);
@@ -62,7 +62,7 @@ class PhpGetterGenerator
         $type  = $this->property->getType();
         $returnType = '';
         if ($this->config->shouldTypeHint()) {
-            $returnType = ': ' . ($type->isNullable() === true ? '?' : '') . (string) $type->getType();
+            $returnType = ': ' . ($type->isNullable() === true ? '?' : '') . $type->getType()->value;
         }
 
         $functionName = 'get' . ucfirst($this->property->getName());

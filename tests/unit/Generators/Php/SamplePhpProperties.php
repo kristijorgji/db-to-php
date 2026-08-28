@@ -16,8 +16,8 @@ trait SamplePhpProperties
     public static function getSampleProperty() : PhpProperty
     {
         return new PhpProperty(
-            new PhpAccessModifiers(PhpAccessModifiers::PUBLIC),
-            new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
+            PhpAccessModifiers::PUBLIC,
+            new PhpType(PhpTypes::INTEGER, true),
             'testProperty'
         );
     }
@@ -29,23 +29,23 @@ trait SamplePhpProperties
     {
         return new PhpPropertiesCollection(... [
             new PhpProperty(
-                new PhpAccessModifiers(PhpAccessModifiers::PUBLIC),
-                new PhpType(new PhpTypes(PhpTypes::FLOAT), true),
+                PhpAccessModifiers::PUBLIC,
+                new PhpType(PhpTypes::FLOAT, true),
                 'salary'
             ),
             new PhpProperty(
-                new PhpAccessModifiers(PhpAccessModifiers::PRIVATE),
-                new PhpType(new PhpTypes(PhpTypes::BOOL), false),
+                PhpAccessModifiers::PRIVATE,
+                new PhpType(PhpTypes::BOOL, false),
                 'active'
             ),
             new PhpProperty(
-                new PhpAccessModifiers(PhpAccessModifiers::PROTECTED),
-                new PhpType(new PhpTypes(PhpTypes::STRING), true),
+                PhpAccessModifiers::PROTECTED,
+                new PhpType(PhpTypes::STRING, true),
                 'name'
             ),
             new PhpProperty(
-                new PhpAccessModifiers(PhpAccessModifiers::PRIVATE),
-                new PhpType(new PhpTypes(PhpTypes::INTEGER), true),
+                PhpAccessModifiers::PRIVATE,
+                new PhpType(PhpTypes::INTEGER, true),
                 'year'
             )
         ]);

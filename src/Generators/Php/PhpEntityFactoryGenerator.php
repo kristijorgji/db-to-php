@@ -66,7 +66,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
     {
         if ($this->config->shouldIncludeAnnotations()) {
             $propertyAnnotationGenerator = new PhpPropertyAnnotationGenerator(
-                new PhpType(new PhpTypes(PhpTypes::ARRAY), false)
+                new PhpType(PhpTypes::ARRAY, false)
             );
             $this->output->add($propertyAnnotationGenerator->generate());
         }
@@ -108,7 +108,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
      */
     private function addMakeFunctionAnnotations()
     {
-        $arrayType = new PhpType(new PhpTypes(new PhpTypes(PhpTypes::ARRAY)), false);
+        $arrayType = new PhpType(PhpTypes::ARRAY, false);
         $returnType = new PhpObjectType(false, $this->entityClassName);
 
         $methodAnnotationGenerator = new PhpMethodAnnotationGenerator(
@@ -208,7 +208,7 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
      */
     private function addMakeDataFunctionAnnotations()
     {
-        $arrayType = new PhpType(new PhpTypes(new PhpTypes(PhpTypes::ARRAY)), false);
+        $arrayType = new PhpType(PhpTypes::ARRAY, false);
         $methodAnnotationGenerator = new PhpMethodAnnotationGenerator(
             new PhpFunctionParametersCollection(... [
                 new PhpFunctionParameter('data', $arrayType)
