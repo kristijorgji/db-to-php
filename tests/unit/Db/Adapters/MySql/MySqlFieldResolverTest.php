@@ -42,13 +42,12 @@ class MySqlFieldResolverTest extends TestCase
         $this->assertInstanceOf(TextField::class, $actual);
     }
 
-    /**
-     * @dataProvider resolveFieldProvider
-     * @param string $name
+    /**     * @param string $name
      * @param string $type
      * @param string $null
      * @param Field $expectedField
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('resolveFieldProvider')]
     public function testResolveField(string $name, string $type, string $null, Field $expectedField)
     {
         $actualField = $this->fieldResolver->resolveField(
@@ -60,7 +59,7 @@ class MySqlFieldResolverTest extends TestCase
         $this->assertEquals($expectedField, $actualField);
     }
 
-    public function resolveFieldProvider()
+    public static function resolveFieldProvider()
     {
         $name = self::randomString(4);
 

@@ -53,10 +53,7 @@ class InitCommand extends Command
 
         $contents = file_get_contents(basePath(AppInfo::DEFAULT_CONFIG_FILENAME));
 
-        $wasWritten = false;
-        try {
-            $wasWritten = file_put_contents($filePath, $contents);
-        } catch (\Exception $e) {}
+        $wasWritten = @file_put_contents($filePath, $contents);
 
         if (!$wasWritten) {
             throw new \RuntimeException(sprintf(

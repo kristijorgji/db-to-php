@@ -14,12 +14,11 @@ class PhpPropertyGeneratorTest extends TestCase
 {
     use SamplePhpProperties;
 
-    /**
-     * @dataProvider generateProvider
-     * @param PhpProperty $property
+    /**     * @param PhpProperty $property
      * @param PhpPropertyGeneratorConfig $config
      * @param string $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('generateProvider')]
     public function testGenerate(
         PhpProperty $property,
         PhpPropertyGeneratorConfig $config,
@@ -30,18 +29,18 @@ class PhpPropertyGeneratorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function generateProvider()
+    public static function generateProvider()
     {
         $expected = self::getExpected(__DIR__ . '/expected/property_generator.txt');
 
         return [
             'no_annotations' => [
-                $this->getSampleProperty(),
+                self::getSampleProperty(),
                 new PhpPropertyGeneratorConfig(false, false),
                 $expected['no_annotations']
             ],
             'with_annotations_nullable' => [
-                $this->getSampleProperty(),
+                self::getSampleProperty(),
                 new PhpPropertyGeneratorConfig(true, false),
                 $expected['with_annotations_nullable']
             ],

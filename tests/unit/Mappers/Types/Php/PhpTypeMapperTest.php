@@ -32,11 +32,7 @@ class PhpTypeMapperTest extends TestCase
         $this->mapper = new PhpTypeMapper();
     }
 
-    /**
-     * @dataProvider mapProvider
-     * @param Field $field
-     * @param $expectedType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapProvider')]
     public function testMap(Field $field, $expectedType)
     {
         $actualType = $this->mapper->map($field);
@@ -50,7 +46,7 @@ class PhpTypeMapperTest extends TestCase
         $this->mapper->map($field);
     }
 
-    public function mapProvider()
+    public static function mapProvider()
     {
         $name = self::randomString(2);
 
