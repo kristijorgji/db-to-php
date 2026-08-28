@@ -1,16 +1,14 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Data;
 
 use Entities\Test2Entity;
 use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
+use function rand;
 
 class Test2EntityFactory extends AbstractEntityFactory
 {
-    /**
-     * @var array
-     */
-    protected static $fields = [
+    protected static array $fields = [
         'id',
         'name',
         'surname',
@@ -23,29 +21,17 @@ class Test2EntityFactory extends AbstractEntityFactory
         'f',
     ];
 
-    /**
-     * @param array $data
-     * @return Test2Entity
-     */
     public static function make(array $data = []) : Test2Entity
     {
         return self::makeFromData(self::makeData($data));
     }
 
-    /**
-     * @param array $data
-     * @return Test2Entity
-     */
     public static function makeFromData(array $data) : Test2Entity
     {
         self::validateData($data);
         return self::mapArrayToEntity($data, Test2Entity::class);
     }
 
-    /**
-     * @param array $data
-     * @return array
-     */
     public static function makeData(array $data = []) : array
     {
         self::validateData($data);

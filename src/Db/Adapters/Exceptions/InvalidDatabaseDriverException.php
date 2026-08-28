@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Db\Adapters\Exceptions;
 
-class InvalidDatabaseDriverException extends \Exception
+use Exception;
+
+class InvalidDatabaseDriverException extends Exception
 {
 
 }

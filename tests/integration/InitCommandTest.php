@@ -1,72 +1,60 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\IntegrationTests;
 
 use kristijorgji\DbToPhp\AppInfo;
 use kristijorgji\DbToPhp\Console\DbToPhpApplication;
-use kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions\UnknownMySqlTypeException;
 use kristijorgji\DbToPhp\FileSystem\FileSystem;
 use kristijorgji\Tests\Helpers\CommandTestCaseHelper;
 use kristijorgji\Tests\Helpers\TestCase;
+use function chdir;
+use function dirname;
+use function getcwd;
+use function preg_replace;
+use function sprintf;
+use function unlink;
+use const DIRECTORY_SEPARATOR;
 
 class InitCommandTest extends TestCase
 {
     use CommandTestCaseHelper;
 
-    /**
-     * @var FileSystem
-     */
-    private $fileSystem;
+    private FileSystem $fileSystem;
+    private string $originalCwd;
+    private DbToPhpApplication $consoleApp;
+    private string $command;
 
-    /**
-     * @var string
-     */
-    private $originalCwd;
-
-    /**
-     * @var DbToPhpApplication
-     */
-    private $consoleApp;
-
-    /**
-     * @var string
-     */
-    private $command;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->fileSystem = new FileSystem();
-        $this->consoleApp = new DbToPhpApplication();
+        $this->fileSystem = new FileSystem;
+        $this->consoleApp = new DbToPhpApplication;
         $this->originalCwd = getcwd();
         $this->command = 'init';
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         chdir($this->originalCwd);
     }
 
-    public function testInit_without_path()
+    public function testInit_without_path(): void
     {
         chdir(dirname(__FILE__));
 
         $this->runCommand(
             $this->consoleApp,
-            sprintf('%s', $this->command)
+            sprintf('%s', $this->command),
         );
 
         $expectedConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . AppInfo::DEFAULT_CONFIG_FILENAME;
         $this->assertTrue(
-            $this->fileSystem->exists($expectedConfigFilePath)
+            $this->fileSystem->exists($expectedConfigFilePath),
         );
 
         unlink($expectedConfigFilePath);
     }
 
-    /**
-     * @param bool $deleteConfigAfter
-     */
-    public function testInit_with_path(bool $deleteConfigAfter = true)
+    public function testInit_with_path(bool $deleteConfigAfter = true): void
     {
         chdir(__DIR__ . '/../');
 
@@ -74,12 +62,11 @@ class InitCommandTest extends TestCase
 
         $this->runCommand(
             $this->consoleApp,
-            sprintf('%s %s', $this->command, 'integration')
+            sprintf('%s %s', $this->command, 'integration'),
         );
 
-
         $this->assertTrue(
-            $this->fileSystem->exists($expectedConfigFilePath)
+            $this->fileSystem->exists($expectedConfigFilePath),
         );
 
         if ($deleteConfigAfter) {
@@ -87,7 +74,7 @@ class InitCommandTest extends TestCase
         }
     }
 
-    public function testInit_already_exists()
+    public function testInit_already_exists(): void
     {
         chdir(dirname(__FILE__));
 
@@ -96,7 +83,7 @@ class InitCommandTest extends TestCase
 
         $output = $this->runCommand(
             $this->consoleApp,
-            sprintf('%s', $this->command)
+            sprintf('%s', $this->command),
         );
 
         $normalizedOutput = preg_replace('/\s+/', ' ', $output);
@@ -105,13 +92,13 @@ class InitCommandTest extends TestCase
         unlink($expectedConfigFilePath);
     }
 
-    public function testInit_not_existing_directory()
+    public function testInit_not_existing_directory(): void
     {
         chdir(dirname(__FILE__));
 
         $output = $this->runCommand(
             $this->consoleApp,
-            sprintf('%s %s', $this->command, self::randomString() . DIRECTORY_SEPARATOR . self::randomString())
+            sprintf('%s %s', $this->command, self::randomString() . DIRECTORY_SEPARATOR . self::randomString()),
         );
 
         $normalizedOutput = preg_replace('/\s+/', ' ', $output);

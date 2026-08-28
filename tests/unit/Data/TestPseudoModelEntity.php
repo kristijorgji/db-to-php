@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Data;
 
@@ -6,28 +6,12 @@ use kristijorgji\DbToPhp\Data\AbstractEntity;
 
 class TestPseudoModelEntity extends AbstractEntity
 {
-    /**
-     * @var int
-     */
-    protected $id;
+    protected int $id = 0;
+    protected ?string $name = null;
+    protected ?string $surname = null;
+    protected bool $isWorking = false;
 
     /**
-     * @var string|null
-     */
-    protected $name;
-
-    /**
-     * @var string|null
-     */
-    protected $surname;
-
-    /**
-     * @var bool
-     */
-    protected $isWorking;
-
-    /**
-     * @param int $id
      * @return $this
      */
     public function setId(int $id)
@@ -37,16 +21,12 @@ class TestPseudoModelEntity extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getId() : int
     {
         return $this->id;
     }
 
     /**
-     * @param string|null $name
      * @return $this
      */
     public function setName(?string $name)
@@ -56,16 +36,12 @@ class TestPseudoModelEntity extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getName() : ?string
     {
         return $this->name;
     }
 
     /**
-     * @param string|null $surname
      * @return $this
      */
     public function setSurname(?string $surname)
@@ -75,16 +51,12 @@ class TestPseudoModelEntity extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSurname() : ?string
     {
         return $this->surname;
     }
 
     /**
-     * @param bool $isWorking
      * @return $this
      */
     public function setIsWorking(bool $isWorking)
@@ -94,9 +66,6 @@ class TestPseudoModelEntity extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function getIsWorking() : bool
     {
         return $this->isWorking;

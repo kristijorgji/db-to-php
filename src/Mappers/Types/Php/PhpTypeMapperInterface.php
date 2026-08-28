@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Mappers\Types\Php;
 
@@ -9,8 +9,6 @@ use kristijorgji\DbToPhp\Rules\Php\PhpType;
 interface PhpTypeMapperInterface
 {
     /**
-     * @param Field $field
-     * @return PhpType
      * @throws UnknownDatabaseFieldTypeException
      */
     public function map(Field $field) : PhpType;

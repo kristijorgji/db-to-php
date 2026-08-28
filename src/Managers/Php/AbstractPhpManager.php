@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Managers\Php;
 
@@ -7,51 +7,20 @@ use kristijorgji\DbToPhp\Db\TablesCollection;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
 use kristijorgji\DbToPhp\Managers\Exceptions\TableDoesNotExistException;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
+use function array_key_exists;
+use function array_pop;
+use function explode;
 
 class AbstractPhpManager
 {
-    /**
-     * @var DatabaseAdapterInterface
-     */
-    protected $databaseAdapter;
-
-    /**
-     * @var PhpTypeMapperInterface
-     */
-    protected $typeMapper;
-
-    /**
-     * @var FileSystemInterface
-     */
-    protected $fileSystem;
-
-    /**
-     * @var bool
-     */
-    protected $typeHint;
-
-    /**
-     * @param DatabaseAdapterInterface $databaseAdapter
-     * @param PhpTypeMapperInterface $typeMapper
-     * @param FileSystemInterface $fileSystem
-     * @param bool $typeHint
-     */
     public function __construct(
-        DatabaseAdapterInterface $databaseAdapter,
-        PhpTypeMapperInterface $typeMapper,
-        FileSystemInterface $fileSystem,
-        bool $typeHint
+        protected DatabaseAdapterInterface $databaseAdapter,
+        protected PhpTypeMapperInterface $typeMapper,
+        protected FileSystemInterface $fileSystem,
+        protected bool $typeHint,
     ) {
-        $this->databaseAdapter = $databaseAdapter;
-        $this->typeMapper = $typeMapper;
-        $this->fileSystem = $fileSystem;
-        $this->typeHint = $typeHint;
     }
 
-    /**
-     * @param string $qualifiedClassName
-     * @return string
-     */
     public function stripClassName(string $qualifiedClassName) : string
     {
         $parts = explode('\\', $qualifiedClassName);
@@ -59,9 +28,7 @@ class AbstractPhpManager
     }
 
     /**
-     * @param TablesCollection $tables
-     * @param string[] $selectedTableNames
-     * @return TablesCollection
+     * @param array<string> $selectedTableNames
      * @throws TableDoesNotExistException
      */
     public function filterTables(TablesCollection $tables, array $selectedTableNames) : TablesCollection
@@ -84,10 +51,6 @@ class AbstractPhpManager
         return new TablesCollection(...$selectedTables);
     }
 
-    /**
-     * @param TablesCollection $tablesCollection
-     * @return array
-     */
     protected function formTablesMap(TablesCollection $tablesCollection) : array
     {
         $tablesMap = [];

@@ -1,13 +1,17 @@
-<?php
+<?php declare(strict_types = 1);
+
+use kristijorgji\DbToPhp\DatabaseDrivers;
+use kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers;
+use kristijorgji\Tests\Helpers\MySqlTestCase;
 
 return [
     'typeHint' => true,
-    'databaseDriver' => kristijorgji\DbToPhp\DatabaseDrivers::MYSQL,
-    'connection' => \kristijorgji\Tests\Helpers\MySqlTestCase::$mysqlConnection,
+    'databaseDriver' => DatabaseDrivers::MYSQL,
+    'connection' => MySqlTestCase::$mysqlConnection,
     'entities' => [
         'includeTables' => ['*'],
         'tableToEntityClassName' => [
-            'test' => 'SuperEntity'
+            'test' => 'SuperEntity',
         ],
         'outputDirectory' => __DIR__ . '/output/entities/actual',
         'namespace' => 'Entities',
@@ -16,17 +20,17 @@ return [
         'includeGetters' => true,
         'fluentSetters' => true,
         'properties' => [
-            'accessModifier' => \kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers::PRIVATE
+            'accessModifier' => PhpAccessModifiers::PRIVATE,
         ],
-        'trackChangesFor' => []
+        'trackChangesFor' => [],
     ],
     'factories' => [
         'includeTables' => ['*'],
         'tableToEntityFactoryClassName' => [
-            'test' => 'SuperEntityFactory'
+            'test' => 'SuperEntityFactory',
         ],
         'outputDirectory' => __DIR__ . '/output/factories/actual',
         'namespace' => 'Factories\Entities',
-        'includeAnnotations' => true
-    ]
+        'includeAnnotations' => true,
+    ],
 ];

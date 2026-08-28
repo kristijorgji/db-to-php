@@ -1,25 +1,19 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Managers;
 
 class GenerateResponse
 {
     /**
-     * @var string[]
+     * @var array<string>
      */
-    private $generatedFilesPaths = [];
+    private array $generatedFilesPaths = [];
 
-    /**
-     * @param string $path
-     */
-    public function addPath(string $path)
+    public function addPath(string $path): void
     {
         $this->generatedFilesPaths[] = $path;
     }
 
-    /**
-     * @return array
-     */
     public function getPaths() : array
     {
         return $this->generatedFilesPaths;

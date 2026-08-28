@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Config\Exceptions;
 
-class ConfigParserException extends \Exception
+use Exception;
+
+class ConfigParserException extends Exception
 {
 
 }

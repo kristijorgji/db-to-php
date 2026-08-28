@@ -1,61 +1,21 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Data;
 
 class Test2Entity
 {
-    /**
-     * @var int
-     */
-    private $id;
+    private int $id;
+    private ?string $name = null;
+    private ?string $surname = null;
+    private bool $isWorking;
+    private ?float $salary = null;
+    private ?float $discount = null;
+    private ?float $newColumn = null;
+    private ?string $dddd = null;
+    private ?string $binaeraylk = null;
+    private ?string $f = null;
 
     /**
-     * @var string|null
-     */
-    private $name;
-
-    /**
-     * @var string|null
-     */
-    private $surname;
-
-    /**
-     * @var bool
-     */
-    private $isWorking;
-
-    /**
-     * @var float|null
-     */
-    private $salary;
-
-    /**
-     * @var float|null
-     */
-    private $discount;
-
-    /**
-     * @var float|null
-     */
-    private $newColumn;
-
-    /**
-     * @var string|null
-     */
-    private $dddd;
-
-    /**
-     * @var string|null
-     */
-    private $binaeraylk;
-
-    /**
-     * @var string|null
-     */
-    private $f;
-
-    /**
-     * @param int $id
      * @return $this
      */
     public function setId(int $id)
@@ -64,16 +24,12 @@ class Test2Entity
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getId() : int
     {
         return $this->id;
     }
 
     /**
-     * @param string|null $name
      * @return $this
      */
     public function setName(?string $name)
@@ -82,16 +38,12 @@ class Test2Entity
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getName() : ?string
     {
         return $this->name;
     }
 
     /**
-     * @param string|null $surname
      * @return $this
      */
     public function setSurname(?string $surname)
@@ -100,16 +52,12 @@ class Test2Entity
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSurname() : ?string
     {
         return $this->surname;
     }
 
     /**
-     * @param bool $isWorking
      * @return $this
      */
     public function setIsWorking(bool $isWorking)
@@ -118,16 +66,12 @@ class Test2Entity
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function getIsWorking() : bool
     {
         return $this->isWorking;
     }
 
     /**
-     * @param float|null $salary
      * @return $this
      */
     public function setSalary(?float $salary)
@@ -136,16 +80,12 @@ class Test2Entity
         return $this;
     }
 
-    /**
-     * @return float|null
-     */
     public function getSalary() : ?float
     {
         return $this->salary;
     }
 
     /**
-     * @param float|null $discount
      * @return $this
      */
     public function setDiscount(?float $discount)
@@ -154,16 +94,12 @@ class Test2Entity
         return $this;
     }
 
-    /**
-     * @return float|null
-     */
     public function getDiscount() : ?float
     {
         return $this->discount;
     }
 
     /**
-     * @param float|null $newColumn
      * @return $this
      */
     public function setNewColumn(?float $newColumn)
@@ -172,16 +108,12 @@ class Test2Entity
         return $this;
     }
 
-    /**
-     * @return float|null
-     */
     public function getNewColumn() : ?float
     {
         return $this->newColumn;
     }
 
     /**
-     * @param string|null $dddd
      * @return $this
      */
     public function setDddd(?string $dddd)
@@ -190,16 +122,12 @@ class Test2Entity
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDddd() : ?string
     {
         return $this->dddd;
     }
 
     /**
-     * @param string|null $binaeraylk
      * @return $this
      */
     public function setBinaeraylk(?string $binaeraylk)
@@ -208,16 +136,12 @@ class Test2Entity
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getBinaeraylk() : ?string
     {
         return $this->binaeraylk;
     }
 
     /**
-     * @param string|null $f
      * @return $this
      */
     public function setF(?string $f)
@@ -226,9 +150,6 @@ class Test2Entity
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getF() : ?string
     {
         return $this->f;

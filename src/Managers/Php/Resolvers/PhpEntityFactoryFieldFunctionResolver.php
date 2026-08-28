@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Managers\Php\Resolvers;
 
+use InvalidArgumentException;
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
 use kristijorgji\DbToPhp\Db\Fields\DateField;
@@ -14,13 +15,12 @@ use kristijorgji\DbToPhp\Db\Fields\IntegerField;
 use kristijorgji\DbToPhp\Db\Fields\JsonField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Db\Fields\YearField;
+use function addslashes;
+use function get_class;
+use function sprintf;
 
 class PhpEntityFactoryFieldFunctionResolver
 {
-    /**
-     * @param Field $field
-     * @return string
-     */
     public function resolve(Field $field) : string
     {
         switch (true)
@@ -46,17 +46,13 @@ class PhpEntityFactoryFieldFunctionResolver
             case $field instanceof DecimalField:
                 return $this->resolveDecimal($field);
             default:
-                throw new \InvalidArgumentException(
-                    sprintf('Field %s do not have generator functions yet!', get_class($field))
+                throw new InvalidArgumentException(
+                    sprintf('Field %s do not have generator functions yet!', get_class($field)),
                 );
 
         }
     }
 
-    /**
-     * @param IntegerField $field
-     * @return string
-     */
     private function resolveInteger(IntegerField $field) : string
     {
         $lengthLimit = $field->getLengthInBits();
@@ -85,7 +81,7 @@ class PhpEntityFactoryFieldFunctionResolver
         return 'self::randomInt32()';
     }
 
-    private function resolveDecimal(DecimalField $field)
+    private function resolveDecimal(DecimalField $field): string
     {
         if ($field->getFractionalPrecision() === 0) {
             if ($field->isSigned()) {
@@ -98,20 +94,12 @@ class PhpEntityFactoryFieldFunctionResolver
         return sprintf('self::randomFloat(%s)', $field->getFractionalPrecision());
     }
 
-    /**
-     * @param Field $field
-     * @return string
-     */
     private function resolveString(Field $field) : string
     {
         $lengthLimit = $field->getLengthInBytes();
         return sprintf('self::randomString(rand(0, %s))', $lengthLimit);
     }
 
-    /**
-     * @param EnumField $enum
-     * @return string
-     */
     private function resolveEnum(EnumField $enum) : string
     {
         $args = '';
@@ -126,7 +114,7 @@ class PhpEntityFactoryFieldFunctionResolver
 
         return sprintf(
             'self::chooseRandomString(%s)',
-            $args
+            $args,
         );
     }
 }

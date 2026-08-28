@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Db\Adapters\MySql;
 
@@ -11,38 +11,36 @@ use kristijorgji\DbToPhp\Db\Fields\IntegerField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\MySqlTestCase;
+use function in_array;
 
 class MySqlAdapterTest extends MySqlTestCase
 {
-    /**
-     * @var MySqlAdapter
-     */
-    private $databaseAdapter;
+    private ?MySqlAdapter $databaseAdapter = null;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->databaseAdapter = new MySqlAdapter(
             self::$mysqlConnection['host'],
-            self::$mysqlConnection['port'],
+            (int) self::$mysqlConnection['port'],
             self::$mysqlConnection['database'],
             self::$mysqlConnection['username'],
-            self::$mysqlConnection['password']
+            self::$mysqlConnection['password'],
         );
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->databaseAdapter = null;
     }
 
-    public function testGetTables()
+    public function testGetTables(): void
     {
         $expectedTableNames = [
             'binarius',
             'special',
             'test',
             'test_2',
-            'times'
+            'times',
         ];
 
         $tables = $this->databaseAdapter->getTables();
@@ -51,7 +49,7 @@ class MySqlAdapterTest extends MySqlTestCase
         }
     }
 
-    public function testGetFields()
+    public function testGetFields(): void
     {
         $fields = $this->databaseAdapter->getFields('test');
         $expectedFields = new FieldsCollection(... [
@@ -61,12 +59,12 @@ class MySqlAdapterTest extends MySqlTestCase
             new EnumField(
                 'status',
                 false,
-                new StringCollection(... ['jaru', 'naru', 'daru'])
+                new StringCollection(... ['jaru', 'naru', 'daru']),
             ),
             new EnumField(
                 'super_status',
                 false,
-                new StringCollection(... ['1', '4', '111'])
+                new StringCollection(... ['1', '4', '111']),
             ),
             new BoolField('active',  false),
             new TextField('file',  false),
@@ -80,9 +78,6 @@ class MySqlAdapterTest extends MySqlTestCase
         $this->assertEquals($expectedFields, $fields);
     }
 
-    /**
-     * @return string
-     */
     public static function getDumpPath() : string
     {
         return __DIR__ . '/test-mysql-db.sql';

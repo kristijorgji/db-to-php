@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Mappers\Types\Php;
 
@@ -17,12 +17,12 @@ use kristijorgji\DbToPhp\Db\Fields\YearField;
 use kristijorgji\DbToPhp\Mappers\Types\Exceptions\UnknownDatabaseFieldTypeException;
 use kristijorgji\DbToPhp\Rules\Php\PhpType;
 use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
+use function get_class;
+use function sprintf;
 
 class PhpTypeMapper implements PhpTypeMapperInterface
 {
     /**
-     * @param Field $field
-     * @return PhpType
      * @throws UnknownDatabaseFieldTypeException
      */
     public function map(Field $field) : PhpType
@@ -59,7 +59,7 @@ class PhpTypeMapper implements PhpTypeMapperInterface
                 break;
             default:
                 throw new UnknownDatabaseFieldTypeException(
-                    sprintf('The field %s cannot be resolved to any internal type', get_class($field))
+                    sprintf('The field %s cannot be resolved to any internal type', get_class($field)),
                 );
         }
 

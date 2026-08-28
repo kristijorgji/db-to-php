@@ -1,15 +1,21 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Data;
 
 use DateTime;
+use InvalidArgumentException;
 use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
 use kristijorgji\DbToPhp\Data\Exceptions\InvalidEntityFactoryFieldException;
 use kristijorgji\Tests\Helpers\TestCase;
+use function array_map;
+use function in_array;
+use function rand;
+use function range;
+use function strlen;
 
 class AbstractEntityFactoryTest extends TestCase
 {
-    public function testValidateFields()
+    public function testValidateFields(): void
     {
         Test2EntityFactory::validateData([
             'id' => 'dummy',
@@ -26,49 +32,49 @@ class AbstractEntityFactoryTest extends TestCase
         self::expectNotToPerformAssertions();
     }
 
-    public function testValidateFields_invalid_field()
+    public function testValidateFields_invalid_field(): void
     {
         $this->expectException(InvalidEntityFactoryFieldException::class);
         Test2EntityFactory::validateData(['kari' => 2]);
     }
 
-    public function testMapArrayToEntity()
+    public function testMapArrayToEntity(): void
     {
         $data = Test2EntityFactory::makeData();
         $actual = AbstractEntityFactory::mapArrayToEntity($data, Test2Entity::class);
         $this->assertInstanceOf(Test2Entity::class, $actual);
     }
 
-    public function testRandomArray()
+    public function testRandomArray(): void
     {
         $actual = AbstractEntityFactory::randomArray();
         self::assertIsArray($actual);
     }
 
-    public function testRandomJson()
+    public function testRandomJson(): void
     {
         $actual = AbstractEntityFactory::randomJson();
         $this->assertJson($actual);
     }
 
-    public function testRandomBoolean()
+    public function testRandomBoolean(): void
     {
         $actual = AbstractEntityFactory::randomBoolean();
         self::assertIsBool($actual);
     }
 
-    public function testRandomDate()
+    public function testRandomDate(): void
     {
         $format = 'Y-m-d H:i:s';
 
         for ($i = 0; $i < 177; $i++) {
             $actual = AbstractEntityFactory::randomDate($format);
             $d = DateTime::createFromFormat($format, $actual);
-            $this->assertTrue($d && $d->format($format) == $actual);
+            $this->assertTrue($d && $d->format($format) === $actual);
         }
     }
 
-    public function testRandomInt8()
+    public function testRandomInt8(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomInt8();
@@ -76,7 +82,7 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomUnsignedInt8()
+    public function testRandomUnsignedInt8(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomUnsignedInt8();
@@ -84,7 +90,7 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomInt16()
+    public function testRandomInt16(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomInt16();
@@ -92,7 +98,7 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomUnsignedInt16()
+    public function testRandomUnsignedInt16(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomUnsignedInt16();
@@ -100,7 +106,7 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomInt24()
+    public function testRandomInt24(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomInt24();
@@ -108,7 +114,7 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomUnsignedInt24()
+    public function testRandomUnsignedInt24(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomUnsignedInt24();
@@ -116,7 +122,7 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomInt32()
+    public function testRandomInt32(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomInt32();
@@ -124,7 +130,7 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomUnsignedInt32()
+    public function testRandomUnsignedInt32(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomUnsignedInt32();
@@ -132,7 +138,7 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomInt64()
+    public function testRandomInt64(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomInt64();
@@ -140,7 +146,7 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomUnsignedInt64()
+    public function testRandomUnsignedInt64(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomUnsignedInt64();
@@ -148,15 +154,15 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomYear()
+    public function testRandomYear(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomYear(4);
-            $this->assertTrue($actual > 0 && strlen($actual) === 4);
+            $this->assertTrue($actual > 0 && strlen((string) $actual) === 4);
         }
     }
 
-    public function testRandomFloat()
+    public function testRandomFloat(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $nrDecimals = rand(2, 5);
@@ -167,13 +173,13 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomFloat_min_greater_then_max()
+    public function testRandomFloat_min_greater_then_max(): void
     {
         $actual = AbstractEntityFactory::randomFloat(rand(1, 4), 21, 7);
         self::assertIsFloat($actual);
     }
 
-    public function testRandomUnsignedNumber()
+    public function testRandomUnsignedNumber(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomUnsignedNumber();
@@ -181,7 +187,7 @@ class AbstractEntityFactoryTest extends TestCase
         }
     }
 
-    public function testRandomUnsignedNumber_fixed_digits_number()
+    public function testRandomUnsignedNumber_fixed_digits_number(): void
     {
         $nrDigits = rand(3, 7);
         $actual = AbstractEntityFactory::randomUnsignedNumber($nrDigits, true);
@@ -189,13 +195,13 @@ class AbstractEntityFactoryTest extends TestCase
         $this->assertTrue($actual > 0);
     }
 
-    public function testRandomUnsignedNumber_overflow()
+    public function testRandomUnsignedNumber_overflow(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         AbstractEntityFactory::randomUnsignedNumber(100000000000000);
     }
 
-    public function testRandomNumber()
+    public function testRandomNumber(): void
     {
         $foundNegative = false;
         $foundPositive = false;
@@ -213,7 +219,7 @@ class AbstractEntityFactoryTest extends TestCase
         $this->assertTrue($foundNegative && $foundPositive);
     }
 
-    public function testChooseRandomString()
+    public function testChooseRandomString(): void
     {
         $values = array_map(function () {
             return self::randomString(rand(1, 7));
@@ -224,7 +230,7 @@ class AbstractEntityFactoryTest extends TestCase
         $this->assertTrue(in_array($chosen, $values));
     }
 
-    public function testRandomString()
+    public function testRandomString(): void
     {
         $randomString = AbstractEntityFactory::randomString(0);
         $this->assertEquals('', $randomString);

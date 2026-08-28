@@ -1,16 +1,14 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\Tests\Factories\Generators;
 
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryField;
 use kristijorgji\Tests\Factories\BaseFactory;
-use kristijorgji\Tests\Factories\Rules\Php\PhpTypeFactory;
+use function count;
+use function rand;
 
 class PhpEntityFactoryFieldFactory extends BaseFactory
 {
-    /**
-     * @return PhpEntityFactoryField
-     */
     public static function make() : PhpEntityFactoryField
     {
         $resolvers = [
@@ -25,12 +23,12 @@ class PhpEntityFactoryFieldFactory extends BaseFactory
             'self::randomUnsignedInt32()',
             'self::randomUnsignedInt64()',
             'self::randomArray',
-            'self::randomString()'
+            'self::randomString()',
         ];
 
         return new PhpEntityFactoryField(
             self::faker()->text(20),
-            $resolvers[rand(0, count($resolvers) - 1)]
+            $resolvers[rand(0, count($resolvers) - 1)],
         );
     }
 }

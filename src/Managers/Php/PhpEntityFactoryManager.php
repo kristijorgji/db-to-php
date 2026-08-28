@@ -1,8 +1,7 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Managers\Php;
 
-use kristijorgji\DbToPhp\AppInfo;
 use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
 use kristijorgji\DbToPhp\Db\Fields\FieldsCollection;
@@ -14,72 +13,47 @@ use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryFieldsCollection;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryGenerator;
 use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
 use kristijorgji\DbToPhp\Managers\GenerateResponse;
+use kristijorgji\DbToPhp\Managers\Php\Resolvers\PhpEntityFactoryFieldFunctionResolver;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
 use kristijorgji\DbToPhp\Support\StringCollection;
-use kristijorgji\DbToPhp\Managers\Php\Resolvers\PhpEntityFactoryFieldFunctionResolver;
+use Throwable;
 
 class PhpEntityFactoryManager extends AbstractPhpManager
 {
-    /**
-     * @var array
-     */
-    private $config;
-
-    /**
-     * @var PhpEntityManager
-     */
-    private $entityManager;
-
-    /**
-     * @param DatabaseAdapterInterface $databaseAdapter
-     * @param PhpTypeMapperInterface $typeMapper
-     * @param FileSystemInterface $fileSystem
-     * @param bool $typeHint
-     * @param array $config
-     * @param PhpEntityManager $entityManager
-     */
     public function __construct(
         DatabaseAdapterInterface $databaseAdapter,
         PhpTypeMapperInterface $typeMapper,
         FileSystemInterface $fileSystem,
         bool $typeHint,
-        array $config,
-        PhpEntityManager $entityManager
-    )
-    {
+        private array $config,
+        private PhpEntityManager $entityManager,
+    ) {
         parent::__construct($databaseAdapter, $typeMapper, $fileSystem, $typeHint);
-        $this->entityManager = $entityManager;
-        $this->config = $config;
     }
 
     /**
-     * @return GenerateResponse
      * @throws GenerateException
      */
     public function generateFactories() : GenerateResponse
     {
-        $response = new GenerateResponse();
+        $response = new GenerateResponse;
 
         $tables = $this->filterTables(
             $this->databaseAdapter->getTables(),
-            $this->config['includeTables']
+            $this->config['includeTables'],
         )->all();
 
         try {
             foreach ($tables as $table) {
                 $response->addPath($this->generateFactory($table->getName()));
             }
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             throw new GenerateException($e->getMessage(), $e, $response);
         }
 
         return $response;
     }
 
-    /**
-     * @param string $tableName
-     * @return string
-     */
     public function generateFactory(string $tableName) : string
     {
         $entityClassName = $this->entityManager->formClassName($tableName);
@@ -94,15 +68,15 @@ class PhpEntityFactoryManager extends AbstractPhpManager
                     $className,
                     new StringCollection(... [
                         AbstractEntityFactory::class,
-                        $fullyQualifiedEntityClassName
+                        $fullyQualifiedEntityClassName,
                     ]),
-                    $this->stripClassName(AbstractEntityFactory::class)
+                    $this->stripClassName(AbstractEntityFactory::class),
                 ),
                 $this->typeHint,
-                $this->config['includeAnnotations']
+                $this->config['includeAnnotations'],
             ),
             $this->formGeneratorFieldsDetails($fields),
-            $entityClassName
+            $entityClassName,
         );
 
         $entityFactoryFileAsString = $entityFactoryGenerator->generate();
@@ -116,17 +90,12 @@ class PhpEntityFactoryManager extends AbstractPhpManager
 
         $this->fileSystem->write(
             $outputPath,
-            $entityFactoryFileAsString
+            $entityFactoryFileAsString,
         );
 
         return $outputPath;
     }
 
-    /**
-     * @param string $tableName
-     * @param string $entityClassName
-     * @return string
-     */
     public function formClassName(string $tableName, string $entityClassName) : string
     {
         if (!isset($this->config['tableToEntityFactoryClassName'][$tableName])) {
@@ -136,20 +105,15 @@ class PhpEntityFactoryManager extends AbstractPhpManager
         return $this->config['tableToEntityFactoryClassName'][$tableName];
     }
 
-    /**
-     * @param FieldsCollection $fields
-     * @return PhpEntityFactoryFieldsCollection
-     */
     public function formGeneratorFieldsDetails(FieldsCollection $fields) : PhpEntityFactoryFieldsCollection
     {
         $generatorFields = [];
-        $fieldResolver = new PhpEntityFactoryFieldFunctionResolver();
-
+        $fieldResolver = new PhpEntityFactoryFieldFunctionResolver;
 
         foreach ($fields->all() as $field) {
             $generatorFields[] = new PhpEntityFactoryField(
                 $field->getName(),
-                $fieldResolver->resolve($field)
+                $fieldResolver->resolve($field),
             );
         }
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Data;
 
@@ -6,9 +6,9 @@ use kristijorgji\Tests\Helpers\TestCase;
 
 class AbstractEntityTest extends TestCase
 {
-    public function testAll()
+    public function testAll(): void
     {
-        $testEntity = new TestPseudoModelEntity();
+        $testEntity = new TestPseudoModelEntity;
         $this->assertFalse($testEntity->isDirty());
         $this->assertEmpty($testEntity->dirtyFields());
 
@@ -19,9 +19,9 @@ class AbstractEntityTest extends TestCase
         $this->assertEquals(
             [
                 'id' => 4,
-                'is_working' => true
+                'is_working' => true,
             ],
-            $testEntity->dirtyFields()
+            $testEntity->dirtyFields(),
         );
 
         $testEntity->sync();
@@ -34,9 +34,9 @@ class AbstractEntityTest extends TestCase
         $this->assertEquals(
             [
                 'is_working' => false,
-                'surname' => 'Jorgji'
+                'surname' => 'Jorgji',
             ],
-            $testEntity->dirtyFields()
+            $testEntity->dirtyFields(),
         );
     }
 }

@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 /* dbToPhp
  *
  * (The MIT license)
@@ -22,6 +23,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
+use kristijorgji\DbToPhp\Console\DbToPhpApplication;
 
 $autoloader = require __DIR__ . '/../bootstrap/autoloader.php';
 
@@ -33,4 +35,4 @@ if (!$autoloader()) {
     );
 }
 
-return new \kristijorgji\DbToPhp\Console\DbToPhpApplication();
+return new DbToPhpApplication;

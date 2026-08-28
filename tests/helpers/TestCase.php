@@ -1,14 +1,17 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\Tests\Helpers;
 
 use DirectoryIterator;
+use function file_get_contents;
+use function in_array;
+use function sprintf;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
     use TestHelpers;
 
-    protected function assertFoldersContentMatch(string $expectedDirectory, string $actualDirectory)
+    protected function assertFoldersContentMatch(string $expectedDirectory, string $actualDirectory): void
     {
         $expectedFiles = [];
 
@@ -25,8 +28,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
                     sprintf(
                         'File %s was not expected in directory %s !',
                         $fileInfo->getFilename(),
-                        $actualDirectory
-                    )
+                        $actualDirectory,
+                    ),
                 );
             }
         }
@@ -37,7 +40,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
             $this->assertEquals(
                 file_get_contents($expectedFilePath),
                 file_get_contents($actualFilePath),
-                sprintf('File %s is different then %s !', $expectedFilePath, $actualFilePath)
+                sprintf('File %s is different then %s !', $expectedFilePath, $actualFilePath),
             );
         }
     }

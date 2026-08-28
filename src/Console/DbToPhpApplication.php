@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Console;
 
@@ -11,15 +11,15 @@ use kristijorgji\DbToPhp\FileSystem\FileSystem;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use function sprintf;
+use function str_repeat;
+use function strlen;
 
 class DbToPhpApplication extends Application
 {
-    /**
-     * @param string $version
-     */
-    public function __construct($version = AppInfo::VERSION)
+    public function __construct(string $version = AppInfo::VERSION)
     {
-        $configFactory = new ConfigFactory(new FileSystem());
+        $configFactory = new ConfigFactory(new FileSystem);
 
         parent::__construct(sprintf('%s by Kristi Jorgji - %s', AppInfo::NAME, $version));
         $this->addCommands([
@@ -30,8 +30,6 @@ class DbToPhpApplication extends Application
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
      * @return int 0 if everything went fine, or an error code
      */
     public function doRun(InputInterface $input, OutputInterface $output): int

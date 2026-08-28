@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\IntegrationTests\MySql\Php;
 
@@ -11,36 +11,22 @@ abstract class AbstractPhpTestCase extends MySqlTestCase
 {
     use CommandTestCaseHelper;
 
-    /**
-     * @var FileSystem
-     */
-    protected $fileSystem;
+    protected FileSystem $fileSystem;
+    protected string $actualOutputDirectory;
+    protected DbToPhpApplication $consoleApp;
 
-    /**
-     * @var string
-     */
-    protected $actualOutputDirectory;
-
-    /**
-     * @var DbToPhpApplication
-     */
-    protected $consoleApp;
-
-    /**
-     * @return string
-     */
     public static function getDumpPath() : string
     {
         return __DIR__ . '/../test-mysql-db.sql';
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->fileSystem = new FileSystem();
-        $this->consoleApp = new DbToPhpApplication();
+        $this->fileSystem = new FileSystem;
+        $this->consoleApp = new DbToPhpApplication;
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->fileSystem->emptyDirectory($this->actualOutputDirectory);
     }

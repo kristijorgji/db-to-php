@@ -1,51 +1,24 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Generators\Php;
 
 use kristijorgji\DbToPhp\Rules\Php\PhpFunctionParametersCollection;
-use kristijorgji\DbToPhp\Rules\Php\PhpObjectType;
 use kristijorgji\DbToPhp\Rules\Php\PhpType;
 use kristijorgji\DbToPhp\Support\TextBuffer;
+use function sprintf;
 
 class PhpMethodAnnotationGenerator
 {
-    /**
-     * @var PhpFunctionParametersCollection
-     */
-    private $parameters;
+    private TextBuffer $output;
 
-    /**
-     * @var PhpType|null
-     */
-    private $returnType;
-
-    /**
-     * @var bool
-     */
-    private $typeHint;
-
-    /**
-     * @var TextBuffer
-     */
-    private $output;
-
-    /**
-     * @param PhpFunctionParametersCollection $parameters
-     * @param PhpType|null $returnType
-     * @param bool $typeHint
-     */
-    public function __construct(PhpFunctionParametersCollection $parameters, ?PhpType $returnType, bool $typeHint)
-    {
-        $this->parameters = $parameters;
-        $this->returnType = $returnType;
-        $this->typeHint = $typeHint;
-        $this->output = new TextBuffer();
+    public function __construct(
+        private PhpFunctionParametersCollection $parameters,
+        private ?PhpType $returnType,
+        private bool $typeHint,
+    ) {
+        $this->output = new TextBuffer;
     }
 
-    /**
-     * @param int $indentationSpaces
-     * @return string
-     */
     public function generate(int $indentationSpaces = 4) : string
     {
         $this->output->addLine('/**', $indentationSpaces);
@@ -53,7 +26,7 @@ class PhpMethodAnnotationGenerator
         foreach ($this->parameters->all() as $argument) {
             $this->output->addLine(
                 sprintf('* @param %s $%s',Utils::resolveTypeForAnnotation($argument->getType()), $argument->getName()),
-                $indentationSpaces + 1
+                $indentationSpaces + 1,
             );
         }
 
@@ -65,7 +38,7 @@ class PhpMethodAnnotationGenerator
 
         $this->output->addLine(
             sprintf('* @return %s', $returnType),
-            5
+            5,
         );
 
         $this->output->addLine('*/', $indentationSpaces + 1);

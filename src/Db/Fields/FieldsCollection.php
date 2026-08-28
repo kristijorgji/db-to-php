@@ -1,24 +1,24 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Db\Fields;
 
 class FieldsCollection
 {
     /**
-     * @var Field[]
+     * @var array<Field>
      */
-    private $fields = [];
+    private array $fields = [];
 
     /**
-     * @param Field[] $fields
+     * @param Field<Field> $fields
      */
-    public function __construct(Field... $fields)
+    public function __construct(Field ... $fields)
     {
         $this->fields = $fields;
     }
 
     /**
-     * @return Field[]
+     * @return array<Field>
      */
     public function all() : array
     {

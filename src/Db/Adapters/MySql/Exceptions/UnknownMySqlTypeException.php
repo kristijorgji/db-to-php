@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions;
 
-class UnknownMySqlTypeException extends \Exception
+use Exception;
+
+class UnknownMySqlTypeException extends Exception
 {
 
 }

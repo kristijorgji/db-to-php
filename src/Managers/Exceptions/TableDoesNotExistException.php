@@ -1,28 +1,22 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Managers\Exceptions;
 
-class TableDoesNotExistException extends \Exception
-{
-    private $tableName;
+use Exception;
+use function sprintf;
 
-    /**
-     * @param string $tableName
-     */
-    public function __construct(string $tableName)
+class TableDoesNotExistException extends Exception
+{
+    public function __construct(private string $tableName)
     {
         parent::__construct(
             sprintf('The included table %s does not exist', $tableName),
             -77,
-            null
+            null,
         );
 
-        $this->tableName = $tableName;
     }
 
-    /**
-     * @return string
-     */
     public function getTableName(): string
     {
         return $this->tableName;

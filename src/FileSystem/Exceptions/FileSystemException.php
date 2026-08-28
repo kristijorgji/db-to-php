@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\FileSystem\Exceptions;
 
-class FileSystemException extends \Exception
+use Exception;
+
+class FileSystemException extends Exception
 {
 
 }

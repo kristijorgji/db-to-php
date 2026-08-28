@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Mappers\Types\Exceptions;
 
-class UnknownDatabaseFieldTypeException extends \Exception
+use Exception;
+
+class UnknownDatabaseFieldTypeException extends Exception
 {
 
 }

@@ -1,38 +1,38 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Managers\Php;
 
+use Exception;
 use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
 use kristijorgji\DbToPhp\Managers\GenerateResponse;
 use kristijorgji\DbToPhp\Managers\Php\PhpEntityFactoryManager;
 use kristijorgji\DbToPhp\Managers\Php\PhpEntityManager;
 use kristijorgji\Tests\Factories\Db\TablesCollectionFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use Throwable;
+use function array_map;
+use function count;
 
 class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
 {
-    /**
-     * @var array
-     */
-    protected $config;
+    protected array $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
-    private $entityManager;
+    private MockObject $entityManager;
 
-    /**
-     * @var PhpEntityFactoryManager
-     */
-    protected $manager;
+    protected PhpEntityFactoryManager $manager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->config = $this->config['factories'];
         $this->createManager();
     }
 
-    private function createManager()
+    private function createManager(): void
     {
         $this->entityManager = $this->getMockBuilder(PhpEntityManager::class)
             ->disableOriginalConstructor()
@@ -44,11 +44,11 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
             $this->fileSystem,
             $this->typeHint,
             $this->config,
-            $this->entityManager
+            $this->entityManager,
         );
     }
 
-    public function testGenerateFactories()
+    public function testGenerateFactories(): void
     {
         $this->selfPartialMock(['filterTables', 'generateFactory']);
 
@@ -80,7 +80,7 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
         $this->assertSame($expectedTableNames, $actualTableNames);
     }
 
-    public function testGenerateFactories_on_error()
+    public function testGenerateFactories_on_error(): void
     {
         $this->selfPartialMock(['filterTables', 'generateFactory']);
 
@@ -95,33 +95,30 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
             ->with($returnedTables)
             ->willReturn($returnedTables);
 
-
-        $partialResponse = new GenerateResponse();
+        $partialResponse = new GenerateResponse;
         $partialResponse->addPath('test');
 
         $this->manager->expects($this->once())
             ->method('generateFactory')
-            ->willThrowException(new \Exception());
+            ->willThrowException(new Exception);
 
         try {
             $this->manager->generateFactories();
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             $this->assertInstanceOf(GenerateException::class, $e);
         }
     }
 
     /**     * @param string $tableName
-     * @param string $entityClassName
-     * @param string $expected
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('formClassNameProvider')]
-    public function testFormClassName(string $tableName, string $entityClassName, string $expected)
+    #[DataProvider('formClassNameProvider')]
+    public function testFormClassName(string $tableName, string $entityClassName, string $expected): void
     {
         $actual = $this->manager->formClassName($tableName, $entityClassName);
         $this->assertEquals($expected, $actual);
     }
 
-    public static function formClassNameProvider()
+    public static function formClassNameProvider(): array
     {
         return [
             ['super', 'SuperEntity', 'SuperEntityFactory'],
@@ -129,7 +126,7 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
         ];
     }
 
-    public function testFormClassName_use_config()
+    public function testFormClassName_use_config(): void
     {
         $this->config['tableToEntityFactoryClassName']['some_specialTable'] = 'UseThisNameEntityFactory';
         $this->createManager();
@@ -137,7 +134,7 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
         $this->assertEquals('UseThisNameEntityFactory', $actual);
     }
 
-    private function selfPartialMock(array $methodsToMock)
+    private function selfPartialMock(array $methodsToMock): void
     {
         $this->manager = $this->getMockBuilder(PhpEntityFactoryManager::class)
             ->setConstructorArgs([
@@ -146,9 +143,8 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
                     $this->fileSystem,
                     $this->typeHint,
                     $this->config,
-                    $this->entityManager
-                ]
-            )
+                    $this->entityManager,
+                ])
             ->onlyMethods($methodsToMock)
             ->getMock();
     }

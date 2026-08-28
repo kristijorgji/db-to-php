@@ -1,26 +1,25 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\UnitTests\Generators\Php;
 
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpClassGeneratorConfig;
+use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpGetterGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpPropertyGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\Configs\PhpSetterGeneratorConfig;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityGenerator;
-use kristijorgji\DbToPhp\Generators\Php\Configs\PhpEntityGeneratorConfig;
-use kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers;
 use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PhpEntityGeneratorTest extends TestCase
 {
     use SamplePhpProperties;
 
     /**     * @param PhpEntityGeneratorConfig $config
-     * @param string $expected
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('generateProvider')]
-    public function testGenerate(PhpEntityGeneratorConfig $config, string $expected)
+    #[DataProvider('generateProvider')]
+    public function testGenerate(PhpEntityGeneratorConfig $config, string $expected): void
     {
         $properties = $this->getSampleProperties();
         $entityGenerator = new PhpEntityGenerator($config, $properties);
@@ -29,7 +28,7 @@ class PhpEntityGeneratorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public static function generateProvider()
+    public static function generateProvider(): array
     {
         $expected = self::getExpected(__DIR__ . '/expected/entity_generator.txt');
 
@@ -37,7 +36,7 @@ class PhpEntityGeneratorTest extends TestCase
             'MyApp\Entities',
             'TestEntity',
             new StringCollection(...[]),
-            null
+            null,
         );
 
         return [
@@ -50,11 +49,11 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpGetterGeneratorConfig(true, true),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        false
+                        false,
                     ),
-                    false
+                    false,
                 ),
-                $expected['no_setters_no_getters']
+                $expected['no_setters_no_getters'],
             ],
             'with_getters_and_setters' => [
                 new PhpEntityGeneratorConfig(
@@ -65,11 +64,11 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpGetterGeneratorConfig(true, true),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        false
+                        false,
                     ),
-                    false
+                    false,
                 ),
-                $expected['with_getters_and_setters']
+                $expected['with_getters_and_setters'],
             ],
             'only_getters' => [
                 new PhpEntityGeneratorConfig(
@@ -80,11 +79,11 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpGetterGeneratorConfig(true, true),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        false
+                        false,
                     ),
-                    false
+                    false,
                 ),
-                $expected['only_getters']
+                $expected['only_getters'],
             ],
             'only_setters' => [
                 new PhpEntityGeneratorConfig(
@@ -95,11 +94,11 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpGetterGeneratorConfig(true, true),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        false
+                        false,
                     ),
-                    false
+                    false,
                 ),
-                $expected['only_setters']
+                $expected['only_setters'],
             ],
             'track_changes' => [
                 new PhpEntityGeneratorConfig(
@@ -107,7 +106,7 @@ class PhpEntityGeneratorTest extends TestCase
                         'MyApp\Entities',
                         'TestEntity',
                         new StringCollection(...[]),
-                        null
+                        null,
                     ),
                     true,
                     true,
@@ -115,12 +114,12 @@ class PhpEntityGeneratorTest extends TestCase
                     new PhpGetterGeneratorConfig(true, true),
                     new PhpPropertyGeneratorConfig(
                         true,
-                        false
+                        false,
                     ),
-                    true
+                    true,
                 ),
-                $expected['track_changes_no_properties']
-            ]
+                $expected['track_changes_no_properties'],
+            ],
         ];
     }
 }

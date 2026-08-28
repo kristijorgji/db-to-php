@@ -1,28 +1,18 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Config;
 
 use kristijorgji\DbToPhp\Config\Exceptions\ConfigParserException;
 use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
+use function strtolower;
 
 class ConfigFactory
 {
-    /**
-     * @var FileSystemInterface
-     */
-    private $fileSystem;
-
-    /**
-     * @param FileSystemInterface $fileSystem
-     */
-    public function __construct(FileSystemInterface $fileSystem)
+    public function __construct(private FileSystemInterface $fileSystem)
     {
-        $this->fileSystem = $fileSystem;
     }
 
     /**
-     * @param string $path
-     * @return array
      * @throws ConfigParserException
      */
     public function get(string $path) : array

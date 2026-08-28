@@ -1,63 +1,57 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\Tests\Helpers;
 
-use DirectoryIterator;
 use Faker\Factory;
 use Faker\Generator;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
+use function base64_encode;
+use function explode;
+use function fclose;
+use function fgets;
+use function fopen;
+use function get_class;
+use function ltrim;
+use function preg_match;
+use function random_bytes;
+use function str_replace;
+use function strlen;
+use function substr;
+use const PHP_EOL;
 
 trait TestHelpers
 {
-    /**
-     * @var Generator
-     */
-    protected static $faker;
+    protected static ?Generator $faker = null;
 
-    /**
-     * @return Generator
-     */
     public static function faker() : Generator
     {
-        if (self::$faker != null) {
+        if (self::$faker !== null) {
             return self::$faker;
         }
 
         return Factory::create();
     }
 
-    /**
-     * @return int
-     */
     public static function uniqueUnsignedByte() : int
     {
         $unsignedInt8Max =  255;
         return self::faker()->unique()->numberBetween(0, $unsignedInt8Max);
     }
 
-    /**
-     * @return int
-     */
     public static function uniqueUnsignedInt16() : int
     {
         $unsignedInt16Max =  65535;
         return self::faker()->unique()->numberBetween(0, $unsignedInt16Max);
     }
 
-    /**
-     * @return int
-     */
     public static function uniqueUnsignedInt32() : int
     {
         $unsignedInt32Max =  4294967295;
         return self::faker()->unique()->numberBetween(0, $unsignedInt32Max);
     }
 
-    /**
-     * @return int
-     */
     public static function uniqueInt32() : int
     {
         $int32Max = 2147483647;
@@ -67,10 +61,8 @@ trait TestHelpers
     /**
      * Generate a more truly "random" alpha-numeric string.
      *
-     * @param  int  $length
-     * @return string
      */
-    public static function randomString($length = 16)
+    public static function randomString(int $length = 16): string
     {
         $string = '';
 
@@ -85,12 +77,7 @@ trait TestHelpers
         return $string;
     }
 
-    /**
-     * @param $instance
-     * @param string $propertyName
-     * @param $value
-     */
-    public static function setPrivateProperty($instance, string $propertyName, $value)
+    public static function setPrivateProperty(object $instance, string $propertyName, mixed $value): void
     {
         $property = self::getPrivateProperty(get_class($instance), $propertyName);
         $property->setValue($instance, $value);
@@ -99,36 +86,23 @@ trait TestHelpers
     /**
      * getPrivateProperty
      *
-     * @param   string $className
-     * @param   string $propertyName
-     * @return  ReflectionProperty
      */
-    public static function getPrivateProperty($className, $propertyName)
+    public static function getPrivateProperty(string $className, string $propertyName): ReflectionProperty
     {
         $reflector = new ReflectionClass($className);
-        $property = $reflector->getProperty($propertyName);
-
-        return $property;
+        return $reflector->getProperty($propertyName);
     }
 
-    /**
-     * @param $instance
-     * @param $name
-     * @return ReflectionMethod
-     */
-    public static function getPrivateMethod($instance, $name)
+    public static function getPrivateMethod(object|string $instance, string $name): ReflectionMethod
     {
         $class = new ReflectionClass($instance);
-        $method = $class->getMethod($name);
-        return $method;
+        return $class->getMethod($name);
     }
 
     /**
-     * @param $instance
-     * @param $name
-     * @return string[]
+     * @return array<string>
      */
-    public static function getMethodAnnotations($instance, $name) : array
+    public static function getMethodAnnotations(object|string $instance, string $name) : array
     {
         $class = new ReflectionClass($instance);
         $method = $class->getMethod($name);
@@ -147,11 +121,7 @@ trait TestHelpers
         return $processedAnnotations;
     }
 
-    /**
-     * @param $object
-     * @return array
-     */
-    public static function objectToArray($object)
+    public static function objectToArray(object $object): array
     {
         $reflectionClass = new ReflectionClass(get_class($object));
         $array = array();
@@ -161,10 +131,6 @@ trait TestHelpers
         return $array;
     }
 
-    /**
-     * @param string|null $path
-     * @return string
-     */
     public static function baseTestsPath(?string $path = null) : string
     {
         $basePath = __DIR__ . '/../';
@@ -176,10 +142,6 @@ trait TestHelpers
         return $basePath;
     }
 
-    /**
-     * @param string $path
-     * @return array
-     */
     public static function getExpected(string $path) : array
     {
         $handle = fopen($path, 'r');

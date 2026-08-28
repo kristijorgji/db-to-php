@@ -1,45 +1,29 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Generators\Php;
 
-use kristijorgji\DbToPhp\Rules\Php\PhpObjectType;
 use kristijorgji\DbToPhp\Rules\Php\PhpType;
 use kristijorgji\DbToPhp\Support\TextBuffer;
+use function sprintf;
 
 class PhpPropertyAnnotationGenerator
 {
-    /**
-     * @var PhpType
-     */
-    private $type;
+    private TextBuffer $output;
 
-    /**
-     * @var TextBuffer
-     */
-    private $output;
-
-    /**
-     * @param PhpType $type
-     */
-    public function __construct(PhpType $type)
+    public function __construct(private PhpType $type)
     {
-        $this->type = $type;
-        $this->output = new TextBuffer();
+        $this->output = new TextBuffer;
     }
 
-    /**
-     * @param int $indentationSpaces
-     * @return string
-     */
     public function generate(int $indentationSpaces = 4) : string
     {
         $this->output->addLine('/**', $indentationSpaces);
         $this->output->addLine(
             sprintf(
                 '* @var %s',
-                Utils::resolveTypeForAnnotation($this->type)
+                Utils::resolveTypeForAnnotation($this->type),
             ),
-            $indentationSpaces + 1
+            $indentationSpaces + 1,
         );
         $this->output->addLine('*/', $indentationSpaces + 1);
 

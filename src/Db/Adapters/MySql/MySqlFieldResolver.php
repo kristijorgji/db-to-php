@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Db\Adapters\MySql;
 
+use InvalidArgumentException;
 use kristijorgji\DbToPhp\Db\Adapters\MySql\Exceptions\UnknownMySqlTypeException;
 use kristijorgji\DbToPhp\Db\Fields\BinaryField;
 use kristijorgji\DbToPhp\Db\Fields\BoolField;
@@ -16,14 +17,12 @@ use kristijorgji\DbToPhp\Db\Fields\JsonField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Db\Fields\YearField;
 use kristijorgji\DbToPhp\Support\StringCollection;
+use function preg_match;
+use function strlen;
 
 class MySqlFieldResolver
 {
     /**
-     * @param string $name
-     * @param string $type
-     * @param string $null
-     * @return Field
      * @throws UnknownMySqlTypeException
      */
     public function resolveField(string $name, string $type, string $null) : Field
@@ -34,13 +33,13 @@ class MySqlFieldResolver
             return new EnumField(
                 $name,
                 $nullable,
-                $this->resolveEnumAllowedTypes($out[1])
+                $this->resolveEnumAllowedTypes($out[1]),
             );
         }
 
         if (preg_match('#^char\((\\d+)\)#i', $type, $captured)
             || preg_match('#^varchar\((\\d+)\)#i', $type, $captured)) {
-            return new TextField($name, $nullable, $captured[1]);
+            return new TextField($name, $nullable, (int) $captured[1]);
         }
 
         if (preg_match('#^(tiny|small|medium|long)*text#i', $type)
@@ -53,7 +52,7 @@ class MySqlFieldResolver
         }
 
         if (preg_match('#^year\((\d+)\)#i', $type, $captured)) {
-            return new YearField($name, $nullable, $captured[1]);
+            return new YearField($name, $nullable, (int) $captured[1]);
         }
 
         // TODO time type
@@ -77,15 +76,15 @@ class MySqlFieldResolver
 
         if (preg_match('#^binary\((\\d+)\)#i', $type, $captured)
             || preg_match('#^varbinary\((\\d+)\)#i', $type, $captured)) {
-            return new BinaryField($name, $nullable, $captured[1]);
+            return new BinaryField($name, $nullable, (int) $captured[1]);
         }
 
-        if (($type == 'tinyint(1)' || preg_match('#(?=^bit)#i', $type))) {
+        if (($type === 'tinyint(1)' || preg_match('#(?=^bit)#i', $type))) {
             return new BoolField($name, $nullable);
         } else if (preg_match('#^(tiny|small|medium|big)*int\(\d+\)( unsigned)?#i', $type, $captured)
             || preg_match('#^(tiny|small|medium|big)*int( unsigned)?#i', $type, $captured)) {
-            $signed = empty($captured[2]) ? true : false;
-            $length = $this->getIntLength(empty($captured[1])  ? 'int' : $captured[1]);
+            $signed = ($captured[2] ?? '') === '';
+            $length = $this->getIntLength(($captured[1] ?? '') === '' ? 'int' : $captured[1]);
             return new IntegerField($name, $nullable, $length, $signed);
         }
 
@@ -98,9 +97,9 @@ class MySqlFieldResolver
         }
 
         if (preg_match('#^decimal\((\d+),(\d+)\)( unsigned)?#', $type, $captured)) {
-            $signed = empty($captured[3]) ? true : false;
-            $decimalPrecision = $captured[1] - $captured[2];
-            return new DecimalField($name, $nullable, $decimalPrecision, $captured[2], $signed);
+            $signed = ($captured[3] ?? '') === '';
+            $decimalPrecision = (int) $captured[1] - (int) $captured[2];
+            return new DecimalField($name, $nullable, $decimalPrecision, (int) $captured[2], $signed);
         }
 
         /**
@@ -110,10 +109,6 @@ class MySqlFieldResolver
         return new TextField($name, $nullable);
     }
 
-    /**
-     * @param string $allowed
-     * @return StringCollection
-     */
     private function resolveEnumAllowedTypes(string $allowed) : StringCollection
     {
         $allowedLength = strlen($allowed);
@@ -141,9 +136,7 @@ class MySqlFieldResolver
     }
 
     /**
-     * @param string $type
-     * @return int
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function getIntLength(string $type) : int
     {
@@ -157,9 +150,9 @@ class MySqlFieldResolver
             case 'int':
                 return 32;
             case 'big':
-                return '64';
+                return 64;
             default:
-                throw new \InvalidArgumentException('Unrecognized mysql integer type ' . $type);
+                throw new InvalidArgumentException('Unrecognized mysql integer type ' . $type);
         }
     }
 }

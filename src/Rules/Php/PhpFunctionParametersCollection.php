@@ -1,28 +1,27 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Rules\Php;
 
 class PhpFunctionParametersCollection
 {
     /**
-     * @var PhpFunctionParameter[]
+     * @var array<PhpFunctionParameter>
      */
-    private $arguments = [];
+    private array $arguments = [];
 
     /**
-     * @param PhpFunctionParameter[] $properties
+     * @param PhpFunctionParameter<PhpFunctionParameter> $properties
      */
-    public function __construct(PhpFunctionParameter... $properties)
+    public function __construct(PhpFunctionParameter ... $properties)
     {
         $this->arguments = $properties;
     }
 
     /**
-     * @return PhpFunctionParameter[]
+     * @return array<PhpFunctionParameter>
      */
     public function all() : array
     {
         return $this->arguments;
     }
-
 }

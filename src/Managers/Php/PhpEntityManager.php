@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace kristijorgji\DbToPhp\Managers\Php;
 
@@ -16,65 +16,50 @@ use kristijorgji\DbToPhp\Generators\Php\PhpEntityGenerator;
 use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
 use kristijorgji\DbToPhp\Managers\GenerateResponse;
 use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
-use kristijorgji\DbToPhp\Rules\Php\PhpAccessModifiers;
 use kristijorgji\DbToPhp\Rules\Php\PhpPropertiesCollection;
 use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
 use kristijorgji\DbToPhp\Support\StringCollection;
+use Throwable;
+use function array_key_exists;
+use function in_array;
+use function snakeToCamelCase;
+use function snakeToPascalCase;
 
 class PhpEntityManager extends AbstractPhpManager
 {
-    /**
-     * @var array
-     */
-    private $config;
-
-    /**
-     * @param DatabaseAdapterInterface $databaseAdapter
-     * @param PhpTypeMapperInterface $typeMapper
-     * @param FileSystemInterface $fileSystem
-     * @param array $config
-     * @param bool $typeHint
-     */
     public function __construct(
         DatabaseAdapterInterface $databaseAdapter,
         PhpTypeMapperInterface $typeMapper,
         FileSystemInterface $fileSystem,
         bool $typeHint,
-        array $config
-    )
-    {
+        private array $config,
+    ) {
         parent::__construct($databaseAdapter, $typeMapper, $fileSystem, $typeHint);
-        $this->config = $config;
     }
 
     /**
-     * @return GenerateResponse
      * @throws GenerateException
      */
     public function generateEntities() : GenerateResponse
     {
-        $response = new GenerateResponse();
+        $response = new GenerateResponse;
 
         $tables = $this->filterTables(
             $this->databaseAdapter->getTables(),
-            $this->config['includeTables']
+            $this->config['includeTables'],
         )->all();
 
         try {
             foreach ($tables as $table) {
                 $response->addPath($this->generateEntity($table->getName()));
             }
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             throw new GenerateException($e->getMessage(), $e, $response);
         }
 
         return $response;
     }
 
-    /**
-     * @param string $tableName
-     * @return string
-     */
     public function generateEntity(string $tableName) : string
     {
         $fields = $this->databaseAdapter->getFields($tableName);
@@ -84,7 +69,7 @@ class PhpEntityManager extends AbstractPhpManager
 
         $entityGenerator = new PhpEntityGenerator(
             $entityGeneratorConfig,
-            $properties
+            $properties,
         );
 
         $entityFileAsString = $entityGenerator->generate();
@@ -98,16 +83,12 @@ class PhpEntityManager extends AbstractPhpManager
 
         $this->fileSystem->write(
             $outputPath,
-            $entityFileAsString
+            $entityFileAsString,
         );
 
         return $outputPath;
     }
 
-    /**
-     * @param string $tableName
-     * @return PhpEntityGeneratorConfig
-     */
     protected function parseConfigForEntity(string $tableName) : PhpEntityGeneratorConfig
     {
         $className = $this->formClassName($tableName);
@@ -126,31 +107,27 @@ class PhpEntityManager extends AbstractPhpManager
                 $className,
                 new StringCollection(... $uses),
                 $extends,
-                $this->config['includeAnnotations']
+                $this->config['includeAnnotations'],
             ),
             $this->config['includeSetters'],
             $this->config['includeGetters'],
             new PhpSetterGeneratorConfig(
                 $this->config['includeAnnotations'],
                 $this->typeHint,
-                $this->config['fluentSetters']
+                $this->config['fluentSetters'],
             ),
             new PhpGetterGeneratorConfig(
                 $this->config['includeAnnotations'],
-                $this->typeHint
+                $this->typeHint,
             ),
             new PhpPropertyGeneratorConfig(
                 $this->config['includeAnnotations'],
-                $this->config['typeHintProperties'] ?? false
+                $this->config['typeHintProperties'] ?? false,
             ),
-            $shouldTrackChanges
+            $shouldTrackChanges,
         );
     }
 
-    /**
-     * @param string $tableName
-     * @return bool
-     */
     protected function shouldTrackChanges(string $tableName) : bool
     {
         return $this->config['trackChangesFor'] === '*'
@@ -161,10 +138,6 @@ class PhpEntityManager extends AbstractPhpManager
             || in_array($tableName, $this->config['trackChangesFor']);
     }
 
-    /**
-     * @param FieldsCollection $fields
-     * @return PhpPropertiesCollection
-     */
     public function formProperties(FieldsCollection $fields) : PhpPropertiesCollection
     {
         $properties = [];
@@ -176,23 +149,15 @@ class PhpEntityManager extends AbstractPhpManager
         return new PhpPropertiesCollection(...$properties);
     }
 
-    /**
-     * @param Field $field
-     * @return PhpProperty
-     */
     public function formProperty(Field $field) : PhpProperty
     {
         return new PhpProperty(
             $this->config['properties']['accessModifier'],
             $this->typeMapper->map($field),
-            snakeToCamelCase($field->getName())
+            snakeToCamelCase($field->getName()),
         );
     }
 
-    /**
-     * @param string $tableName
-     * @return string
-     */
     public function formClassName(string $tableName) : string
     {
         if (!isset($this->config['tableToEntityClassName'][$tableName])) {
@@ -202,9 +167,6 @@ class PhpEntityManager extends AbstractPhpManager
         return $this->config['tableToEntityClassName'][$tableName];
     }
 
-    /**
-     * @return string
-     */
     public function getEntitiesNamespace() : string
     {
         return $this->config['namespace'];
