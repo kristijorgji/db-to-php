@@ -35,14 +35,14 @@ class PhpPropertyAnnotationGeneratorTest extends TestCase
         return [
             'array_type_not_nullable' => [
                 new PhpType(
-                    new PhpTypes(PhpTypes::ARRAY),
+                    PhpTypes::ARRAY,
                     false
                 ),
                 $expected['array_type_not_nullable']
             ],
             'array_type_nullable' => [
                 new PhpType(
-                    new PhpTypes(PhpTypes::ARRAY),
+                    PhpTypes::ARRAY,
                     true
                 ),
                 $expected['array_type_nullable']

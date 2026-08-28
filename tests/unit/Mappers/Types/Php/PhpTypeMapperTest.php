@@ -51,22 +51,22 @@ class PhpTypeMapperTest extends TestCase
         $name = self::randomString(2);
 
         return [
-            [new BinaryField($name, false), new PhpType(new PhpTypes(PhpTypes::STRING), false)],
-            [new BoolField($name, false), new PhpType(new PhpTypes(PhpTypes::BOOL), false)],
-            [new DateField($name, false, DateField::MYSQL_TIMESTAMP), new PhpType(new PhpTypes(PhpTypes::STRING), false)],
+            [new BinaryField($name, false), new PhpType(PhpTypes::STRING, false)],
+            [new BoolField($name, false), new PhpType(PhpTypes::BOOL, false)],
+            [new DateField($name, false, DateField::MYSQL_TIMESTAMP), new PhpType(PhpTypes::STRING, false)],
 
-            [new DecimalField($name, false, 4), new PhpType(new PhpTypes(PhpTypes::INTEGER), false)],
-            'decimal_with_fractional' => [new DecimalField($name, false, 16, 4), new PhpType(new PhpTypes(PhpTypes::FLOAT), false)],
-            'decimal_without_fractional' => [new DecimalField($name, false, 20, 0), new PhpType(new PhpTypes(PhpTypes::INTEGER), false)],
+            [new DecimalField($name, false, 4), new PhpType(PhpTypes::INTEGER, false)],
+            'decimal_with_fractional' => [new DecimalField($name, false, 16, 4), new PhpType(PhpTypes::FLOAT, false)],
+            'decimal_without_fractional' => [new DecimalField($name, false, 20, 0), new PhpType(PhpTypes::INTEGER, false)],
 
-            [new DoubleField($name, false), new PhpType(new PhpTypes(PhpTypes::FLOAT), false)],
-            [new EnumField($name, false, new StringCollection('d')), new PhpType(new PhpTypes(PhpTypes::STRING), false)],
-            [new FloatField($name, false), new PhpType(new PhpTypes(PhpTypes::FLOAT), false)],
-            [new IntegerField($name, false), new PhpType(new PhpTypes(PhpTypes::INTEGER), false)],
-            [new IntegerField($name, true), new PhpType(new PhpTypes(PhpTypes::INTEGER), true)],
-            [new TextField($name, false), new PhpType(new PhpTypes(PhpTypes::STRING), false)],
+            [new DoubleField($name, false), new PhpType(PhpTypes::FLOAT, false)],
+            [new EnumField($name, false, new StringCollection('d')), new PhpType(PhpTypes::STRING, false)],
+            [new FloatField($name, false), new PhpType(PhpTypes::FLOAT, false)],
+            [new IntegerField($name, false), new PhpType(PhpTypes::INTEGER, false)],
+            [new IntegerField($name, true), new PhpType(PhpTypes::INTEGER, true)],
+            [new TextField($name, false), new PhpType(PhpTypes::STRING, false)],
 
-            'year' => [new YearField($name, true), new PhpType(new PhpTypes(PhpTypes::INTEGER), true)],
+            'year' => [new YearField($name, true), new PhpType(PhpTypes::INTEGER, true)],
         ];
     }
 }

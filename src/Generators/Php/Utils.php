@@ -14,7 +14,7 @@ final class Utils
             return $type->getClassName() . $nullableText;
         }
 
-        return $type->getType() . $nullableText;
+        return $type->getType()->value . $nullableText;
     }
 
     public static function resolveType(PhpType $type) : string
@@ -24,6 +24,6 @@ final class Utils
             return $nullablePrefix . $type->getClassName();
         }
 
-        return $nullablePrefix . $type->getType();
+        return $nullablePrefix . $type->getType()->value;
     }
 }

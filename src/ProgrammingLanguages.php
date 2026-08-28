@@ -2,9 +2,7 @@
 
 namespace kristijorgji\DbToPhp;
 
-use kristijorgji\DbToPhp\Support\Enum;
-
-class ProgrammingLanguages extends Enum
+enum ProgrammingLanguages: string
 {
-    const PHP = 'php';
+    case PHP = 'php';
 }

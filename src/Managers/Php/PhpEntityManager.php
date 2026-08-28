@@ -183,7 +183,7 @@ class PhpEntityManager extends AbstractPhpManager
     public function formProperty(Field $field) : PhpProperty
     {
         return new PhpProperty(
-            new PhpAccessModifiers($this->config['properties']['accessModifier']),
+            $this->config['properties']['accessModifier'],
             $this->typeMapper->map($field),
             snakeToCamelCase($field->getName())
         );

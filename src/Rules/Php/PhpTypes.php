@@ -2,14 +2,12 @@
 
 namespace kristijorgji\DbToPhp\Rules\Php;
 
-use kristijorgji\DbToPhp\Support\Enum;
-
-class PhpTypes extends Enum
+enum PhpTypes: string
 {
-    const INTEGER = 'int';
-    const STRING = 'string';
-    const BOOL = 'bool';
-    const FLOAT = 'float';
-    const ARRAY = 'array';
-    const OBJECT = 'object';
+    case INTEGER = 'int';
+    case STRING = 'string';
+    case BOOL = 'bool';
+    case FLOAT = 'float';
+    case ARRAY = 'array';
+    case OBJECT = 'object';
 }
