@@ -99,7 +99,8 @@ class InitCommandTest extends TestCase
             sprintf('%s', $this->command)
         );
 
-        $this->assertMatchesRegularExpression('#The file \".*\" already exists#', $output);
+        $normalizedOutput = preg_replace('/\s+/', ' ', $output);
+        $this->assertMatchesRegularExpression('#The file ".*" already exists#', $normalizedOutput);
 
         unlink($expectedConfigFilePath);
     }
@@ -113,6 +114,7 @@ class InitCommandTest extends TestCase
             sprintf('%s %s', $this->command, self::randomString() . DIRECTORY_SEPARATOR . self::randomString())
         );
 
-        $this->assertMatchesRegularExpression('#Cannot write \".+\"\. Please check#', $output);
+        $normalizedOutput = preg_replace('/\s+/', ' ', $output);
+        $this->assertMatchesRegularExpression('#Cannot write ".+"\. Please check#', $normalizedOutput);
     }
 }
