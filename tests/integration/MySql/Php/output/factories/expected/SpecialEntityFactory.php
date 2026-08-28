@@ -7,10 +7,7 @@ use Entities\SpecialEntity;
 
 class SpecialEntityFactory extends AbstractEntityFactory
 {
-    /**
-     * @var array
-     */
-    protected static $fields = [
+    protected static array $fields = [
         'geometry',
         'geometry_collection',
         'json',
