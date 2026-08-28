@@ -2,13 +2,11 @@
 
 namespace kristijorgji\DbToPhp\Rules\Php;
 
-use kristijorgji\DbToPhp\Support\Enum;
-
-class PhpAccessModifiers extends Enum
+enum PhpAccessModifiers: string
 {
-    const PRIVATE = 'private';
-    const PROTECTED = 'protected';
-    const PUBLIC = 'public';
-    const ABSTRACT = 'abstract';
-    const FINAL = 'final';
+    case PRIVATE = 'private';
+    case PROTECTED = 'protected';
+    case PUBLIC = 'public';
+    case ABSTRACT = 'abstract';
+    case FINAL = 'final';
 }

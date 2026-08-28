@@ -56,7 +56,7 @@ class PhpSetterGenerator
     {
         $type  = $this->property->getType();
         $nullableText = $type->isNullable() === true ? '|null' :  '';
-        $type = (string) $this->property->getType()->getType() . $nullableText;
+        $type = $this->property->getType()->getType()->value . $nullableText;
 
         $this->output->addLine('/**', 4);
         $this->output->addLine(
@@ -79,7 +79,7 @@ class PhpSetterGenerator
         $argumentType = '';
         if ($this->config->shouldTypeHint()) {
             $type  = $this->property->getType();
-            $argumentType = ($type->isNullable() === true ? '?' : '') . (string) $type->getType() . ' ';
+            $argumentType = ($type->isNullable() === true ? '?' : '') . $type->getType()->value . ' ';
         }
 
         $functionName = 'set' . ucfirst($this->property->getName());

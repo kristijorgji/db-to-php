@@ -46,8 +46,8 @@ class PhpPropertyGeneratorTest extends TestCase
             ],
             'with_annotations_not_nullable' => [
                  new PhpProperty(
-                     new PhpAccessModifiers(PhpAccessModifiers::PROTECTED),
-                     new PhpType(new PhpTypes(PhpTypes::INTEGER), false),
+                     PhpAccessModifiers::PROTECTED,
+                     new PhpType(PhpTypes::INTEGER, false),
                      'employeeAge'
                  ),
                 new PhpPropertyGeneratorConfig(true, false),
@@ -55,8 +55,8 @@ class PhpPropertyGeneratorTest extends TestCase
             ],
             'with_type_hints_no_annotation' => [
                 new PhpProperty(
-                    new PhpAccessModifiers(PhpAccessModifiers::PROTECTED),
-                    new PhpType(new PhpTypes(PhpTypes::STRING), true),
+                    PhpAccessModifiers::PROTECTED,
+                    new PhpType(PhpTypes::STRING, true),
                     'secretValue'
                 ),
                 new PhpPropertyGeneratorConfig(false, true),

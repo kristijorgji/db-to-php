@@ -21,6 +21,6 @@ class PhpTypeFactory extends BaseFactory
      */
     public static function makeType() : PhpTypes
     {
-        return new PhpTypes(PhpTypes::getValues()[rand(0, count(PhpTypes::getValues()) - 1)]);
+        return PhpTypes::cases()[array_rand(PhpTypes::cases())];
     }
 }

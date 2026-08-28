@@ -41,7 +41,7 @@ class PhpMethodAnnotationGeneratorTest extends TestCase
         return [
             'void_return_type_type_hinting' => [
                 new PhpFunctionParametersCollection(... [
-                    new PhpFunctionParameter('test', new PhpType(new PhpTypes(PhpTypes::BOOL), true))
+                    new PhpFunctionParameter('test', new PhpType(PhpTypes::BOOL, true))
                 ]),
                 null,
                 true,

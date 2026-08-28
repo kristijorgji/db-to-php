@@ -62,7 +62,7 @@ class PhpPropertyGenerator
             $this->output->add(
                 sprintf(
                     '%s %s $%s;',
-                    (string) $this->property->getAccessModifier(),
+                    $this->property->getAccessModifier()->value,
                     Utils::resolveType($this->property->getType()),
                     $this->property->getName()
                 ),
@@ -72,7 +72,7 @@ class PhpPropertyGenerator
             $this->output->add(
                 sprintf(
                     '%s $%s;',
-                    (string) $this->property->getAccessModifier(),
+                    $this->property->getAccessModifier()->value,
                     $this->property->getName()
                 ),
                 4
