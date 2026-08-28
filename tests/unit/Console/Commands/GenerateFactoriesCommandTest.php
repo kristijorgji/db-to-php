@@ -65,7 +65,7 @@ class GenerateFactoriesCommandTest extends AbstractCommandTestCase
                 $this->configFactory,
                 self::randomString()
             ])
-            ->setMethods($methodsToMock)
+            ->onlyMethods($methodsToMock)
             ->getMock();
     }
 }

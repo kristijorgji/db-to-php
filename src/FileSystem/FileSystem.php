@@ -24,17 +24,19 @@ class FileSystem implements FileSystemInterface
      */
     public function write(string $path, string $content)
     {
-        try {
-            fwrite(
-                fopen($path, 'w'),
-                $content
-            );
-        } catch (\Exception $e) {
+        $handle = @fopen($path, 'w');
+
+        if ($handle === false) {
             throw new FileSystemException(
                 sprintf('Failed to write to %s', $path),
-                -4,
-                $e
+                -4
             );
+        }
+
+        try {
+            fwrite($handle, $content);
+        } finally {
+            fclose($handle);
         }
     }
 

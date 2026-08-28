@@ -57,11 +57,10 @@ class ManagerFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider getProvider
-     * @param array $config
+    /**     * @param array $config
      * @param string $expectedManagerClass
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getProvider')]
     public function testGet(array $config, string $expectedManagerClass)
     {
         $this->databaseAdapterFactory->expects($this->once())
@@ -74,7 +73,7 @@ class ManagerFactoryTest extends TestCase
         $this->assertEquals($expectedManagerClass, get_class($actualManager));
     }
 
-    public function getProvider()
+    public static function getProvider()
     {
         $config = [
             'typeHint' => true,

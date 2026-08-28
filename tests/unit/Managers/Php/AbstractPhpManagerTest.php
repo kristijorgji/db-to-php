@@ -103,6 +103,7 @@ class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
                 $this->fileSystem,
                 $this->typeHint
             ])
-            ->getMockForAbstractClass();
+            ->onlyMethods([])
+            ->getMock();
     }
 }

@@ -37,7 +37,8 @@ class AbstractCommandTest extends TestCase
                 $this->configFactory,
                 self::randomString()
             ])
-            ->getMockForAbstractClass();
+            ->onlyMethods([])
+            ->getMock();
     }
 
     public function testLocateDefaultConfigFile()

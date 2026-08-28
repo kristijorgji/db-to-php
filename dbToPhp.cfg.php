@@ -4,11 +4,11 @@ return [
     'typeHint' => true,
     'databaseDriver' => kristijorgji\DbToPhp\DatabaseDrivers::MYSQL,
     'connection' => [
-        'host' => '192.168.66.7',
-        'port' => 3306,
-        'database' => 'test_db_to_php',
-        'username' => 'root',
-        'password' => 'Test123@',
+        'host' => getenv('DB_HOST') ?: '127.0.0.1',
+        'port' => (int) (getenv('DB_PORT') ?: 3306),
+        'database' => getenv('DB_DATABASE') ?: 'test_db_to_php',
+        'username' => getenv('DB_USERNAME') ?: 'root',
+        'password' => getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : 'Test123@',
     ],
     'entities' => [
         'includeTables' => ['*'],

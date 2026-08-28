@@ -16,11 +16,10 @@ class PhpEntityGeneratorTest extends TestCase
 {
     use SamplePhpProperties;
 
-    /**
-     * @dataProvider generateProvider
-     * @param PhpEntityGeneratorConfig $config
+    /**     * @param PhpEntityGeneratorConfig $config
      * @param string $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('generateProvider')]
     public function testGenerate(PhpEntityGeneratorConfig $config, string $expected)
     {
         $properties = $this->getSampleProperties();
@@ -30,7 +29,7 @@ class PhpEntityGeneratorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function generateProvider()
+    public static function generateProvider()
     {
         $expected = self::getExpected(__DIR__ . '/expected/entity_generator.txt');
 

@@ -10,11 +10,10 @@ use kristijorgji\Tests\Helpers\TestCase;
 
 class PhpPropertyAnnotationGeneratorTest extends TestCase
 {
-    /**
-     * @dataProvider generateProvider
-     * @param PhpType $type
+    /**     * @param PhpType $type
      * @param string $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('generateProvider')]
     public function testGenerate(
         PhpType $type,
         string $expected
@@ -30,7 +29,7 @@ class PhpPropertyAnnotationGeneratorTest extends TestCase
         );
     }
 
-    public function generateProvider()
+    public static function generateProvider()
     {
         $expected = self::getExpected(__DIR__ . '/expected/property_annotation_generator.txt');
         return [

@@ -20,8 +20,7 @@ class EnumTest extends TestCase
     public function testWrongConstruct()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $t = new TestEnum('this does not exist in constants');
-        echo (string) $t;
+        new TestEnum('this does not exist in constants');
     }
 
     public function testGetValueAsString()
@@ -40,13 +39,13 @@ class EnumTest extends TestCase
         $initialValue = $optionsProperty->getValue($this->testEnum);
         $changedValue = $initialValue;
         $changedValue[TestEnum::class]['ANOTHER_TEST'] = self::randomString();
-        $optionsProperty->setValue($this->testEnum, $changedValue);
+        $optionsProperty->setValue(null, $changedValue);
 
         try {
             $this->testEnum->getSelfKey();
         } catch (\Exception $e) {
             $this->assertInstanceOf(\Exception::class, $e);
-            $optionsProperty->setValue($initialValue);
+            $optionsProperty->setValue(null, $initialValue);
         }
     }
 
