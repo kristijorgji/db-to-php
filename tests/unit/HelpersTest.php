@@ -6,16 +6,13 @@ use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use function basePath;
 use function camelToSnakeCase;
-use function preg_match;
 
-class HelpersTest extends TestCase
+final class HelpersTest extends TestCase
 {
     public function testGetBasePath(): void
     {
         $actual = basePath();
-        $this->assertTrue(
-            preg_match('#\/src\/\.\.\/$#', $actual) === 1,
-        );
+        $this->assertMatchesRegularExpression('#\/src\/\.\.\/$#', $actual);
     }
 
     /**     * @param string $input
@@ -25,7 +22,7 @@ class HelpersTest extends TestCase
         string $input,
         string $expected,
     ): void {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             camelToSnakeCase($input),
         );

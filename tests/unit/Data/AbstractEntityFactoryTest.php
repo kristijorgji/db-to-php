@@ -8,12 +8,11 @@ use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
 use kristijorgji\DbToPhp\Data\Exceptions\InvalidEntityFactoryFieldException;
 use kristijorgji\Tests\Helpers\TestCase;
 use function array_map;
-use function in_array;
-use function rand;
+use function random_int;
 use function range;
 use function strlen;
 
-class AbstractEntityFactoryTest extends TestCase
+final class AbstractEntityFactoryTest extends TestCase
 {
     public function testValidateFields(): void
     {
@@ -48,7 +47,7 @@ class AbstractEntityFactoryTest extends TestCase
     public function testRandomArray(): void
     {
         $actual = AbstractEntityFactory::randomArray();
-        self::assertIsArray($actual);
+        $this->assertIsArray($actual);
     }
 
     public function testRandomJson(): void
@@ -60,7 +59,7 @@ class AbstractEntityFactoryTest extends TestCase
     public function testRandomBoolean(): void
     {
         $actual = AbstractEntityFactory::randomBoolean();
-        self::assertIsBool($actual);
+        $this->assertIsBool($actual);
     }
 
     public function testRandomDate(): void
@@ -166,34 +165,34 @@ class AbstractEntityFactoryTest extends TestCase
     public function testRandomFloat(): void
     {
         for ($i = 0; $i < 27; $i++) {
-            $nrDecimals = rand(2, 5);
-            $min = rand(1, 100);
-            $max = rand(0, 1) ? rand(1, 100) : null;
+            $nrDecimals = random_int(2, 5);
+            $min = random_int(1, 100);
+            $max = random_int(0, 1) ? random_int(1, 100) : null;
             $actual = AbstractEntityFactory::randomFloat($nrDecimals, $min, $max);
-            self::assertIsFloat($actual);
+            $this->assertIsFloat($actual);
         }
     }
 
     public function testRandomFloat_min_greater_then_max(): void
     {
-        $actual = AbstractEntityFactory::randomFloat(rand(1, 4), 21, 7);
-        self::assertIsFloat($actual);
+        $actual = AbstractEntityFactory::randomFloat(random_int(1, 4), 21, 7);
+        $this->assertIsFloat($actual);
     }
 
     public function testRandomUnsignedNumber(): void
     {
         for ($i = 0; $i < 27; $i++) {
             $actual = AbstractEntityFactory::randomUnsignedNumber();
-            $this->assertTrue($actual >= 0, $actual . ' should not be negative');
+            $this->assertGreaterThanOrEqual(0, $actual, $actual . ' should not be negative');
         }
     }
 
     public function testRandomUnsignedNumber_fixed_digits_number(): void
     {
-        $nrDigits = rand(3, 7);
+        $nrDigits = random_int(3, 7);
         $actual = AbstractEntityFactory::randomUnsignedNumber($nrDigits, true);
-        $this->assertEquals($nrDigits, strlen((string) $actual));
-        $this->assertTrue($actual > 0);
+        $this->assertSame($nrDigits, strlen((string) $actual));
+        $this->assertGreaterThan(0, $actual);
     }
 
     public function testRandomUnsignedNumber_overflow(): void
@@ -219,18 +218,16 @@ class AbstractEntityFactoryTest extends TestCase
 
     public function testChooseRandomString(): void
     {
-        $values = array_map(function () {
-            return self::randomString(rand(1, 7));
-        }, range(0, rand(10, 21)));
+        $values = array_map(fn() => self::randomString(random_int(1, 7)), range(0, random_int(10, 21)));
 
         $chosen = AbstractEntityFactory::chooseRandomString(...$values);
 
-        $this->assertTrue(in_array($chosen, $values));
+        $this->assertContains($chosen, $values);
     }
 
     public function testRandomString(): void
     {
         $randomString = AbstractEntityFactory::randomString(0);
-        $this->assertEquals('', $randomString);
+        $this->assertSame('', $randomString);
     }
 }

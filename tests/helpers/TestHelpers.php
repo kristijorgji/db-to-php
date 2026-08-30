@@ -12,7 +12,6 @@ use function explode;
 use function fclose;
 use function fgets;
 use function fopen;
-use function get_class;
 use function ltrim;
 use function preg_match;
 use function random_bytes;
@@ -79,7 +78,7 @@ trait TestHelpers
 
     public static function setPrivateProperty(object $instance, string $propertyName, mixed $value): void
     {
-        $property = self::getPrivateProperty(get_class($instance), $propertyName);
+        $property = self::getPrivateProperty($instance::class, $propertyName);
         $property->setValue($instance, $value);
     }
 
@@ -123,8 +122,8 @@ trait TestHelpers
 
     public static function objectToArray(object $object): array
     {
-        $reflectionClass = new ReflectionClass(get_class($object));
-        $array = array();
+        $reflectionClass = new ReflectionClass($object::class);
+        $array = [];
         foreach ($reflectionClass->getProperties() as $property) {
             $array[$property->getName()] = $property->getValue($object);
         }

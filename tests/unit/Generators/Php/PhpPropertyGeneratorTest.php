@@ -11,7 +11,7 @@ use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class PhpPropertyGeneratorTest extends TestCase
+final class PhpPropertyGeneratorTest extends TestCase
 {
     use SamplePhpProperties;
 
@@ -24,7 +24,7 @@ class PhpPropertyGeneratorTest extends TestCase
         string $expected,
     ): void {
         $actual = (new PhpPropertyGenerator($property, $config))->generate();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public static function generateProvider(): array

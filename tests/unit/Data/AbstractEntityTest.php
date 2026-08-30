@@ -4,7 +4,7 @@ namespace kristijorgji\UnitTests\Data;
 
 use kristijorgji\Tests\Helpers\TestCase;
 
-class AbstractEntityTest extends TestCase
+final class AbstractEntityTest extends TestCase
 {
     public function testAll(): void
     {

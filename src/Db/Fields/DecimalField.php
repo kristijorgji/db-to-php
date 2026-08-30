@@ -7,9 +7,9 @@ class DecimalField extends Field
     public function __construct(
         string $name,
         bool $nullable,
-        private int $decimalPrecision,
-        private int $fractionalPrecision = 0,
-        private bool $signed = false,
+        private readonly int $decimalPrecision,
+        private readonly int $fractionalPrecision = 0,
+        private readonly bool $signed = false,
     ) {
         parent::__construct($name, $nullable);
     }

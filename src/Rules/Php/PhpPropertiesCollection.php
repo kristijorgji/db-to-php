@@ -7,14 +7,14 @@ use IteratorAggregate;
 use Traversable;
 
 /**
- * @implements IteratorAggregate<int, PhpProperty>
+ * @implements IteratorAggregate<int|string, PhpProperty>
  */
 class PhpPropertiesCollection implements IteratorAggregate
 {
     /**
      * @var array<PhpProperty>
      */
-    private array $properties = [];
+    private readonly array $properties;
 
     public function __construct(PhpProperty ... $properties)
     {
@@ -22,7 +22,7 @@ class PhpPropertiesCollection implements IteratorAggregate
     }
 
     /**
-     * @return ArrayIterator<int, PhpProperty>
+     * @return ArrayIterator<int|string, PhpProperty>
      */
     public function getIterator() : Traversable
     {

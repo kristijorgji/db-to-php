@@ -14,7 +14,7 @@ class DateField extends Field
         'Y-m-d H:i:s',
     ];
 
-    public function __construct(string $name, bool $nullable, private string $format)
+    public function __construct(string $name, bool $nullable, private readonly string $format)
     {
         if (!in_array($format, $this->formats)) {
             throw new InvalidArgumentException(

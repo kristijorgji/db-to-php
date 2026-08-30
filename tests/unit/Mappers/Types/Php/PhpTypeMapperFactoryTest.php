@@ -9,7 +9,7 @@ use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperFactory;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class PhpTypeMapperFactoryTest extends TestCase
+final class PhpTypeMapperFactoryTest extends TestCase
 {
     protected PhpTypeMapperFactory $typeMapperFactory;
 

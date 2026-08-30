@@ -5,13 +5,13 @@ namespace kristijorgji\DbToPhp\Generators\Php\Configs;
 class PhpEntityGeneratorConfig
 {
     public function __construct(
-        private PhpClassGeneratorConfig $phpClassGeneratorConfig,
-        private bool $includeSetters,
-        private bool $includeGetters,
-        private PhpSetterGeneratorConfig $phpSetterGeneratorConfig,
-        private PhpGetterGeneratorConfig $phpGetterGeneratorConfig,
-        private PhpPropertyGeneratorConfig $phpPropertyGeneratorConfig,
-        private bool $shouldTrackChanges,
+        private readonly PhpClassGeneratorConfig $phpClassGeneratorConfig,
+        private readonly bool $includeSetters,
+        private readonly bool $includeGetters,
+        private readonly PhpSetterGeneratorConfig $phpSetterGeneratorConfig,
+        private readonly PhpGetterGeneratorConfig $phpGetterGeneratorConfig,
+        private readonly PhpPropertyGeneratorConfig $phpPropertyGeneratorConfig,
+        private readonly bool $shouldTrackChanges,
     ) {
     }
 

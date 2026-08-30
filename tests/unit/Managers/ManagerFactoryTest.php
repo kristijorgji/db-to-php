@@ -14,16 +14,14 @@ use function array_map;
 use function array_values;
 use function range;
 
-class ManagerFactoryTest extends TestCase
+final class ManagerFactoryTest extends TestCase
 {
     private DatabaseAdapterFactory&MockObject $databaseAdapterFactory;
     private ManagerFactory $managerFactory;
 
     protected function setUp(): void
     {
-        $this->databaseAdapterFactory = $this->getMockBuilder(DatabaseAdapterFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->databaseAdapterFactory = $this->createMock(DatabaseAdapterFactory::class);
 
         $this->managerFactory = new ManagerFactory(
             $this->databaseAdapterFactory,
@@ -38,7 +36,7 @@ class ManagerFactoryTest extends TestCase
         $this->databaseAdapterFactory->expects($this->once())
             ->method('get')
             ->with($config['databaseDriver'], $config['connection'])
-            ->willReturn($this->getMockBuilder(DatabaseAdapterInterface::class)->getMock());
+            ->willReturn($this->createStub(DatabaseAdapterInterface::class));
 
         $actualManager = $this->managerFactory->get($config);
 
@@ -56,9 +54,10 @@ class ManagerFactoryTest extends TestCase
         ];
 
         return [
-            array_values(array_map(function () use ($config) {
-                return [$config, PhpManager::class];
-            }, range(0, 0)))[0],
+            array_values(array_map(fn() => [
+                $config,
+                PhpManager::class,
+            ], range(0, 0)))[0],
         ];
     }
 }

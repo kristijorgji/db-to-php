@@ -9,10 +9,10 @@ use kristijorgji\Tests\Factories\Db\TablesCollectionFactory;
 use Throwable;
 use function in_array;
 use function microtime;
-use function rand;
+use function random_int;
 use function sort;
 
-class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
+final class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
 {
     protected AbstractPhpManager $manager;
 
@@ -44,7 +44,7 @@ class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
         $expectedTables = [];
         for ($i = 0; $i < $randomChosenTablesNr; $i++) {
             do {
-                $randomChosenIndex = rand(0, $nrTotalTables - 1);
+                $randomChosenIndex = random_int(0, $nrTotalTables - 1);
             } while (in_array($randomChosenIndex, $randomChosenIndexes));
 
             $randomChosenIndexes[] = $randomChosenIndex;
@@ -93,7 +93,7 @@ class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
         }
 
         $this->assertInstanceOf(TableDoesNotExistException::class, $thrownException);
-        $this->assertEquals($nonExistingTable, $thrownException->getTableName());
+        $this->assertSame($nonExistingTable, $thrownException->getTableName());
     }
 
     private function createManager(): void

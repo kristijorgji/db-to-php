@@ -12,11 +12,9 @@ class PhpTypeMapperFactory
      */
     public function get(string $databaseDriver) : PhpTypeMapperInterface
     {
-        switch ($databaseDriver) {
-            case DatabaseDrivers::MYSQL:
-                return new PhpTypeMapper;
-            default:
-                throw new InvalidArgumentException('Invalid database driver!');
-        }
+        return match ($databaseDriver) {
+            DatabaseDrivers::MYSQL => new PhpTypeMapper,
+            default => throw new InvalidArgumentException('Invalid database driver!'),
+        };
     }
 }

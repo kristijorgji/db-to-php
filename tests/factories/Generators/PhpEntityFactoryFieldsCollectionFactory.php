@@ -10,8 +10,8 @@ class PhpEntityFactoryFieldsCollectionFactory
 {
     public static function make(int $size = 7) : PhpEntityFactoryFieldsCollection
     {
-        return new PhpEntityFactoryFieldsCollection(... array_map(function () {
-            return PhpEntityFactoryFieldFactory::make();
-        }, range(1, $size)));
+        return new PhpEntityFactoryFieldsCollection(
+            ... array_map(fn() => PhpEntityFactoryFieldFactory::make(), range(1, $size)),
+        );
     }
 }

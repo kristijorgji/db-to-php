@@ -11,7 +11,7 @@ use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperFactory;
 class ManagerFactory
 {
     public function __construct(
-        private DatabaseAdapterFactory $databaseAdapterFactory,
+        private readonly DatabaseAdapterFactory $databaseAdapterFactory,
     ) {
     }
 

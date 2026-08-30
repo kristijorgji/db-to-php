@@ -8,14 +8,18 @@ use kristijorgji\DbToPhp\FileSystem\FileSystemInterface;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class ConfigFactoryTest extends TestCase
+final class ConfigFactoryTest extends TestCase
 {
+    /**
+     * @var MockObject&FileSystemInterface
+     */
     private MockObject $fileSystem;
+
     private ConfigFactory $configFactory;
 
     protected function setUp(): void
     {
-        $this->fileSystem = $this->getMockBuilder(FileSystemInterface::class)->getMock();
+        $this->fileSystem = $this->createMock(FileSystemInterface::class);
         $this->configFactory = new ConfigFactory(
             $this->fileSystem,
         );

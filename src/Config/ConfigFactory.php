@@ -8,7 +8,7 @@ use function strtolower;
 
 class ConfigFactory
 {
-    public function __construct(private FileSystemInterface $fileSystem)
+    public function __construct(private readonly FileSystemInterface $fileSystem)
     {
     }
 
@@ -19,11 +19,9 @@ class ConfigFactory
     {
         $extension = strtolower($this->fileSystem->getFileExtension($path));
 
-        switch ($extension) {
-            case 'php':
-                return require $path;
-            default:
-                throw new ConfigParserException('Only configurations in php format are supported for now');
-        }
+        return match ($extension) {
+            'php' => require $path,
+            default => throw new ConfigParserException('Only configurations in php format are supported for now'),
+        };
     }
 }

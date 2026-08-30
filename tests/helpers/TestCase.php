@@ -4,7 +4,6 @@ namespace kristijorgji\Tests\Helpers;
 
 use DirectoryIterator;
 use function file_get_contents;
-use function in_array;
 use function sprintf;
 
 class TestCase extends \PHPUnit\Framework\TestCase
@@ -26,8 +25,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
         foreach (new DirectoryIterator($actualDirectory) as $fileInfo) {
             if(!$fileInfo->isDot()) {
-                $this->assertTrue(
-                    in_array($fileInfo->getFilename(), $expectedFiles),
+                $this->assertContains(
+                    $fileInfo->getFilename(),
+                    $expectedFiles,
                     sprintf(
                         'File %s was not expected in directory %s !',
                         $fileInfo->getFilename(),

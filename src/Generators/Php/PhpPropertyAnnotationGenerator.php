@@ -8,9 +8,9 @@ use function sprintf;
 
 class PhpPropertyAnnotationGenerator
 {
-    private TextBuffer $output;
+    private readonly TextBuffer $output;
 
-    public function __construct(private PhpType $type)
+    public function __construct(private readonly PhpType $type)
     {
         $this->output = new TextBuffer;
     }

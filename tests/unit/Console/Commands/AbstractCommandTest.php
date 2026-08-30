@@ -10,20 +10,17 @@ use PHPUnit\Framework\MockObject\MockObject;
 use function getcwd;
 use const DIRECTORY_SEPARATOR;
 
-class AbstractCommandTest extends TestCase
+final class AbstractCommandTest extends TestCase
 {
     private AbstractCommand&MockObject $command;
-    private ConfigFactory&MockObject $configFactory;
 
     protected function setUp(): void
     {
-        $this->configFactory = $this->getMockBuilder(ConfigFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configFactory = $this->createMock(ConfigFactory::class);
 
         $this->command = $this->getMockBuilder(AbstractCommand::class)
             ->setConstructorArgs([
-                $this->configFactory,
+                $configFactory,
                 self::randomString(),
             ])
             ->onlyMethods([])

@@ -12,7 +12,7 @@ use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class PhpEntityGeneratorTest extends TestCase
+final class PhpEntityGeneratorTest extends TestCase
 {
     use SamplePhpProperties;
 
@@ -25,7 +25,7 @@ class PhpEntityGeneratorTest extends TestCase
         $entityGenerator = new PhpEntityGenerator($config, $properties);
         $actual = $entityGenerator->generate();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public static function generateProvider(): array
@@ -36,7 +36,6 @@ class PhpEntityGeneratorTest extends TestCase
             'MyApp\Entities',
             'TestEntity',
             new StringCollection(...[]),
-            null,
         );
 
         return [
@@ -106,7 +105,6 @@ class PhpEntityGeneratorTest extends TestCase
                         'MyApp\Entities',
                         'TestEntity',
                         new StringCollection(...[]),
-                        null,
                     ),
                     true,
                     true,

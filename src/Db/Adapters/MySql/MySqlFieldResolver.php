@@ -145,19 +145,13 @@ class MySqlFieldResolver
      */
     private function getIntLength(string $type) : int
     {
-        switch ($type) {
-            case 'tiny':
-                return 8;
-            case 'small':
-                return 16;
-            case 'medium':
-                return 24;
-            case 'int':
-                return 32;
-            case 'big':
-                return 64;
-            default:
-                throw new InvalidArgumentException('Unrecognized mysql integer type ' . $type);
-        }
+        return match ($type) {
+            'tiny' => 8,
+            'small' => 16,
+            'medium' => 24,
+            'int' => 32,
+            'big' => 64,
+            default => throw new InvalidArgumentException('Unrecognized mysql integer type ' . $type),
+        };
     }
 }

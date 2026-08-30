@@ -10,7 +10,7 @@ use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class PhpMethodAnnotationGeneratorTest extends TestCase
+final class PhpMethodAnnotationGeneratorTest extends TestCase
 {
     /**     * @param PhpFunctionParametersCollection $parameters
      */
@@ -27,7 +27,7 @@ class PhpMethodAnnotationGeneratorTest extends TestCase
 
         $actual = $generator->generate();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public static function generateProvider(): array

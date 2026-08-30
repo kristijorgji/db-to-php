@@ -11,9 +11,8 @@ use kristijorgji\DbToPhp\Db\Fields\IntegerField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\MySqlTestCase;
-use function in_array;
 
-class MySqlAdapterTest extends MySqlTestCase
+final class MySqlAdapterTest extends MySqlTestCase
 {
     private ?MySqlAdapter $databaseAdapter = null;
 
@@ -45,7 +44,7 @@ class MySqlAdapterTest extends MySqlTestCase
 
         $tables = $this->databaseAdapter->getTables();
         foreach ($tables as $table) {
-            $this->assertTrue(in_array($table->getName(), $expectedTableNames));
+            $this->assertContains($table->getName(), $expectedTableNames);
         }
     }
 

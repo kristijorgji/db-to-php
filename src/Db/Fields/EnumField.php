@@ -10,7 +10,7 @@ class EnumField extends Field
      * @internal param $lengthInBits
      * @internal param $signed
      */
-    public function __construct(string $name, bool $nullable, private StringCollection $allowedValues)
+    public function __construct(string $name, bool $nullable, private readonly StringCollection $allowedValues)
     {
         parent::__construct($name, $nullable);
     }

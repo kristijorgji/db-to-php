@@ -8,14 +8,13 @@ use kristijorgji\DbToPhp\FileSystem\FileSystem;
 use kristijorgji\Tests\Helpers\CommandTestCaseHelper;
 use kristijorgji\Tests\Helpers\TestCase;
 use function chdir;
-use function dirname;
 use function getcwd;
 use function preg_replace;
 use function sprintf;
 use function unlink;
 use const DIRECTORY_SEPARATOR;
 
-class InitCommandTest extends TestCase
+final class InitCommandTest extends TestCase
 {
     use CommandTestCaseHelper;
 
@@ -39,7 +38,7 @@ class InitCommandTest extends TestCase
 
     public function testInit_without_path(): void
     {
-        chdir(dirname(__FILE__));
+        chdir(__DIR__);
 
         $this->runCommand(
             $this->consoleApp,
@@ -76,7 +75,7 @@ class InitCommandTest extends TestCase
 
     public function testInit_already_exists(): void
     {
-        chdir(dirname(__FILE__));
+        chdir(__DIR__);
 
         $expectedConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . AppInfo::DEFAULT_CONFIG_FILENAME;
         $this->fileSystem->write($expectedConfigFilePath, self::randomString());
@@ -94,7 +93,7 @@ class InitCommandTest extends TestCase
 
     public function testInit_not_existing_directory(): void
     {
-        chdir(dirname(__FILE__));
+        chdir(__DIR__);
 
         $output = $this->runCommand(
             $this->consoleApp,

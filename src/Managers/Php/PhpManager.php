@@ -11,8 +11,8 @@ use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperInterface;
 
 class PhpManager extends AbstractPhpManager implements ManagerContract
 {
-    private PhpEntityManager $entityManager;
-    private PhpEntityFactoryManager $entityFactoryManager;
+    private readonly PhpEntityManager $entityManager;
+    private readonly PhpEntityFactoryManager $entityFactoryManager;
 
     public function __construct(
         protected array $config,

@@ -5,7 +5,7 @@ namespace kristijorgji\Tests\Factories\Generators;
 use kristijorgji\DbToPhp\Generators\Php\PhpEntityFactoryField;
 use kristijorgji\Tests\Factories\BaseFactory;
 use function count;
-use function rand;
+use function random_int;
 
 class PhpEntityFactoryFieldFactory extends BaseFactory
 {
@@ -28,7 +28,7 @@ class PhpEntityFactoryFieldFactory extends BaseFactory
 
         return new PhpEntityFactoryField(
             self::faker()->text(20),
-            $resolvers[rand(0, count($resolvers) - 1)],
+            $resolvers[random_int(0, count($resolvers) - 1)],
         );
     }
 }

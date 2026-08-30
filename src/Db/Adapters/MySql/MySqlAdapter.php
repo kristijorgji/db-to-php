@@ -11,15 +11,15 @@ use function array_map;
 
 class MySqlAdapter implements DatabaseAdapterInterface
 {
-    private ?PDO $pdo = null;
-    private MySqlFieldResolver $fieldResolver;
+    private ?PDO $pdo;
+    private readonly MySqlFieldResolver $fieldResolver;
 
     public function __construct(
-        private string $host,
-        private int $port,
-        private string $dbName,
-        private string $username,
-        private string $password,
+        private readonly string $host,
+        private readonly int $port,
+        private readonly string $dbName,
+        private readonly string $username,
+        private readonly string $password,
     ) {
         $this->pdo = new PDO(
             "mysql:host={$this->host}:{$this->port};dbname={$this->dbName};charset=utf8",
@@ -41,9 +41,7 @@ class MySqlAdapter implements DatabaseAdapterInterface
         $statement = $this->pdo->query($query);
         $result = $statement->fetchAll(PDO::FETCH_COLUMN);
 
-        return new TablesCollection(... array_map(function ($tableName) {
-            return new Table($tableName);
-        }, $result));
+        return new TablesCollection(... array_map(fn($tableName) => new Table($tableName), $result));
     }
 
     public function getFields(string $tableName): FieldsCollection
@@ -52,12 +50,10 @@ class MySqlAdapter implements DatabaseAdapterInterface
         $statement = $this->pdo->query($query);
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        return new FieldsCollection(... array_map(function ($field) {
-                return $this->fieldResolver->resolveField(
-                    $field['Field'],
-                    $field['Type'],
-                    $field['Null'],
-                );
-            }, $result));
+        return new FieldsCollection(... array_map(fn($field) => $this->fieldResolver->resolveField(
+            $field['Field'],
+            $field['Type'],
+            $field['Null'],
+        ), $result));
     }
 }

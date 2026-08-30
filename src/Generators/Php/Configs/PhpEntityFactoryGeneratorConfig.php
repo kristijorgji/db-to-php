@@ -5,9 +5,9 @@ namespace kristijorgji\DbToPhp\Generators\Php\Configs;
 class PhpEntityFactoryGeneratorConfig
 {
     public function __construct(
-        private PhpClassGeneratorConfig $phpClassGeneratorConfig,
-        private bool $typeHint,
-        private bool $includeAnnotations,
+        private readonly PhpClassGeneratorConfig $phpClassGeneratorConfig,
+        private readonly bool $typeHint,
+        private readonly bool $includeAnnotations,
     ) {
     }
 

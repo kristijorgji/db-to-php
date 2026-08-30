@@ -7,7 +7,7 @@ class PhpFunctionParametersCollection
     /**
      * @var array<PhpFunctionParameter>
      */
-    private array $arguments = [];
+    private readonly array $arguments;
 
     public function __construct(PhpFunctionParameter ... $properties)
     {

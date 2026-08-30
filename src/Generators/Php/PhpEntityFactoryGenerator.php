@@ -13,9 +13,9 @@ use function sprintf;
 class PhpEntityFactoryGenerator extends PhpClassGenerator
 {
     public function __construct(
-        private PhpEntityFactoryGeneratorConfig $config,
-        private PhpEntityFactoryFieldsCollection $fieldsInfo,
-        private string $entityClassName,
+        private readonly PhpEntityFactoryGeneratorConfig $config,
+        private readonly PhpEntityFactoryFieldsCollection $fieldsInfo,
+        private readonly string $entityClassName,
     ) {
         parent::__construct($config->getPhpClassGeneratorConfig());
     }

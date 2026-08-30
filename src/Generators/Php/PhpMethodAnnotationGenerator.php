@@ -9,11 +9,11 @@ use function sprintf;
 
 class PhpMethodAnnotationGenerator
 {
-    private TextBuffer $output;
+    private readonly TextBuffer $output;
 
     public function __construct(
-        private PhpFunctionParametersCollection $parameters,
-        private ?PhpType $returnType,
+        private readonly PhpFunctionParametersCollection $parameters,
+        private readonly ?PhpType $returnType,
     ) {
         $this->output = new TextBuffer;
     }

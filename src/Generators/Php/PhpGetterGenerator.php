@@ -10,10 +10,12 @@ use function ucfirst;
 
 class PhpGetterGenerator
 {
-    private TextBuffer $output;
+    private readonly TextBuffer $output;
 
-    public function __construct(private PhpProperty $property, private PhpGetterGeneratorConfig $config)
-    {
+    public function __construct(
+        private readonly PhpProperty $property,
+        private readonly PhpGetterGeneratorConfig $config,
+    ) {
         $this->output = new TextBuffer;
     }
 
@@ -30,7 +32,7 @@ class PhpGetterGenerator
     private function addAnnotation(): void
     {
         $type  = $this->property->getType();
-        $nullableText = $type->isNullable() === true ? '|null' :  '';
+        $nullableText = $type->isNullable() ? '|null' :  '';
 
         $this->output->addLine('/**', 4);
         $this->output->addLine(
@@ -45,7 +47,7 @@ class PhpGetterGenerator
         $type  = $this->property->getType();
         $returnType = '';
         if ($this->config->shouldTypeHint()) {
-            $returnType = ': ' . ($type->isNullable() === true ? '?' : '') . $type->getType()->value;
+            $returnType = ': ' . ($type->isNullable() ? '?' : '') . $type->getType()->value;
         }
 
         $functionName = 'get' . ucfirst($this->property->getName());

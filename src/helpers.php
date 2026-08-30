@@ -13,9 +13,7 @@ if (!function_exists('snakeToPascalCase')) {
     function snakeToPascalCase(string $input) : string
     {
         $tokens = explode('_', $input);
-        $tokens = array_map(function ($token) {
-            return ucfirst($token);
-        }, $tokens);
+        $tokens = array_map(fn($token) => ucfirst($token), $tokens);
 
         return implode('', $tokens);
     }

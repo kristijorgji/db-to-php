@@ -7,7 +7,7 @@ class YearField extends Field
     public function __construct(
         string $name,
         bool $nullable,
-        private int $digits = 4,
+        private readonly int $digits = 4,
     ) {
         parent::__construct($name, $nullable);
     }

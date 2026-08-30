@@ -39,9 +39,7 @@ class InitCommand extends Command
     {
         $path = $input->getArgument('path');
 
-        if ($path === null) {
-            $path = getcwd();
-        }
+        $path ??= getcwd();
 
         $realPath = realpath($path);
 

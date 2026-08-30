@@ -7,7 +7,7 @@ class FieldsCollection
     /**
      * @var array<Field>
      */
-    private array $fields = [];
+    private readonly array $fields;
 
     public function __construct(Field ... $fields)
     {

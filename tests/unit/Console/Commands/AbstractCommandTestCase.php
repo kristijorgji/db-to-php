@@ -20,11 +20,9 @@ abstract class AbstractCommandTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->configFactory = $this->getMockBuilder(ConfigFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configFactory = $this->createMock(ConfigFactory::class);
 
-        $this->manager = $this->getMockBuilder(ManagerContract::class)->getMock();
+        $this->manager = $this->createMock(ManagerContract::class);
 
         $this->input = new StringInput('');
         $this->output = new BufferedOutput;
