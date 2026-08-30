@@ -3,7 +3,7 @@
 include vendor/kristijorgji/php-coding-standard/make/markdown.mk
 
 .PHONY: help dev-init verify-hooks mysql-up mysql-down \
-	test test-coverage lint lint-markdown fix fix-markdown check
+	test test-coverage lint lint-markdown fix fix-markdown check code-analyse code-modernize
 
 help:
 	@echo
@@ -19,9 +19,11 @@ help:
 	@echo
 	@echo "Quality"
 	@echo "--------------------------------------------------------------------------------"
-	@echo "  lint                 composer code-style + lint-markdown"
+	@echo "  lint                 composer code-style + code-analyse + lint-markdown"
 	@echo "  lint-markdown        markdownlint-cli2 (Docker, read-only)"
-	@echo "  check                composer check (format + style + tests)"
+	@echo "  check                composer check (audit, yaml-lint, format, style, phpstan, tests)"
+	@echo "  code-analyse         composer code-analyse (PHPStan)"
+	@echo "  code-modernize       composer code-modernize (Rector, writes)"
 	@echo "  fix                  composer code-format + fix-markdown"
 	@echo "  fix-markdown         Prettier + markdownlint --fix (Docker)"
 	@echo "  test                 composer tests (PHPUnit)"
@@ -63,7 +65,14 @@ check:
 
 lint:
 	XDEBUG_MODE=off composer code-style
+	XDEBUG_MODE=off composer code-analyse
 	@$(MAKE) --no-print-directory lint-markdown
+
+code-analyse:
+	XDEBUG_MODE=off composer code-analyse
+
+code-modernize:
+	XDEBUG_MODE=off composer code-modernize
 
 # -------------------------------------------------------------------------------------------------
 # Writing / auto-fix

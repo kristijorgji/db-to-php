@@ -23,12 +23,17 @@
   "require-dev": {
     "fakerphp/faker": "^1.23",
     "kristijorgji/php-coding-standard": "^0.3",
+    "phpstan/extension-installer": "^1.4",
+    "phpstan/phpstan": "^2.2",
+    "phpstan/phpstan-phpunit": "^2.0",
     "phpunit/phpunit": "^12.0",
+    "rector/rector": "^2",
     "symplify/easy-coding-standard": "^13"
   },
   "config": {
     "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "phpstan/extension-installer": true
     },
     "platform": {
       "php": "8.3.0"
@@ -36,15 +41,27 @@
     "sort-packages": true
   },
     "scripts": {
+        "check": [
+            "@security-audit",
+            "@yaml-lint",
+            "@code-format",
+            "@code-style",
+            "@code-analyse",
+            "@tests"
+        ],
+        "code-analyse": ["vendor/bin/phpstan analyse --memory-limit=1G --no-progress"],
+        "code-format": ["vendor/bin/ecs check --fix"],
+        "code-modernize": ["vendor/bin/rector process"],
+        "code-modernize-check": ["vendor/bin/rector process --dry-run"],
+        "code-style": ["vendor/bin/ecs check"],
+        "security-audit": ["composer audit"],
         "tests": ["vendor/bin/phpunit"],
         "tests-coverage": [
             "mkdir -p build/coverage",
             "vendor/bin/phpunit --coverage-clover build/coverage/clover.xml",
             "vendor/bin/kj-php-coding-standard-coverage-check build/coverage/clover.xml 99"
         ],
-        "code-style": ["vendor/bin/ecs check"],
-        "code-format": ["vendor/bin/ecs check --fix"],
-        "check": ["@code-format", "@code-style", "@tests"]
+        "yaml-lint": ["vendor/bin/kj-php-coding-standard-yaml-lint docker-compose.yml"]
     },
   "autoload": {
     "psr-4": {

@@ -1,0 +1,14 @@
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - phpstan-baseline.neon
+
+parameters:
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - tests/integration/MySql/Php/output
+    level: 6
+    phpVersion: 80300
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
