@@ -2,7 +2,6 @@
 
 namespace kristijorgji\DbToPhp\Data;
 
-use ReflectionObject;
 use function array_key_exists;
 use function camelToSnakeCase;
 
@@ -50,15 +49,10 @@ abstract class AbstractEntity
 
     public function sync(): void
     {
-        $reflection = new ReflectionObject($this);
-
-        foreach ($reflection->getProperties() as $property) {
-            if ($property->getName() === '__original') {
-                continue;
+        foreach ($this as $key => $value) {
+            if ($key !== '__original') {
+                $this->__original[$key] = $value;
             }
-
-            $property->setAccessible(true);
-            $this->__original[$property->getName()] = $property->getValue($this);
         }
     }
 }

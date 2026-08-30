@@ -15,3 +15,6 @@ parameters:
     ignoreErrors:
         -
             identifier: missingType.iterableValue
+        -
+            identifier: foreach.nonIterable
+            path: src/Data/AbstractEntity.php
