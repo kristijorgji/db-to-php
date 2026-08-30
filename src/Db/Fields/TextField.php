@@ -7,7 +7,7 @@ class TextField extends Field
     /**
      * @internal param $signed
      */
-    public function __construct(string $name, bool $nullable, private int $lengthInBytes = 64)
+    public function __construct(string $name, bool $nullable, private readonly int $lengthInBytes = 64)
     {
         parent::__construct($name, $nullable);
     }

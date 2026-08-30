@@ -5,8 +5,8 @@ namespace kristijorgji\DbToPhp\Generators\Php\Configs;
 class PhpPropertyGeneratorConfig
 {
     public function __construct(
-        private bool $includeAnnotations,
-        private bool $typed,
+        private readonly bool $includeAnnotations,
+        private readonly bool $typed,
     ) {
     }
 

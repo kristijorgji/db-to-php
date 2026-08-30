@@ -10,8 +10,8 @@ use function count;
 class PhpEntityGenerator extends PhpClassGenerator
 {
     public function __construct(
-        private PhpEntityGeneratorConfig $config,
-        private PhpPropertiesCollection $properties,
+        private readonly PhpEntityGeneratorConfig $config,
+        private readonly PhpPropertiesCollection $properties,
     ) {
         parent::__construct($config->getPhpClassGeneratorConfig());
     }

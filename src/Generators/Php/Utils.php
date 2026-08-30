@@ -9,7 +9,7 @@ final class Utils
 {
     public static function resolveTypeForAnnotation(PhpType $type) : string
     {
-        $nullableText = $type->isNullable() === true ? '|null' :  '';
+        $nullableText = $type->isNullable() ? '|null' :  '';
         if ($type instanceof PhpObjectType) {
             return $type->getClassName() . $nullableText;
         }
@@ -19,7 +19,7 @@ final class Utils
 
     public static function resolveType(PhpType $type) : string
     {
-        $nullablePrefix = $type->isNullable() === true ? '?' :  '';
+        $nullablePrefix = $type->isNullable() ? '?' :  '';
         if ($type instanceof PhpObjectType) {
             return $nullablePrefix . $type->getClassName();
         }

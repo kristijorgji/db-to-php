@@ -10,7 +10,7 @@ abstract class PhpClassGenerator
 {
     protected TextBuffer $output;
 
-    public function __construct(private PhpClassGeneratorConfig $config)
+    public function __construct(private readonly PhpClassGeneratorConfig $config)
     {
         $this->output = new TextBuffer;
     }

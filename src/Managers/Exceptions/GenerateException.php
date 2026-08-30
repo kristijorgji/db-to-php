@@ -8,8 +8,11 @@ use Throwable;
 
 class GenerateException extends Exception
 {
-    public function __construct(string $message, Throwable $previous, private GenerateResponse $partialResponse)
-    {
+    public function __construct(
+        string $message,
+        Throwable $previous,
+        private readonly GenerateResponse $partialResponse,
+    ) {
         parent::__construct($message, -177, $previous);
     }
 

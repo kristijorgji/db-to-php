@@ -4,7 +4,7 @@ namespace kristijorgji\DbToPhp\Generators\Php\Configs;
 
 class PhpGetterGeneratorConfig
 {
-    public function __construct(private bool $includeAnnotations, private bool $typeHint)
+    public function __construct(private readonly bool $includeAnnotations, private readonly bool $typeHint)
     {
     }
 

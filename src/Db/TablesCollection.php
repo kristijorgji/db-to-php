@@ -14,7 +14,7 @@ class TablesCollection implements IteratorAggregate
     /**
      * @var array<Table>
      */
-    private array $tables = [];
+    private array $tables;
 
     public function __construct(Table ... $fields)
     {

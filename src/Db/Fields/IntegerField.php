@@ -7,8 +7,8 @@ class IntegerField extends Field
     public function __construct(
         string $name,
         bool $nullable,
-        private int $lengthInBits = 32,
-        private bool $signed = false,
+        private readonly int $lengthInBits = 32,
+        private readonly bool $signed = false,
     ) {
         parent::__construct($name, $nullable);
     }

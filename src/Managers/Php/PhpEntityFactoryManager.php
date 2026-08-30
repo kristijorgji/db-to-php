@@ -26,7 +26,7 @@ class PhpEntityFactoryManager extends AbstractPhpManager
         FileSystemInterface $fileSystem,
         bool $typeHint,
         private array $config,
-        private PhpEntityManager $entityManager,
+        private readonly PhpEntityManager $entityManager,
     ) {
         parent::__construct($databaseAdapter, $typeMapper, $fileSystem, $typeHint);
     }

@@ -11,12 +11,12 @@ use function ucfirst;
 
 class PhpSetterGenerator
 {
-    private TextBuffer $output;
+    private readonly TextBuffer $output;
 
     public function __construct(
-        private PhpProperty $property,
-        private PhpSetterGeneratorConfig $config,
-        private array $extraLines = [],
+        private readonly PhpProperty $property,
+        private readonly PhpSetterGeneratorConfig $config,
+        private readonly array $extraLines = [],
     ) {
         $this->output = new TextBuffer;
     }
@@ -35,7 +35,7 @@ class PhpSetterGenerator
     private function addAnnotation(): void
     {
         $type  = $this->property->getType();
-        $nullableText = $type->isNullable() === true ? '|null' :  '';
+        $nullableText = $type->isNullable() ? '|null' :  '';
         $type = $this->property->getType()->getType()->value . $nullableText;
 
         $this->output->addLine('/**', 4);
@@ -59,7 +59,7 @@ class PhpSetterGenerator
         $argumentType = '';
         if ($this->config->shouldTypeHint()) {
             $type  = $this->property->getType();
-            $argumentType = ($type->isNullable() === true ? '?' : '') . $type->getType()->value . ' ';
+            $argumentType = ($type->isNullable() ? '?' : '') . $type->getType()->value . ' ';
         }
 
         $functionName = 'set' . ucfirst($this->property->getName());

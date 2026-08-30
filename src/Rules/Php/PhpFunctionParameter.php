@@ -4,7 +4,7 @@ namespace kristijorgji\DbToPhp\Rules\Php;
 
 class PhpFunctionParameter
 {
-    public function __construct(private string $name, private PhpType $type)
+    public function __construct(private readonly string $name, private readonly PhpType $type)
     {
     }
 

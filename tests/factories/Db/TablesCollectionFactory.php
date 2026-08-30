@@ -10,8 +10,6 @@ class TablesCollectionFactory
 {
     public static function make(int $size = 7) : TablesCollection
     {
-        return new TablesCollection(... array_map(function () {
-            return TableFactory::make();
-        }, range(1, $size)));
+        return new TablesCollection(... array_map(fn() => TableFactory::make(), range(1, $size)));
     }
 }

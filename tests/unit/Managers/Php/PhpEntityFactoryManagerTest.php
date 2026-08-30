@@ -14,7 +14,7 @@ use Throwable;
 use function array_map;
 use function count;
 
-class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
+final class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
 {
     protected array $config;
     private PhpEntityManager&MockObject $entityManager;
@@ -29,9 +29,7 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
 
     private function createManager(): void
     {
-        $this->entityManager = $this->getMockBuilder(PhpEntityManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->entityManager = $this->createMock(PhpEntityManager::class);
 
         $this->manager = $this->getMockBuilder(PhpEntityFactoryManager::class)
             ->setConstructorArgs([
@@ -61,14 +59,12 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
             ->with($returnedTables)
             ->willReturn($returnedTables);
 
-        $expectedTableNames = array_map(function ($table) {
-            return $table->getName();
-        }, $returnedTables->all());
+        $expectedTableNames = array_map(fn($table) => $table->getName(), $returnedTables->all());
 
         $actualTableNames = [];
         $this->manager->expects($this->exactly(count($returnedTables->all())))
             ->method('generateFactory')
-            ->willReturnCallback(function ($tableName) use (&$actualTableNames) {
+            ->willReturnCallback(function (string $tableName) use (&$actualTableNames) {
                 $actualTableNames[] = $tableName;
                 return '';
             });
@@ -113,7 +109,7 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
     public function testFormClassName(string $tableName, string $entityClassName, string $expected): void
     {
         $actual = $this->manager->formClassName($tableName, $entityClassName);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public static function formClassNameProvider(): array
@@ -129,7 +125,7 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
         $this->config['tableToEntityFactoryClassName']['some_specialTable'] = 'UseThisNameEntityFactory';
         $this->createManager();
         $actual = $this->manager->formClassName('some_specialTable', self::randomString());
-        $this->assertEquals('UseThisNameEntityFactory', $actual);
+        $this->assertSame('UseThisNameEntityFactory', $actual);
     }
 
     private function selfPartialMock(array $methodsToMock): void

@@ -5,8 +5,11 @@ namespace kristijorgji\DbToPhp\Rules\Php;
 
 class PhpProperty
 {
-    public function __construct(private PhpAccessModifiers $accessModifier, private PhpType $type, private string $name)
-    {
+    public function __construct(
+        private readonly PhpAccessModifiers $accessModifier,
+        private readonly PhpType $type,
+        private readonly string $name,
+    ) {
     }
 
     public function getAccessModifier(): PhpAccessModifiers

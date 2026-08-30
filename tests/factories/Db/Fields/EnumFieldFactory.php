@@ -5,7 +5,7 @@ namespace kristijorgji\Tests\Factories\Db\Fields;
 use kristijorgji\DbToPhp\Db\Fields\EnumField;
 use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Factories\BaseFactory;
-use function rand;
+use function random_int;
 
 class EnumFieldFactory extends BaseFactory
 {
@@ -23,8 +23,8 @@ class EnumFieldFactory extends BaseFactory
         $maxValues = 10;
         $allowedValues = [];
 
-        for ($i = 0; $i < rand(3, $maxValues); $i++) {
-            $allowedValues[] = self::randomString(rand(2, 10));
+        for ($i = 0; $i < random_int(3, $maxValues); $i++) {
+            $allowedValues[] = self::randomString(random_int(2, 10));
         }
 
         return new StringCollection(... $allowedValues);

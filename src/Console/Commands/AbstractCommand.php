@@ -26,7 +26,7 @@ abstract class AbstractCommand extends Command
     /**
      * AbstractCommand constructor.
      */
-    public function __construct(private ConfigFactory $configFactory, string $name)
+    public function __construct(private readonly ConfigFactory $configFactory, string $name)
     {
         parent::__construct($name);
     }
@@ -47,9 +47,7 @@ abstract class AbstractCommand extends Command
             $this->loadConfig($input, $output);
         }
 
-        if ($this->manager === null) {
-            $this->manager = $this->loadManager();
-        }
+        $this->manager ??= $this->loadManager();
     }
 
     protected function getManager() : ManagerContract
@@ -62,9 +60,6 @@ abstract class AbstractCommand extends Command
         $this->config = $config;
     }
 
-    /**
-     * @return array|null
-     */
     protected function getConfig() : ?array
     {
         return $this->config;

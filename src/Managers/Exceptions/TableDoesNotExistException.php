@@ -7,12 +7,11 @@ use function sprintf;
 
 class TableDoesNotExistException extends Exception
 {
-    public function __construct(private string $tableName)
+    public function __construct(private readonly string $tableName)
     {
         parent::__construct(
             sprintf('The included table %s does not exist', $tableName),
             -77,
-            null,
         );
 
     }

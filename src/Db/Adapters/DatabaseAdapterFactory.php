@@ -14,19 +14,17 @@ class DatabaseAdapterFactory
      */
     public function get(string $databaseDriver, array $config) : DatabaseAdapterInterface
     {
-        switch ($databaseDriver) {
-            case DatabaseDrivers::MYSQL:
-                return new MySqlAdapter(
-                    $config['host'],
-                    (int) $config['port'],
-                    $config['database'],
-                    $config['username'],
-                    $config['password'],
-                );
-            default:
-                throw new InvalidDatabaseDriverException(
-                    sprintf('Invalid database driver: %s !', $databaseDriver),
-                );
-        }
+        return match ($databaseDriver) {
+            DatabaseDrivers::MYSQL => new MySqlAdapter(
+                $config['host'],
+                (int) $config['port'],
+                $config['database'],
+                $config['username'],
+                $config['password'],
+            ),
+            default => throw new InvalidDatabaseDriverException(
+                sprintf('Invalid database driver: %s !', $databaseDriver),
+            ),
+        };
     }
 }

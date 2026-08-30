@@ -9,7 +9,7 @@ class StringCollection
     /**
      * @var array<string>
      */
-    private array $elements = [];
+    private readonly array $elements;
 
     public function __construct(string ... $fields)
     {

@@ -9,7 +9,7 @@ use kristijorgji\DbToPhp\Managers\GenerateResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use Throwable;
 
-class GenerateFactoriesCommandTest extends AbstractCommandTestCase
+final class GenerateFactoriesCommandTest extends AbstractCommandTestCase
 {
     protected GenerateFactoriesCommand&MockObject $command;
 

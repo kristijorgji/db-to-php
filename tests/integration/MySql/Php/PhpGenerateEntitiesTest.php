@@ -12,7 +12,7 @@ use function file_exists;
 use function range;
 use function sprintf;
 
-class PhpGenerateEntitiesTest extends AbstractPhpTestCase
+final class PhpGenerateEntitiesTest extends AbstractPhpTestCase
 {
     /**     * @param array $config
      */
@@ -54,14 +54,20 @@ class PhpGenerateEntitiesTest extends AbstractPhpTestCase
 
         return [
             'output_directory_exists' => array_values(array_map(function () use (&$config, $expectedOutputDirectory) {
-                return [$config, $expectedOutputDirectory];
+                return [
+                    $config,
+                    $expectedOutputDirectory,
+                ];
             }, range(0, 0)))[0],
             'output_directory_doesnt_exists' =>
                 array_values(array_map(function () use (&$config, $expectedOutputDirectory) {
                     if (file_exists($config['entities']['outputDirectory'])) {
                         (new FileSystem)->deleteDirectory($config['entities']['outputDirectory']);
                     }
-                    return [$config, $expectedOutputDirectory];
+                    return [
+                        $config,
+                        $expectedOutputDirectory,
+                    ];
                 }, range(0, 0)))[0],
         ];
     }

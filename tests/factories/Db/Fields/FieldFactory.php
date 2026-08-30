@@ -5,7 +5,7 @@ namespace kristijorgji\Tests\Factories\Db\Fields;
 use kristijorgji\DbToPhp\Db\Fields\Field;
 use kristijorgji\Tests\Factories\BaseFactory;
 use function count;
-use function rand;
+use function random_int;
 
 abstract class FieldFactory extends BaseFactory
 {
@@ -21,6 +21,6 @@ abstract class FieldFactory extends BaseFactory
 
     public static function make() : Field
     {
-        return self::$factories[rand(0, count(self::$factories) - 1)]::make();
+        return self::$factories[random_int(0, count(self::$factories) - 1)]::make();
     }
 }

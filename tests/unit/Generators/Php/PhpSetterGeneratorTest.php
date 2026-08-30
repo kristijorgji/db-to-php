@@ -8,7 +8,7 @@ use kristijorgji\DbToPhp\Rules\Php\PhpProperty;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class PhpSetterGeneratorTest extends TestCase
+final class PhpSetterGeneratorTest extends TestCase
 {
     use SamplePhpProperties;
 
@@ -24,7 +24,7 @@ class PhpSetterGeneratorTest extends TestCase
 
         $actual = $generator->generate();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public static function generateProvider(): array

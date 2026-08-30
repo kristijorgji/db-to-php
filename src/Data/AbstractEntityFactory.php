@@ -13,9 +13,8 @@ use function in_array;
 use function json_encode;
 use function mt_getrandmax;
 use function mt_rand;
-use function pow;
-use function rand;
 use function random_bytes;
+use function random_int;
 use function round;
 use function snakeToPascalCase;
 use function sprintf;
@@ -86,47 +85,47 @@ abstract class AbstractEntityFactory
 
     public static function randomInt8() : int
     {
-        return rand(-128, 127);
+        return random_int(-128, 127);
     }
 
     public static function randomUnsignedInt8() : int
     {
-        return rand(0, 255);
+        return random_int(0, 255);
     }
 
     public static function randomInt16() : int
     {
-        return rand(-32768, 32767);
+        return random_int(-32768, 32767);
     }
 
     public static function randomUnsignedInt16() : int
     {
-        return rand(0, 65535);
+        return random_int(0, 65535);
     }
 
     public static function randomInt24() : int
     {
-        return rand(-8388608, 8388607);
+        return random_int(-8388608, 8388607);
     }
 
     public static function randomUnsignedInt24() : int
     {
-        return rand(0, 16777215);
+        return random_int(0, 16777215);
     }
 
     public static function randomInt32() : int
     {
-        return rand(-2147483648, 2147483647);
+        return random_int(-2147483648, 2147483647);
     }
 
     public static function randomUnsignedInt32() : int
     {
-        return rand(0, 4294967295);
+        return random_int(0, 4294967295);
     }
 
     public static function randomInt64() : int
     {
-        return rand(PHP_INT_MIN, PHP_INT_MAX);
+        return random_int(PHP_INT_MIN, PHP_INT_MAX);
     }
 
     /**
@@ -156,9 +155,7 @@ abstract class AbstractEntityFactory
         int|float $min = 0,
         int|float|null $max = null,
     ) : float {
-        if ($nbMaxDecimals === null) {
-            $nbMaxDecimals = static::randomDigit();
-        }
+        $nbMaxDecimals ??= static::randomDigit();
 
         if ($max === null) {
             $max = static::randomUnsignedNumber();
@@ -188,17 +185,15 @@ abstract class AbstractEntityFactory
      */
     public static function randomUnsignedNumber(?int $nbDigits = null, bool $strict = false) : int
     {
-        if ($nbDigits === null) {
-            $nbDigits = static::randomDigitNotNull();
-        }
-        $max = pow(10, $nbDigits) - 1;
+        $nbDigits ??= static::randomDigitNotNull();
+        $max = 10 ** $nbDigits - 1;
         if ($max > mt_getrandmax()) {
             throw new InvalidArgumentException(
                 'randomUnsignedNumber() can only generate numbers up to mt_getrandmax()',
             );
         }
         if ($strict) {
-            return mt_rand(pow(10, $nbDigits - 1), $max);
+            return mt_rand(10 ** ($nbDigits - 1), $max);
         }
 
         return mt_rand(0, $max);
@@ -207,7 +202,7 @@ abstract class AbstractEntityFactory
     public static function randomNumber(?int $nrDigits = null, bool $strict = false) : int
     {
         $randomNumber = self::randomUnsignedNumber($nrDigits, $strict);
-        return self::randomBoolean() ? $randomNumber : 0 - $randomNumber;
+        return self::randomBoolean() ? $randomNumber : -$randomNumber;
     }
 
     public static function randomDigit() : int
@@ -237,6 +232,6 @@ abstract class AbstractEntityFactory
 
     public static function chooseRandomString(string ... $values) : string
     {
-        return $values[rand(0, count($values) -1)];
+        return $values[random_int(0, count($values) -1)];
     }
 }

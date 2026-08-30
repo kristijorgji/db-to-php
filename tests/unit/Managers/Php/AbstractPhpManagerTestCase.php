@@ -20,9 +20,9 @@ class AbstractPhpManagerTestCase extends TestCase
     {
         $this->config = require $this->baseTestsPath('integration/MySql/Php/config.php');
 
-        $this->databaseAdapter = $this->getMockBuilder(DatabaseAdapterInterface::class)->getMock();
-        $this->typeMapper = $this->getMockBuilder(PhpTypeMapperInterface::class)->getMock();
-        $this->fileSystem = $this->getMockBuilder(FileSystemInterface::class)->getMock();
+        $this->databaseAdapter = $this->createMock(DatabaseAdapterInterface::class);
+        $this->typeMapper = $this->createMock(PhpTypeMapperInterface::class);
+        $this->fileSystem = $this->createMock(FileSystemInterface::class);
         $this->typeHint = $this->config['typeHint'];
     }
 }

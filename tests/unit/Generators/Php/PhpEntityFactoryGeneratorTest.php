@@ -11,7 +11,7 @@ use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class PhpEntityFactoryGeneratorTest extends TestCase
+final class PhpEntityFactoryGeneratorTest extends TestCase
 {
     /**     * @param PhpEntityFactoryGeneratorConfig $config
      */
@@ -30,7 +30,7 @@ class PhpEntityFactoryGeneratorTest extends TestCase
 
         $actual = $entityGenerator->generate();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public static function generateProvider(): array

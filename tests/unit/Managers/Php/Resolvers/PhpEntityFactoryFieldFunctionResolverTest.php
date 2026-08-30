@@ -20,7 +20,7 @@ use kristijorgji\Tests\Helpers\TestCase;
 use kristijorgji\UnitTests\Mappers\Types\Php\TestDbField;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class PhpEntityFactoryFieldFunctionResolverTest extends TestCase
+final class PhpEntityFactoryFieldFunctionResolverTest extends TestCase
 {
     private PhpEntityFactoryFieldFunctionResolver $resolver;
 
@@ -35,7 +35,7 @@ class PhpEntityFactoryFieldFunctionResolverTest extends TestCase
     public function testResolve(Field $field, string $expected): void
     {
         $actual = $this->resolver->resolve($field);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testResolve_invalid(): void

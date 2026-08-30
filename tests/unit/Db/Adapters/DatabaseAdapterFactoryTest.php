@@ -6,7 +6,7 @@ use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterFactory;
 use kristijorgji\DbToPhp\Db\Adapters\Exceptions\InvalidDatabaseDriverException;
 use kristijorgji\Tests\Helpers\TestCase;
 
-class DatabaseAdapterFactoryTest extends TestCase
+final class DatabaseAdapterFactoryTest extends TestCase
 {
     private DatabaseAdapterFactory $databaseAdapterFactory;
 

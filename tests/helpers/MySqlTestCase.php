@@ -11,7 +11,7 @@ abstract class MySqlTestCase extends TestCase
     public static array $mysqlConnection = [];
     protected static ?PDO $pdo = null;
 
-    static function init(): void
+    public static function init(): void
     {
         self::$mysqlConnection = [
             'host' => $_ENV['DB_HOST'],

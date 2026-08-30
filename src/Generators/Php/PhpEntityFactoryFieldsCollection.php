@@ -7,7 +7,7 @@ class PhpEntityFactoryFieldsCollection
     /**
      * @var array<PhpEntityFactoryField>
      */
-    private array $fields = [];
+    private readonly array $fields;
 
     public function __construct(PhpEntityFactoryField ... $fields)
     {

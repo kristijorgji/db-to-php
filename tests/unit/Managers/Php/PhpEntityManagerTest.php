@@ -32,7 +32,7 @@ use function count;
 use function range;
 use function snakeToCamelCase;
 
-class PhpEntityManagerTest extends AbstractPhpManagerTestCase
+final class PhpEntityManagerTest extends AbstractPhpManagerTestCase
 {
     use SamplePhpProperties;
 
@@ -71,14 +71,12 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
             ->with($returnedTables)
             ->willReturn($returnedTables);
 
-        $expectedTableNames = array_map(function ($table) {
-            return $table->getName();
-        }, $returnedTables->all());
+        $expectedTableNames = array_map(fn($table) => $table->getName(), $returnedTables->all());
 
         $actualTableNames = [];
         $this->manager->expects($this->exactly(count($returnedTables->all())))
             ->method('generateEntity')
-            ->willReturnCallback(function ($tableName) use (&$actualTableNames) {
+            ->willReturnCallback(function (string $tableName) use (&$actualTableNames) {
                 $actualTableNames[] = $tableName;
                 return '';
             });
@@ -195,7 +193,6 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                         'Entities',
                         'SuperEntity',
                         new StringCollection(... []),
-                        null,
                     ),
                     true,
                     true,
@@ -263,13 +260,9 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
 
     public function testFormProperties(): void
     {
-        $fields = new FieldsCollection(... array_map(function () {
-            return FieldFactory::make();
-        }, range(0, 4)));
+        $fields = new FieldsCollection(... array_map(fn() => FieldFactory::make(), range(0, 4)));
 
-        $returnedTypes = array_map(function () {
-            return PhpTypeFactory::make();
-        }, $fields->all());
+        $returnedTypes = array_map(fn() => PhpTypeFactory::make(), $fields->all());
 
         $expectedFields = $fields->all();
         $actualFields = [];
@@ -281,13 +274,11 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                 return $returnedTypes[$mapCallIndex++];
             });
 
-        $expectedProperties = new PhpPropertiesCollection(... array_map(function ($field, $type) {
-            return new PhpProperty(
-                $this->config['properties']['accessModifier'],
-                $type,
-                snakeToCamelCase($field->getName()),
-            );
-        }, $fields->all(), $returnedTypes));
+        $expectedProperties = new PhpPropertiesCollection(... array_map(fn($field, $type) => new PhpProperty(
+            $this->config['properties']['accessModifier'],
+            $type,
+            snakeToCamelCase($field->getName()),
+        ), $fields->all(), $returnedTypes));
 
         $actualProperties = $this->manager->formProperties($fields);
 
@@ -301,7 +292,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
     public function testFormClassName(string $tableName, string $expected): void
     {
         $actual = $this->manager->formClassName($tableName);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public static function formClassNameProvider(): array
@@ -321,7 +312,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
         $this->config['tableToEntityClassName']['some_specialTable'] = 'UseThisNameEntity';
         $this->createManager();
         $actual = $this->manager->formClassName('some_specialTable');
-        $this->assertEquals('UseThisNameEntity', $actual);
+        $this->assertSame('UseThisNameEntity', $actual);
     }
 
     private function selfPartialMock(array $methodsToMock): void

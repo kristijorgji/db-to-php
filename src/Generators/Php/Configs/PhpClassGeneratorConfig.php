@@ -7,10 +7,10 @@ use kristijorgji\DbToPhp\Support\StringCollection;
 class PhpClassGeneratorConfig
 {
     public function __construct(
-        private string $namespace,
-        private string $className,
-        private StringCollection $uses,
-        private ?string $extends = null,
+        private readonly string $namespace,
+        private readonly string $className,
+        private readonly StringCollection $uses,
+        private readonly ?string $extends = null,
     ) {
     }
 

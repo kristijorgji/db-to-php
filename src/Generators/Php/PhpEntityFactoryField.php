@@ -6,8 +6,8 @@ namespace kristijorgji\DbToPhp\Generators\Php;
 class PhpEntityFactoryField
 {
     public function __construct(
-        private string $dbFieldName,
-        private string $resolvingCall,
+        private readonly string $dbFieldName,
+        private readonly string $resolvingCall,
     ) {
     }
 

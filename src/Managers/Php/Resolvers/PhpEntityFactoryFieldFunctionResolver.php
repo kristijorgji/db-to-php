@@ -16,41 +16,26 @@ use kristijorgji\DbToPhp\Db\Fields\JsonField;
 use kristijorgji\DbToPhp\Db\Fields\TextField;
 use kristijorgji\DbToPhp\Db\Fields\YearField;
 use function addslashes;
-use function get_class;
 use function sprintf;
 
 class PhpEntityFactoryFieldFunctionResolver
 {
     public function resolve(Field $field) : string
     {
-        switch (true)
-        {
-            case $field instanceof BoolField:
-                return 'self::randomBoolean()';
-            case $field instanceof DateField:
-                return sprintf('self::randomDate(\'%s\')', $field->getFormat());
-            case $field instanceof DoubleField:
-            case $field instanceof FloatField:
-                return 'self::randomFloat()';
-            case $field instanceof EnumField:
-                return $this->resolveEnum($field);
-            case $field instanceof JsonField:
-                return 'self::randomJson()';
-            case $field instanceof TextField:
-            case $field instanceof BinaryField:
-                return $this->resolveString($field);
-            case $field instanceof IntegerField:
-                return $this->resolveInteger($field);
-            case $field instanceof YearField:
-                return sprintf('self::randomYear(%s)', $field->getDigits());
-            case $field instanceof DecimalField:
-                return $this->resolveDecimal($field);
-            default:
-                throw new InvalidArgumentException(
-                    sprintf('Field %s do not have generator functions yet!', get_class($field)),
-                );
-
-        }
+        return match (true) {
+            $field instanceof BoolField => 'self::randomBoolean()',
+            $field instanceof DateField => sprintf('self::randomDate(\'%s\')', $field->getFormat()),
+            $field instanceof DoubleField, $field instanceof FloatField => 'self::randomFloat()',
+            $field instanceof EnumField => $this->resolveEnum($field),
+            $field instanceof JsonField => 'self::randomJson()',
+            $field instanceof TextField, $field instanceof BinaryField => $this->resolveString($field),
+            $field instanceof IntegerField => $this->resolveInteger($field),
+            $field instanceof YearField => sprintf('self::randomYear(%s)', $field->getDigits()),
+            $field instanceof DecimalField => $this->resolveDecimal($field),
+            default => throw new InvalidArgumentException(
+                sprintf('Field %s do not have generator functions yet!', $field::class),
+            ),
+        };
     }
 
     private function resolveInteger(IntegerField $field) : string

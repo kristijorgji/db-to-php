@@ -4,7 +4,7 @@ namespace kristijorgji\DbToPhp\Rules\Php;
 
 class PhpObjectType extends PhpType
 {
-    public function __construct(bool $nullable, private string $className)
+    public function __construct(bool $nullable, private readonly string $className)
     {
         parent::__construct(
             PhpTypes::OBJECT,

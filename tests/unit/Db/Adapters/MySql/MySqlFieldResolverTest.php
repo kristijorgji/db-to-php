@@ -20,7 +20,7 @@ use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class MySqlFieldResolverTest extends TestCase
+final class MySqlFieldResolverTest extends TestCase
 {
     private MySqlFieldResolver $fieldResolver;
 
@@ -58,11 +58,12 @@ class MySqlFieldResolverTest extends TestCase
     {
         $name = self::randomString(4);
 
-        $h = function (Field $field, string $mysqlType) use ($name) {
-            return [
-                $name, $mysqlType, ($field->isNullable() ? 'YES' : 'NO'), $field,
-            ];
-        };
+        $h = (fn(Field $field, string $mysqlType) => [
+            $name,
+            $mysqlType,
+            ($field->isNullable() ? 'YES' : 'NO'),
+            $field,
+        ]);
 
         return [
             'nullable' => $h(new TextField($name, true, 1), 'char(1)'),

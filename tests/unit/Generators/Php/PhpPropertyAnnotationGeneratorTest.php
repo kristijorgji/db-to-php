@@ -9,7 +9,7 @@ use kristijorgji\DbToPhp\Rules\Php\PhpTypes;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class PhpPropertyAnnotationGeneratorTest extends TestCase
+final class PhpPropertyAnnotationGeneratorTest extends TestCase
 {
     /**     * @param PhpType $type
      */
@@ -22,7 +22,7 @@ class PhpPropertyAnnotationGeneratorTest extends TestCase
             $type,
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $generator->generate(),
         );

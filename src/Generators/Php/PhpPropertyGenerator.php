@@ -9,10 +9,12 @@ use function sprintf;
 
 class PhpPropertyGenerator
 {
-    private TextBuffer $output;
+    private readonly TextBuffer $output;
 
-    public function __construct(private PhpProperty $property, private PhpPropertyGeneratorConfig $config)
-    {
+    public function __construct(
+        private readonly PhpProperty $property,
+        private readonly PhpPropertyGeneratorConfig $config,
+    ) {
         $this->output = new TextBuffer;
     }
 

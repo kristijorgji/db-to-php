@@ -3,7 +3,7 @@
 namespace kristijorgji\UnitTests\Data;
 
 use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
-use function rand;
+use function random_int;
 
 class Test2EntityFactory extends AbstractEntityFactory
 {
@@ -36,15 +36,15 @@ class Test2EntityFactory extends AbstractEntityFactory
         self::validateData($data);
         return [
             'id' => $data['id'] ?? self::randomInt32(),
-            'name' => $data['name'] ?? self::randomString(rand(0, 50)),
-            'surname' => $data['surname'] ?? self::randomString(rand(0, 64)),
+            'name' => $data['name'] ?? self::randomString(random_int(0, 50)),
+            'surname' => $data['surname'] ?? self::randomString(random_int(0, 64)),
             'isWorking' => $data['isWorking'] ?? self::randomBoolean(),
             'salary' => $data['salary'] ?? self::randomFloat(),
             'discount' => $data['discount'] ?? self::randomFloat(),
             'new_column' => $data['new_column'] ?? self::randomFloat(),
-            'dddd' => $data['dddd'] ?? self::randomString(rand(0, 64)),
-            'binaeraylk' => $data['binaeraylk'] ?? self::randomString(rand(0, 1)),
-            'f' => $data['f'] ?? self::randomString(rand(0, 64)),
+            'dddd' => $data['dddd'] ?? self::randomString(random_int(0, 64)),
+            'binaeraylk' => $data['binaeraylk'] ?? self::randomString(random_int(0, 1)),
+            'f' => $data['f'] ?? self::randomString(random_int(0, 64)),
         ];
     }
 }

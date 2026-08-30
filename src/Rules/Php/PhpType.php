@@ -4,7 +4,7 @@ namespace kristijorgji\DbToPhp\Rules\Php;
 
 class PhpType
 {
-    public function __construct(private PhpTypes $type, private bool $nullable)
+    public function __construct(private readonly PhpTypes $type, private readonly bool $nullable)
     {
     }
 

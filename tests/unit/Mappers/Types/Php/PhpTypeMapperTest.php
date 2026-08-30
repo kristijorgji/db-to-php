@@ -21,7 +21,7 @@ use kristijorgji\DbToPhp\Support\StringCollection;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class PhpTypeMapperTest extends TestCase
+final class PhpTypeMapperTest extends TestCase
 {
     private PhpTypeMapper $mapper;
 

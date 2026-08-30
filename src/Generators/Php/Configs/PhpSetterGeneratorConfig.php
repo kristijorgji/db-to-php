@@ -4,8 +4,11 @@ namespace kristijorgji\DbToPhp\Generators\Php\Configs;
 
 class PhpSetterGeneratorConfig
 {
-    public function __construct(private bool $includeAnnotations, private bool $typeHint, private bool $isFluent)
-    {
+    public function __construct(
+        private readonly bool $includeAnnotations,
+        private readonly bool $typeHint,
+        private readonly bool $isFluent,
+    ) {
     }
 
     public function shouldIncludeAnnotations(): bool

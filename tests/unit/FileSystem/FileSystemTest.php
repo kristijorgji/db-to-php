@@ -6,7 +6,7 @@ use kristijorgji\DbToPhp\FileSystem\Exceptions\FileSystemException;
 use kristijorgji\DbToPhp\FileSystem\FileSystem;
 use kristijorgji\Tests\Helpers\TestCase;
 
-class FileSystemTest extends TestCase
+final class FileSystemTest extends TestCase
 {
     private FileSystem $fileSystem;
 
@@ -20,16 +20,14 @@ class FileSystemTest extends TestCase
         $path = __DIR__ . '/test';
         $this->fileSystem->createDirectory($path);
         $this->fileSystem->deleteDirectory($path);
-        self::assertFalse(
-            $this->fileSystem->exists($path),
-        );
+        $this->assertFalse($this->fileSystem->exists($path));
     }
 
     public function testReadFile(): void
     {
         $expected = 'dfadsfd
 ';
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->fileSystem->readFile(__DIR__ . '/testfile.img'),
         );
@@ -43,7 +41,7 @@ class FileSystemTest extends TestCase
 
     public function testGetFileExtension(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             'img',
             $this->fileSystem->getFileExtension(__DIR__ . '/testfile.img'),
         );
