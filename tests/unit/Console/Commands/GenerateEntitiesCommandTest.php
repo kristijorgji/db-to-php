@@ -13,12 +13,6 @@ final class GenerateEntitiesCommandTest extends AbstractCommandTestCase
 {
     protected GenerateEntitiesCommand&MockObject $command;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->mockSelf([]);
-    }
-
     public function testExecute_on_error(): void
     {
         $this->mockSelf(['bootstrap', 'outputGenerationResult', 'getManager']);

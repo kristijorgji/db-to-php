@@ -37,7 +37,7 @@ final class PhpEntityManagerTest extends AbstractPhpManagerTestCase
     use SamplePhpProperties;
 
     protected array $config;
-    protected PhpEntityManager&MockObject $manager;
+    protected PhpEntityManager $manager;
 
     protected function setUp(): void
     {
@@ -48,12 +48,19 @@ final class PhpEntityManagerTest extends AbstractPhpManagerTestCase
 
     private function createManager(): void
     {
-        $this->selfPartialMock([]);
+        $this->manager = new PhpEntityManager(
+            $this->databaseAdapter,
+            $this->typeMapper,
+            $this->fileSystem,
+            $this->typeHint,
+            $this->config,
+        );
     }
 
     public function testGenerateEntities(): void
     {
-        $this->selfPartialMock(['filterTables', 'generateEntity']);
+        $databaseAdapter = $this->mockDatabaseAdapter();
+        $manager = $this->selfPartialMock(['filterTables', 'generateEntity']);
 
         $returnedTables = new TablesCollection(...
             [
@@ -62,11 +69,11 @@ final class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                 new Table('orders'),
             ]);
 
-        $this->databaseAdapter->expects($this->once())
+        $databaseAdapter->expects($this->once())
             ->method('getTables')
             ->willReturn($returnedTables);
 
-        $this->manager->expects($this->once())
+        $manager->expects($this->once())
             ->method('filterTables')
             ->with($returnedTables)
             ->willReturn($returnedTables);
@@ -74,29 +81,30 @@ final class PhpEntityManagerTest extends AbstractPhpManagerTestCase
         $expectedTableNames = array_map(fn($table) => $table->getName(), $returnedTables->all());
 
         $actualTableNames = [];
-        $this->manager->expects($this->exactly(count($returnedTables->all())))
+        $manager->expects($this->exactly(count($returnedTables->all())))
             ->method('generateEntity')
             ->willReturnCallback(function (string $tableName) use (&$actualTableNames) {
                 $actualTableNames[] = $tableName;
                 return '';
             });
 
-        $this->manager->generateEntities();
+        $manager->generateEntities();
 
         $this->assertSame($expectedTableNames, $actualTableNames);
     }
 
     public function testGenerateEntities_on_error(): void
     {
-        $this->selfPartialMock(['filterTables', 'generateEntity']);
+        $databaseAdapter = $this->mockDatabaseAdapter();
+        $manager = $this->selfPartialMock(['filterTables', 'generateEntity']);
 
         $returnedTables = TablesCollectionFactory::make();
 
-        $this->databaseAdapter->expects($this->once())
+        $databaseAdapter->expects($this->once())
             ->method('getTables')
             ->willReturn($returnedTables);
 
-        $this->manager->expects($this->once())
+        $manager->expects($this->once())
             ->method('filterTables')
             ->with($returnedTables)
             ->willReturn($returnedTables);
@@ -104,12 +112,12 @@ final class PhpEntityManagerTest extends AbstractPhpManagerTestCase
         $partialResponse = new GenerateResponse;
         $partialResponse->addPath('test');
 
-        $this->manager->expects($this->once())
+        $manager->expects($this->once())
             ->method('generateEntity')
             ->willThrowException(new Exception);
 
         try {
-            $this->manager->generateEntities();
+            $manager->generateEntities();
         } catch (Throwable $e) {
             $this->assertInstanceOf(GenerateException::class, $e);
         }
@@ -117,31 +125,33 @@ final class PhpEntityManagerTest extends AbstractPhpManagerTestCase
 
     public function testGenerateEntity(): void
     {
-        $this->selfPartialMock(['formProperties']);
+        $databaseAdapter = $this->mockDatabaseAdapter();
+        $fileSystem = $this->mockFileSystem();
+        $manager = $this->selfPartialMock(['formProperties']);
         $tableName = 'test_table';
 
         $returnedFields = FieldsCollectionFactory::make();
 
-        $this->databaseAdapter->expects($this->once())
+        $databaseAdapter->expects($this->once())
             ->method('getFields')
             ->with($tableName)
             ->willReturn($returnedFields);
 
         $returnedProperties = $this->getSampleProperties();
 
-        $this->manager->expects($this->once())
+        $manager->expects($this->once())
             ->method('formProperties')
             ->with($returnedFields)
             ->willReturn($returnedProperties);
 
-        $this->fileSystem->expects($this->once())
+        $fileSystem->expects($this->once())
             ->method('write')
             ->with(
                 $this->config['outputDirectory'] . '/TestTableEntity.php',
                 $this->anything(),
             );
 
-        $this->manager->generateEntity($tableName);
+        $manager->generateEntity($tableName);
     }
 
     /**     * @param array $config
@@ -260,6 +270,8 @@ final class PhpEntityManagerTest extends AbstractPhpManagerTestCase
 
     public function testFormProperties(): void
     {
+        $typeMapper = $this->mockTypeMapper();
+        $this->createManager();
         $fields = new FieldsCollection(... array_map(fn() => FieldFactory::make(), range(0, 4)));
 
         $returnedTypes = array_map(fn() => PhpTypeFactory::make(), $fields->all());
@@ -267,7 +279,7 @@ final class PhpEntityManagerTest extends AbstractPhpManagerTestCase
         $expectedFields = $fields->all();
         $actualFields = [];
         $mapCallIndex = 0;
-        $this->typeMapper->expects($this->exactly(count($fields->all())))
+        $typeMapper->expects($this->exactly(count($fields->all())))
             ->method('map')
             ->willReturnCallback(function ($field) use (&$actualFields, &$mapCallIndex, $returnedTypes) {
                 $actualFields[] = $field;
@@ -315,7 +327,10 @@ final class PhpEntityManagerTest extends AbstractPhpManagerTestCase
         $this->assertSame('UseThisNameEntity', $actual);
     }
 
-    private function selfPartialMock(array $methodsToMock): void
+    /**
+     * @param list<string> $methodsToMock
+     */
+    private function selfPartialMock(array $methodsToMock): PhpEntityManager&MockObject
     {
         $this->manager = $this->getMockBuilder(PhpEntityManager::class)
             ->setConstructorArgs([
@@ -327,5 +342,7 @@ final class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                 ])
             ->onlyMethods($methodsToMock)
             ->getMock();
+
+        return $this->manager;
     }
 }

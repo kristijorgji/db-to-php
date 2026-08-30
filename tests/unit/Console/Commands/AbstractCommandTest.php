@@ -6,25 +6,18 @@ use kristijorgji\DbToPhp\AppInfo;
 use kristijorgji\DbToPhp\Config\ConfigFactory;
 use kristijorgji\DbToPhp\Console\Commands\AbstractCommand;
 use kristijorgji\Tests\Helpers\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use function getcwd;
 use const DIRECTORY_SEPARATOR;
 
 final class AbstractCommandTest extends TestCase
 {
-    private AbstractCommand&MockObject $command;
+    private AbstractCommand $command;
 
     protected function setUp(): void
     {
-        $configFactory = $this->createMock(ConfigFactory::class);
-
-        $this->command = $this->getMockBuilder(AbstractCommand::class)
-            ->setConstructorArgs([
-                $configFactory,
-                self::randomString(),
-            ])
-            ->onlyMethods([])
-            ->getMock();
+        $configFactory = $this->createStub(ConfigFactory::class);
+        $this->command = new class ($configFactory, self::randomString()) extends AbstractCommand {
+        };
     }
 
     public function testLocateDefaultConfigFile(): void

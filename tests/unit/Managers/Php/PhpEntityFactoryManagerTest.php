@@ -10,6 +10,7 @@ use kristijorgji\DbToPhp\Managers\Php\PhpEntityManager;
 use kristijorgji\Tests\Factories\Db\TablesCollectionFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Throwable;
 use function array_map;
 use function count;
@@ -17,8 +18,8 @@ use function count;
 final class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
 {
     protected array $config;
-    private PhpEntityManager&MockObject $entityManager;
-    protected PhpEntityFactoryManager&MockObject $manager;
+    private PhpEntityManager&Stub $entityManager;
+    protected PhpEntityFactoryManager $manager;
 
     protected function setUp(): void
     {
@@ -29,32 +30,30 @@ final class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
 
     private function createManager(): void
     {
-        $this->entityManager = $this->createMock(PhpEntityManager::class);
+        $this->entityManager = $this->createStub(PhpEntityManager::class);
 
-        $this->manager = $this->getMockBuilder(PhpEntityFactoryManager::class)
-            ->setConstructorArgs([
-                $this->databaseAdapter,
-                $this->typeMapper,
-                $this->fileSystem,
-                $this->typeHint,
-                $this->config,
-                $this->entityManager,
-            ])
-            ->onlyMethods([])
-            ->getMock();
+        $this->manager = new PhpEntityFactoryManager(
+            $this->databaseAdapter,
+            $this->typeMapper,
+            $this->fileSystem,
+            $this->typeHint,
+            $this->config,
+            $this->entityManager,
+        );
     }
 
     public function testGenerateFactories(): void
     {
-        $this->selfPartialMock(['filterTables', 'generateFactory']);
+        $databaseAdapter = $this->mockDatabaseAdapter();
+        $manager = $this->selfPartialMock(['filterTables', 'generateFactory']);
 
         $returnedTables = TablesCollectionFactory::make();
 
-        $this->databaseAdapter->expects($this->once())
+        $databaseAdapter->expects($this->once())
             ->method('getTables')
             ->willReturn($returnedTables);
 
-        $this->manager->expects($this->once())
+        $manager->expects($this->once())
             ->method('filterTables')
             ->with($returnedTables)
             ->willReturn($returnedTables);
@@ -62,29 +61,30 @@ final class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
         $expectedTableNames = array_map(fn($table) => $table->getName(), $returnedTables->all());
 
         $actualTableNames = [];
-        $this->manager->expects($this->exactly(count($returnedTables->all())))
+        $manager->expects($this->exactly(count($returnedTables->all())))
             ->method('generateFactory')
             ->willReturnCallback(function (string $tableName) use (&$actualTableNames) {
                 $actualTableNames[] = $tableName;
                 return '';
             });
 
-        $this->manager->generateFactories();
+        $manager->generateFactories();
 
         $this->assertSame($expectedTableNames, $actualTableNames);
     }
 
     public function testGenerateFactories_on_error(): void
     {
-        $this->selfPartialMock(['filterTables', 'generateFactory']);
+        $databaseAdapter = $this->mockDatabaseAdapter();
+        $manager = $this->selfPartialMock(['filterTables', 'generateFactory']);
 
         $returnedTables = TablesCollectionFactory::make();
 
-        $this->databaseAdapter->expects($this->once())
+        $databaseAdapter->expects($this->once())
             ->method('getTables')
             ->willReturn($returnedTables);
 
-        $this->manager->expects($this->once())
+        $manager->expects($this->once())
             ->method('filterTables')
             ->with($returnedTables)
             ->willReturn($returnedTables);
@@ -92,12 +92,12 @@ final class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
         $partialResponse = new GenerateResponse;
         $partialResponse->addPath('test');
 
-        $this->manager->expects($this->once())
+        $manager->expects($this->once())
             ->method('generateFactory')
             ->willThrowException(new Exception);
 
         try {
-            $this->manager->generateFactories();
+            $manager->generateFactories();
         } catch (Throwable $e) {
             $this->assertInstanceOf(GenerateException::class, $e);
         }
@@ -128,7 +128,10 @@ final class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
         $this->assertSame('UseThisNameEntityFactory', $actual);
     }
 
-    private function selfPartialMock(array $methodsToMock): void
+    /**
+     * @param list<string> $methodsToMock
+     */
+    private function selfPartialMock(array $methodsToMock): PhpEntityFactoryManager&MockObject
     {
         $this->manager = $this->getMockBuilder(PhpEntityFactoryManager::class)
             ->setConstructorArgs([
@@ -141,5 +144,7 @@ final class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
                 ])
             ->onlyMethods($methodsToMock)
             ->getMock();
+
+        return $this->manager;
     }
 }

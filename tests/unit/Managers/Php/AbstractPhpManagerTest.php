@@ -98,14 +98,11 @@ final class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
 
     private function createManager(): void
     {
-        $this->manager = $this->getMockBuilder(AbstractPhpManager::class)
-            ->setConstructorArgs([
-                $this->databaseAdapter,
-                $this->typeMapper,
-                $this->fileSystem,
-                $this->typeHint,
-            ])
-            ->onlyMethods([])
-            ->getMock();
+        $this->manager = new AbstractPhpManager(
+            $this->databaseAdapter,
+            $this->typeMapper,
+            $this->fileSystem,
+            $this->typeHint,
+        );
     }
 }
