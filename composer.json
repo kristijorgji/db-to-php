@@ -35,12 +35,17 @@
     },
     "sort-packages": true
   },
-  "scripts": {
-    "tests": ["vendor/bin/phpunit"],
-    "code-style": ["vendor/bin/ecs check"],
-    "code-format": ["vendor/bin/ecs check --fix"],
-    "check": ["@code-format", "@code-style", "@tests"]
-  },
+    "scripts": {
+        "tests": ["vendor/bin/phpunit"],
+        "tests-coverage": [
+            "mkdir -p build/coverage",
+            "vendor/bin/phpunit --coverage-clover build/coverage/clover.xml",
+            "vendor/bin/kj-php-coding-standard-coverage-check build/coverage/clover.xml 99"
+        ],
+        "code-style": ["vendor/bin/ecs check"],
+        "code-format": ["vendor/bin/ecs check --fix"],
+        "check": ["@code-format", "@code-style", "@tests"]
+    },
   "autoload": {
     "psr-4": {
       "kristijorgji\\DbToPhp\\": "src/"

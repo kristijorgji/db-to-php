@@ -1,17 +1,29 @@
+# IDEs
 .idea/
-.vagrant/
-Entities/
-Factories/
-vendor/
-.env
-logs/
-tests/coverage/
 *.sublime-project
 *.swp
 *.sublime-workspace
+
+# OS
 Thumbs.db
 desktop.ini
 .DS_Store
+
+.vagrant/
+
+# PHP
+vendor/
 .phpunit.result.cache
 .phpunit.cache/
 .ecs_cache/
+
+# Project
+/git_hooks/
+/build/
+/build/coverage/
+.env
+logs/
+tests/coverage/
+
+Entities/
+Factories/

@@ -140,6 +140,7 @@ class MySqlFieldResolverTest extends TestCase
             // TODO can have proper fields and generators in factories
 
             $h(new YearField($name, false, 4), 'year(4)'),
+            $h(new YearField($name, false, 4), 'year'),
 
             $h(new TextField($name, false), 'time'),
             $h(new TextField($name, false), 'datetime'),

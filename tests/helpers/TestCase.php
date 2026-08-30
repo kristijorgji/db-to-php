@@ -13,6 +13,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function assertFoldersContentMatch(string $expectedDirectory, string $actualDirectory): void
     {
+        $this->assertDirectoryExists($expectedDirectory);
+        $this->assertDirectoryExists($actualDirectory);
+
         $expectedFiles = [];
 
         foreach (new DirectoryIterator($expectedDirectory) as $fileInfo) {

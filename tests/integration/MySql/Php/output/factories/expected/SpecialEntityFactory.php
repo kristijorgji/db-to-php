@@ -51,7 +51,7 @@ class SpecialEntityFactory extends AbstractEntityFactory
             'geometry_collection' => array_key_exists('geometry_collection', $data) ?
                 $data['geometry_collection'] : self::randomString(rand(0, 64)),
             'json' => array_key_exists('json', $data) ?
-                $data['json'] : self::randomString(rand(0, 64)),
+                $data['json'] : self::randomJson(),
             'line_string' => array_key_exists('line_string', $data) ?
                 $data['line_string'] : self::randomString(rand(0, 64)),
             'multilinestring' => array_key_exists('multilinestring', $data) ?

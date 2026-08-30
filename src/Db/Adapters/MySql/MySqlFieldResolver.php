@@ -55,6 +55,11 @@ class MySqlFieldResolver
             return new YearField($name, $nullable, (int) $captured[1]);
         }
 
+        // MySQL 8+ reports YEAR without a display width.
+        if (preg_match('#^year$#i', $type)) {
+            return new YearField($name, $nullable);
+        }
+
         // TODO time type
         if (preg_match('#^time$#i', $type)) {
             return new TextField($name, $nullable);

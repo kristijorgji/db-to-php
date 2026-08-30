@@ -7,7 +7,6 @@ use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterFactory;
 use kristijorgji\DbToPhp\Db\Adapters\DatabaseAdapterInterface;
 use kristijorgji\DbToPhp\Managers\ManagerFactory;
 use kristijorgji\DbToPhp\Managers\Php\PhpManager;
-use kristijorgji\DbToPhp\Mappers\Types\Php\PhpTypeMapperFactory;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -24,7 +23,6 @@ class ManagerFactoryTest extends TestCase
      */
     private MockObject $databaseAdapterFactory;
 
-    private MockObject $typeMapperFactory;
     private ManagerFactory $managerFactory;
 
     protected function setUp(): void
@@ -33,23 +31,19 @@ class ManagerFactoryTest extends TestCase
             'databaseDriver' => DatabaseDrivers::MYSQL,
             'connection' => [
                 'host' => '127.0.0.1',
-                'port' => 3306,
+                'port' => 1111,
                 'database' => 'db_to_php',
-                'username' => 'root',
-                'password' => 'Test123@',
+                'username' => 'test_user_db_to_php',
+                'password' => 'Secret@',
             ],
         ];
 
         $this->databaseAdapterFactory = $this->getMockBuilder(DatabaseAdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->typeMapperFactory = $this->getMockBuilder(PhpTypeMapperFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->managerFactory = new ManagerFactory(
             $this->databaseAdapterFactory,
-            $this->typeMapperFactory,
         );
     }
 

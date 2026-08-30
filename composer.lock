@@ -1773,16 +1773,16 @@
         },
         {
             "name": "kristijorgji/php-coding-standard",
-            "version": "0.3.7",
+            "version": "0.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kristijorgji/php-coding-standard.git",
-                "reference": "bae8a914bd60ad788947c3731c564787e30a683e"
+                "reference": "8d01f603f4411b8594b29f15281fff72a294400d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kristijorgji/php-coding-standard/zipball/bae8a914bd60ad788947c3731c564787e30a683e",
-                "reference": "bae8a914bd60ad788947c3731c564787e30a683e",
+                "url": "https://api.github.com/repos/kristijorgji/php-coding-standard/zipball/8d01f603f4411b8594b29f15281fff72a294400d",
+                "reference": "8d01f603f4411b8594b29f15281fff72a294400d",
                 "shasum": ""
             },
             "require": {
@@ -1811,9 +1811,9 @@
             ],
             "description": "PHPCS/ECS house coding standard (Slevomat-based) plus optional shared git pre-commit hooks",
             "support": {
-                "source": "https://github.com/kristijorgji/php-coding-standard/tree/v0.3.7"
+                "source": "https://github.com/kristijorgji/php-coding-standard/tree/v0.3.9"
             },
-            "time": "2026-08-17T10:00:21+00:00"
+            "time": "2026-08-29T11:53:56+00:00"
         },
         {
             "name": "kubawerlos/php-cs-fixer-custom-fixers",
@@ -5186,5 +5186,5 @@
     "platform-overrides": {
         "php": "8.3.0"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }

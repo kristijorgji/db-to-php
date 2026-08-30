@@ -1,0 +1,41 @@
+{
+  // Enable automatic ignore logic for all .gitignore files (root and sub-dirs)
+  "gitignore": true,
+
+  // Markdownlint Rule Configurations
+  "config": {
+    // Base: markdownlint recommended rules
+    "default": true,
+
+    // MD033: Allow inline HTML if ever needed in docs
+    "MD033": false,
+
+    // MD001: Headings should increment by one level at a time
+    "MD001": true,
+
+    // MD003: Heading style: ATX (# Heading) for consistency
+    "MD003": { "style": "atx" },
+
+    // MD013: Line length: 120 chars, ignoring code and tables
+    "MD013": {
+      "line_length": 120,
+      "code_blocks": false,
+      "tables": false
+    },
+
+    // MD004: Unordered lists: use '-' (dash) consistently
+    "MD004": { "style": "dash" },
+
+    // MD049: Emphasis style: allow both '_' and '*' consistently
+    "MD049": { "style": "consistent" },
+
+    // MD046: Code fences: prefer backticks (fenced)
+    "MD046": { "style": "fenced" },
+
+    // MD024: Allow duplicate headings if they are in different sections
+    "MD024": { "siblings_only": true },
+
+    // MD029: Ordered lists must use sequential numbering (1. 2. 3.)
+    "MD029": { "style": "ordered" }
+  }
+}
