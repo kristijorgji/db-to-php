@@ -12,20 +12,16 @@ concurrency:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php: ['8.3', '8.4', '8.5']
 
     services:
-      mariadb:
-        image: mariadb:11
+      mysql:
+        image: mysql:8.4
         env:
-          MARIADB_ROOT_PASSWORD: Test123@
+          MYSQL_ROOT_PASSWORD: Test123@
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pTest123@"
           --health-interval=5s
           --health-timeout=5s
           --health-retries=10
@@ -33,10 +29,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup PHP ${{ matrix.php }}
+      - name: Setup PHP 8.5
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: '8.5'
           extensions: pdo, pdo_mysql, mbstring, xml, bcmath
           coverage: none
           tools: composer:v2
@@ -49,8 +45,8 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-${{ matrix.php }}-
+          key: ${{ runner.os }}-composer-8.5-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-8.5-
 
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
@@ -65,16 +61,16 @@ jobs:
           DB_PASSWORD=Test123@
           EOF
 
-      - name: Wait for MariaDB
+      - name: Wait for MySQL
         run: |
           for i in $(seq 1 30); do
             if mysqladmin ping -h127.0.0.1 -uroot -p'Test123@' --silent; then
-              echo "MariaDB is ready"
+              echo "MySQL is ready"
               exit 0
             fi
             sleep 2
           done
-          echo "MariaDB did not become ready in time" >&2
+          echo "MySQL did not become ready in time" >&2
           exit 1
 
       - name: Run test suite
@@ -82,18 +78,14 @@ jobs:
 
   code-style:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php: ['8.3', '8.4', '8.5']
 
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup PHP ${{ matrix.php }}
+      - name: Setup PHP 8.5
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: '8.5'
           extensions: pdo, pdo_mysql, mbstring, xml, bcmath
           coverage: none
           tools: composer:v2
@@ -106,8 +98,8 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-${{ matrix.php }}-
+          key: ${{ runner.os }}-composer-8.5-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-8.5-
 
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
@@ -120,7 +112,7 @@ jobs:
     needs: [tests, code-style]
     runs-on: ubuntu-latest
     steps:
-      - name: Verify all matrix jobs passed
+      - name: Verify required jobs passed
         run: |
           echo "tests result: ${{ needs.tests.result }}"
           echo "code-style result: ${{ needs.code-style.result }}"

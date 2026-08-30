@@ -40,14 +40,12 @@ make test
 
 `127.0.0.1:23306`, database `test_db_to_php`, user `root`, password `Test123@`.
 
-CI still uses MariaDB on **3306** inside the runner and writes its own
-`tests/.env`. A MySQL already listening on 3306 is fine if you change `DB_PORT`
-locally.
+GitHub Actions CI is **PHP 8.5** + **MySQL 8.4** on runner port **3306**
+and writes its own `tests/.env`. A MySQL already listening on 3306 locally is
+fine if you change `DB_PORT`.
 
-MySQL 8 reports `json` columns as JSON (factory `randomJson()`), while MariaDB
-often exposes them as `longtext` (`randomString`). The committed integration
-fixtures match MySQL 8.4 (local Docker). CI still uses MariaDB and may differ
-on that one column until CI is aligned.
+MySQL 8 reports `json` columns as JSON (factory `randomJson()`). The committed
+integration fixtures match that.
 
 ## Makefile
 
