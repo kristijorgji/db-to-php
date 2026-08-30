@@ -60,7 +60,7 @@ make check
 make dev-init
 ```
 
-No Artisan, sqlc, postman, or PHPStan targets.
+No Artisan, sqlc, or postman targets. `make lint` runs ECS + PHPStan + markdown.
 
 ## Git hooks
 
@@ -72,10 +72,12 @@ make verify-hooks
 ```
 
 Enabled via [`.kj-php-coding-standard.env`](../.kj-php-coding-standard.env):
-markdownlint, related PHPUnit (`src/` → `tests/unit/`), coverage gate.
+markdownlint, related PHPUnit (`src/` → `tests/unit/`), PHPStan (`03-code-analyse`
+when `src/**/*.php` is staged), coverage gate.
 `KJ_PHP_CS_PHP_RUNTIME=host` — compose is MySQL only.
 
-`git_hooks/` is gitignored; re-run `make dev-init` after package upgrades.
+`git_hooks/` is gitignored; re-run `make dev-init` after package upgrades or
+hook-list changes.
 
 Coverage gate minimum is **99%** (measured clover was 99.16%).
 `make test-coverage` writes `build/coverage/clover.xml` (gitignored).
@@ -169,10 +171,24 @@ XDEBUG_TRIGGER=1 XDEBUG_MODE=debug vendor/bin/phpunit
 ```shell
 make lint
 make fix
+make check
 # or
+composer check
 composer code-style
 composer code-format
+composer code-analyse
+composer code-modernize-check
 ```
+
+`composer check` runs audit, YAML lint (`docker-compose.yml`), ECS format +
+style, PHPStan, then PHPUnit.
+
+PHPStan: [`phpstan.neon`](../phpstan.neon) level 6, PHP 8.3, `src` + `tests`
+(skips generated fixtures). Current noise lives in
+[`phpstan-baseline.neon`](../phpstan-baseline.neon).
+
+Rector: [`rector.php`](../rector.php) PHP 8.3 sets. `composer code-modernize`
+writes; `code-modernize-check` is dry-run. Not part of `check`.
 
 ECS (`vendor/bin/ecs check` / `--fix`). Markdown via `make lint-markdown` /
 `make fix-markdown` (Docker).

@@ -107,6 +107,15 @@ jobs:
       - name: Check code style
         run: composer code-style
 
+      - name: Lint YAML
+        run: composer yaml-lint
+
+      - name: PHPStan
+        run: composer code-analyse
+
+      - name: Composer audit
+        run: composer audit
+
   tests-complete:
     if: always()
     needs: [tests, code-style]
