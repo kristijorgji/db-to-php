@@ -74,7 +74,6 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
                 new PhpFunctionParameter('data', $arrayType),
             ]),
             $returnType,
-            $this->config->shouldTypeHint(),
         );
 
         $this->output->add($methodAnnotationGenerator->generate());
@@ -160,7 +159,6 @@ class PhpEntityFactoryGenerator extends PhpClassGenerator
                 new PhpFunctionParameter('data', $arrayType),
             ]),
             $arrayType,
-            $this->config->shouldTypeHint(),
         );
 
         $this->output->add($methodAnnotationGenerator->generate());

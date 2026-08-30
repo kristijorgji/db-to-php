@@ -8,27 +8,18 @@ use kristijorgji\DbToPhp\Console\Commands\AbstractCommand;
 use kristijorgji\Tests\Helpers\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use function getcwd;
-use function sprintf;
 use const DIRECTORY_SEPARATOR;
 
 class AbstractCommandTest extends TestCase
 {
-    private AbstractCommand $command;
-
-    /**
-     * @var PHPUnit\Framework\MockObject\MockObject
-     */
-    private MockObject $configFactory;
-
-    private string $appName;
+    private AbstractCommand&MockObject $command;
+    private ConfigFactory&MockObject $configFactory;
 
     protected function setUp(): void
     {
         $this->configFactory = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->appName = sprintf('%s Application', AppInfo::NAME);
 
         $this->command = $this->getMockBuilder(AbstractCommand::class)
             ->setConstructorArgs([

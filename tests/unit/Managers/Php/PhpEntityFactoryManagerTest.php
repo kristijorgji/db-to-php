@@ -17,13 +17,8 @@ use function count;
 class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
 {
     protected array $config;
-
-    /**
-     * @var PHPUnit\Framework\MockObject\MockObject
-     */
-    private MockObject $entityManager;
-
-    protected PhpEntityFactoryManager $manager;
+    private PhpEntityManager&MockObject $entityManager;
+    protected PhpEntityFactoryManager&MockObject $manager;
 
     protected function setUp(): void
     {
@@ -38,14 +33,17 @@ class PhpEntityFactoryManagerTest extends AbstractPhpManagerTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->manager = new PhpEntityFactoryManager(
-            $this->databaseAdapter,
-            $this->typeMapper,
-            $this->fileSystem,
-            $this->typeHint,
-            $this->config,
-            $this->entityManager,
-        );
+        $this->manager = $this->getMockBuilder(PhpEntityFactoryManager::class)
+            ->setConstructorArgs([
+                $this->databaseAdapter,
+                $this->typeMapper,
+                $this->fileSystem,
+                $this->typeHint,
+                $this->config,
+                $this->entityManager,
+            ])
+            ->onlyMethods([])
+            ->getMock();
     }
 
     public function testGenerateFactories(): void

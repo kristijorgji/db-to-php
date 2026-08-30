@@ -70,7 +70,8 @@ class AbstractEntityFactoryTest extends TestCase
         for ($i = 0; $i < 177; $i++) {
             $actual = AbstractEntityFactory::randomDate($format);
             $d = DateTime::createFromFormat($format, $actual);
-            $this->assertTrue($d && $d->format($format) === $actual);
+            $this->assertInstanceOf(DateTime::class, $d);
+            $this->assertSame($actual, $d->format($format));
         }
     }
 
@@ -206,17 +207,14 @@ class AbstractEntityFactoryTest extends TestCase
         $foundNegative = false;
         $foundPositive = false;
 
-        while (!$foundNegative || !$foundPositive) {
+        for ($i = 0; $i < 500; $i++) {
             $actual = AbstractEntityFactory::randomNumber();
-            if (!$foundNegative) {
-                $foundNegative = $actual < 0;
-            }
-            if (!$foundPositive) {
-                $foundPositive = $actual >= 0;
-            }
+            $foundNegative = $foundNegative || $actual < 0;
+            $foundPositive = $foundPositive || $actual >= 0;
         }
 
-        $this->assertTrue($foundNegative && $foundPositive);
+        $this->assertTrue($foundNegative);
+        $this->assertTrue($foundPositive);
     }
 
     public function testChooseRandomString(): void

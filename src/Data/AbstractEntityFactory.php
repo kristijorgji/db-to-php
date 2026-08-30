@@ -235,9 +235,6 @@ abstract class AbstractEntityFactory
         return $string;
     }
 
-    /**
-     * @param string<string> ...$values
-     */
     public static function chooseRandomString(string ... $values) : string
     {
         return $values[rand(0, count($values) -1)];

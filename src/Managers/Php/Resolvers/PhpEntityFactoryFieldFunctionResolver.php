@@ -94,7 +94,7 @@ class PhpEntityFactoryFieldFunctionResolver
         return sprintf('self::randomFloat(%s)', $field->getFractionalPrecision());
     }
 
-    private function resolveString(Field $field) : string
+    private function resolveString(TextField|BinaryField $field) : string
     {
         $lengthLimit = $field->getLengthInBytes();
         return sprintf('self::randomString(rand(0, %s))', $lengthLimit);

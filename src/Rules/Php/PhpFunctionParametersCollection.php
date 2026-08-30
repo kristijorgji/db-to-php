@@ -9,9 +9,6 @@ class PhpFunctionParametersCollection
      */
     private array $arguments = [];
 
-    /**
-     * @param PhpFunctionParameter<PhpFunctionParameter> $properties
-     */
     public function __construct(PhpFunctionParameter ... $properties)
     {
         $this->arguments = $properties;

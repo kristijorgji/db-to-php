@@ -6,6 +6,9 @@ use ArrayIterator;
 use IteratorAggregate;
 use Traversable;
 
+/**
+ * @implements IteratorAggregate<int, PhpProperty>
+ */
 class PhpPropertiesCollection implements IteratorAggregate
 {
     /**
@@ -13,16 +16,13 @@ class PhpPropertiesCollection implements IteratorAggregate
      */
     private array $properties = [];
 
-    /**
-     * @param PhpProperty<PhpProperty> $properties
-     */
     public function __construct(PhpProperty ... $properties)
     {
         $this->properties = $properties;
     }
 
     /**
-     * @return Traversable
+     * @return ArrayIterator<int, PhpProperty>
      */
     public function getIterator() : Traversable
     {

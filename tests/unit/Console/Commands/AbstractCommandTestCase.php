@@ -13,12 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractCommandTestCase extends TestCase
 {
-    /**
-     * @var PHPUnit\Framework\MockObject\MockObject
-     */
-    protected MockObject $configFactory;
-
-    protected MockObject $manager;
+    protected ConfigFactory&MockObject $configFactory;
+    protected ManagerContract&MockObject $manager;
     protected InputInterface $input;
     protected OutputInterface $output;
 

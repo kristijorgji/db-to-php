@@ -11,7 +11,6 @@ use function in_array;
 use function microtime;
 use function rand;
 use function sort;
-use const SORT_ASC;
 
 class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
 {
@@ -51,7 +50,7 @@ class AbstractPhpManagerTest extends AbstractPhpManagerTestCase
             $randomChosenIndexes[] = $randomChosenIndex;
         }
 
-        sort($randomChosenIndexes, SORT_ASC);
+        sort($randomChosenIndexes);
 
         foreach ($randomChosenIndexes as $randomChosenIndex) {
             $this->config['entities']['includeTables'][] = $tables->getAt($randomChosenIndex)->getName();

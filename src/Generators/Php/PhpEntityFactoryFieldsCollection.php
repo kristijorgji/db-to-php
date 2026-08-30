@@ -9,9 +9,6 @@ class PhpEntityFactoryFieldsCollection
      */
     private array $fields = [];
 
-    /**
-     * @param PhpEntityFactoryField<PhpEntityFactoryField> $fields
-     */
     public function __construct(PhpEntityFactoryField ... $fields)
     {
         $this->fields = $fields;
