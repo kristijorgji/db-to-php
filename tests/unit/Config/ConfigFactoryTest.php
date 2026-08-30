@@ -11,7 +11,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 final class ConfigFactoryTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&FileSystemInterface
+     * @var MockObject&FileSystemInterface
      */
     private MockObject $fileSystem;
 
