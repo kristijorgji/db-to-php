@@ -184,8 +184,7 @@ composer code-modernize-check
 style, PHPStan, then PHPUnit.
 
 PHPStan: [`phpstan.neon`](../phpstan.neon) level 6, PHP 8.3, `src` + `tests`
-(skips generated fixtures). Current noise lives in
-[`phpstan-baseline.neon`](../phpstan-baseline.neon).
+(skips generated fixtures).
 
 Rector: [`rector.php`](../rector.php) PHP 8.3 sets. `composer code-modernize`
 writes; `code-modernize-check` is dry-run. Not part of `check`.

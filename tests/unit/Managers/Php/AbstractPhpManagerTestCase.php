@@ -11,14 +11,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 class AbstractPhpManagerTestCase extends TestCase
 {
     protected array $config;
-
-    /**
-     * @var PHPUnit\Framework\MockObject\MockObject
-     */
-    protected MockObject $databaseAdapter;
-
-    protected MockObject $typeMapper;
-    protected MockObject $fileSystem;
+    protected DatabaseAdapterInterface&MockObject $databaseAdapter;
+    protected PhpTypeMapperInterface&MockObject $typeMapper;
+    protected FileSystemInterface&MockObject $fileSystem;
     protected bool $typeHint;
 
     protected function setUp(): void

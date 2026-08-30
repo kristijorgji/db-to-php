@@ -107,7 +107,6 @@ class PhpEntityManager extends AbstractPhpManager
                 $className,
                 new StringCollection(... $uses),
                 $extends,
-                $this->config['includeAnnotations'],
             ),
             $this->config['includeSetters'],
             $this->config['includeGetters'],

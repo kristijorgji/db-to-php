@@ -7,9 +7,6 @@ use kristijorgji\Tests\Factories\BaseFactory;
 
 class DoubleFieldFactory extends BaseFactory
 {
-    /**
-     * @return DoubleField()
-     */
     public static function make() : DoubleField
     {
         return new DoubleField(

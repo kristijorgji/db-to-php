@@ -6,6 +6,9 @@ use ArrayIterator;
 use IteratorAggregate;
 use Traversable;
 
+/**
+ * @implements IteratorAggregate<int, Table>
+ */
 class TablesCollection implements IteratorAggregate
 {
     /**
@@ -13,16 +16,13 @@ class TablesCollection implements IteratorAggregate
      */
     private array $tables = [];
 
-    /**
-     * @param Table<Table> $fields
-     */
     public function __construct(Table ... $fields)
     {
         $this->tables = $fields;
     }
 
     /**
-     * @return Traversable
+     * @return ArrayIterator<int, Table>
      */
     public function getIterator() : Traversable
     {

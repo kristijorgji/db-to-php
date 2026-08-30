@@ -11,9 +11,6 @@ class StringCollection
      */
     private array $elements = [];
 
-    /**
-     * @param string<string> $fields
-     */
     public function __construct(string ... $fields)
     {
         $this->elements = $fields;

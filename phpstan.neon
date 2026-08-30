@@ -1,6 +1,5 @@
 includes:
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
-    - phpstan-baseline.neon
 
 parameters:
     paths:
@@ -12,3 +11,10 @@ parameters:
     phpVersion: 80300
     treatPhpDocTypesAsCertain: false
     reportUnmatchedIgnoredErrors: false
+    # Config/fixture arrays; item types would be mixed, which ECS forbids.
+    ignoreErrors:
+        -
+            identifier: missingType.iterableValue
+        -
+            identifier: foreach.nonIterable
+            path: src/Data/AbstractEntity.php

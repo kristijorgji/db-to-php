@@ -25,6 +25,7 @@ use kristijorgji\Tests\Factories\Db\TablesCollectionFactory;
 use kristijorgji\Tests\Factories\Rules\Php\PhpTypeFactory;
 use kristijorgji\UnitTests\Generators\Php\SamplePhpProperties;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use Throwable;
 use function array_map;
 use function count;
@@ -36,7 +37,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
     use SamplePhpProperties;
 
     protected array $config;
-    protected PhpEntityManager $manager;
+    protected PhpEntityManager&MockObject $manager;
 
     protected function setUp(): void
     {
@@ -47,13 +48,7 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
 
     private function createManager(): void
     {
-        $this->manager = new PhpEntityManager(
-            $this->databaseAdapter,
-            $this->typeMapper,
-            $this->fileSystem,
-            $this->typeHint,
-            $this->config,
-        );
+        $this->selfPartialMock([]);
     }
 
     public function testGenerateEntities(): void
@@ -201,7 +196,6 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                         'SuperEntity',
                         new StringCollection(... []),
                         null,
-                        true,
                     ),
                     true,
                     true,
@@ -245,7 +239,6 @@ class PhpEntityManagerTest extends AbstractPhpManagerTestCase
                         'SuperEntity',
                         new StringCollection(... [AbstractEntity::class]),
                         'AbstractEntity',
-                        true,
                     ),
                     true,
                     true,

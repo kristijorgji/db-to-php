@@ -14,7 +14,6 @@ class PhpMethodAnnotationGenerator
     public function __construct(
         private PhpFunctionParametersCollection $parameters,
         private ?PhpType $returnType,
-        private bool $typeHint,
     ) {
         $this->output = new TextBuffer;
     }

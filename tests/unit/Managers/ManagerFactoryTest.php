@@ -16,28 +16,11 @@ use function range;
 
 class ManagerFactoryTest extends TestCase
 {
-    private array $config;
-
-    /**
-     * @var PHPUnit\Framework\MockObject\MockObject
-     */
-    private MockObject $databaseAdapterFactory;
-
+    private DatabaseAdapterFactory&MockObject $databaseAdapterFactory;
     private ManagerFactory $managerFactory;
 
     protected function setUp(): void
     {
-        $this->config = [
-            'databaseDriver' => DatabaseDrivers::MYSQL,
-            'connection' => [
-                'host' => '127.0.0.1',
-                'port' => 1111,
-                'database' => 'db_to_php',
-                'username' => 'test_user_db_to_php',
-                'password' => 'Secret@',
-            ],
-        ];
-
         $this->databaseAdapterFactory = $this->getMockBuilder(DatabaseAdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

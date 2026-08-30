@@ -18,13 +18,11 @@ class PhpMethodAnnotationGeneratorTest extends TestCase
     public function testGenerate(
         PhpFunctionParametersCollection $parameters,
         ?PhpType $returnType,
-        bool $typeHint,
         string $expected,
     ): void {
         $generator = new PhpMethodAnnotationGenerator(
             $parameters,
             $returnType,
-            $typeHint,
         );
 
         $actual = $generator->generate();
@@ -41,7 +39,6 @@ class PhpMethodAnnotationGeneratorTest extends TestCase
                     new PhpFunctionParameter('test', new PhpType(PhpTypes::BOOL, true)),
                 ]),
                 null,
-                true,
                 $expected['void_return_type_type_hinting'],
             ],
         ];

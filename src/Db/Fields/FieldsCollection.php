@@ -9,9 +9,6 @@ class FieldsCollection
      */
     private array $fields = [];
 
-    /**
-     * @param Field<Field> $fields
-     */
     public function __construct(Field ... $fields)
     {
         $this->fields = $fields;

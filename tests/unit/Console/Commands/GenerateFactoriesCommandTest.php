@@ -6,19 +6,17 @@ use Exception;
 use kristijorgji\DbToPhp\Console\Commands\GenerateFactoriesCommand;
 use kristijorgji\DbToPhp\Managers\Exceptions\GenerateException;
 use kristijorgji\DbToPhp\Managers\GenerateResponse;
+use PHPUnit\Framework\MockObject\MockObject;
 use Throwable;
 
 class GenerateFactoriesCommandTest extends AbstractCommandTestCase
 {
-    protected GenerateFactoriesCommand $command;
+    protected GenerateFactoriesCommand&MockObject $command;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->command = new GenerateFactoriesCommand(
-            $this->configFactory,
-            self::randomString(),
-        );
+        $this->mockSelf([]);
     }
 
     public function testExecute_on_error(): void

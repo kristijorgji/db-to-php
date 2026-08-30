@@ -2,7 +2,6 @@
 
 namespace kristijorgji\UnitTests\Data;
 
-use Entities\Test2Entity;
 use kristijorgji\DbToPhp\Data\AbstractEntityFactory;
 use function rand;
 
